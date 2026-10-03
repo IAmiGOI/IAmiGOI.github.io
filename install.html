@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install — ST Module Engine</title>
+<meta name="description" content="How to install ST Module Engine into SillyTavern: from the in-app installer or from a release ZIP.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Install — ST Module Engine">
+<meta property="og:description" content="How to install ST Module Engine into SillyTavern: from the in-app installer or from a release ZIP.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="index.html"><img src="assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="index.html#features">Features</a>
+    <a class="l on" href="install.html">Install</a>
+    <a class="l" href="docs/overview.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <a class="btn primary sm dl dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download</a>
+</header>
+
+<main>
+  <div class="legal" style="max-width:860px">
+    <div class="eyebrow">Install</div>
+    <h1>Install ST Module Engine</h1>
+    <p class="lead">Two ways. The first takes thirty seconds and updates itself; the second is for offline or manual setups.</p>
+
+    <div class="note"><b>You need:</b> a working <a href="https://github.com/SillyTavern/SillyTavern">SillyTavern</a> (a recent release) and a browser. A model connection is needed for most features — the setup guide inside the engine helps with that on first launch.</div>
+
+    <h2>Method 1 — from inside SillyTavern <span class="chip">recommended</span></h2>
+    <ol class="steps">
+      <li><h3>Open the installer</h3><p>In SillyTavern click the <b>Extensions</b> icon (stacked cubes) → <b>Install extension</b>.</p></li>
+      <li><h3>Paste the repository link</h3><div class="copy"><span>https://github.com/IAmiGOI/Module-Engine</span><button class="btn sm" type="button">Copy</button></div><p>Leave the branch empty and press <b>Install for all users</b> (or <b>Install just for me</b>).</p></li>
+      <li><h3>Reload the page</h3><p>The loading screen now shows <b>ST × ME</b>. The engine's dock appears on the right edge of the screen — hover it to open the panel.</p></li>
+    </ol>
+
+    <h2>Method 2 — from a release ZIP</h2>
+    <ol class="steps">
+      <li><h3>Download</h3><p><a class="btn primary dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download <span class="dl-version">latest release</span></a></p><p><span class="dl-meta" style="color:var(--muted);font-size:13px"></span></p></li>
+      <li><h3>Unzip into the extensions folder</h3><p>Create a folder named <code>Module-Engine</code> and put the contents of the ZIP in it, so that <code>manifest.json</code> sits directly inside:</p>
+        <pre><code>SillyTavern/public/scripts/extensions/third-party/Module-Engine/manifest.json</code></pre>
+        <p>Installing only for your user? Use <code>SillyTavern/data/&lt;your-user&gt;/extensions/Module-Engine/</code> instead.</p></li>
+      <li><h3>Restart and reload</h3><p>Restart SillyTavern if it was running, then reload the page.</p></li>
+    </ol>
+
+    <h2>First launch</h2>
+    <ol class="steps">
+      <li><h3>Meet Mea</h3><p>On the very first start the built-in guide opens by itself and walks you through a short checklist.</p></li>
+      <li><h3>Connect a model</h3><p>Choose <b>Use SillyTavern's current connection</b> for the quickest start, or enter your own API key and endpoint. See <a href="docs/models.html">Model connections</a>.</p></li>
+      <li><h3>Turn modules on</h3><p>Open <a href="docs/modules.html">Modules</a> and switch on what you want — Tracker and RP Time are good first picks.</p></li>
+    </ol>
+
+    <h2>Updating</h2>
+    <p>The engine checks for new versions itself: open the <b>Updates</b> card on the settings screen and press install. You can also use SillyTavern's own extension manager, or download the newest ZIP and replace the folder (your settings are stored separately and are kept).</p>
+    <h2>Uninstalling</h2>
+    <p>Open <b>Extensions → Manage extensions</b>, find <b>ST Module Engine</b> and remove it — or delete the <code>Module-Engine</code> folder. Your chats and characters are never touched.</p>
+
+    <h2>Something went wrong?</h2>
+    <ul>
+      <li><b>No dock after reload</b> — check that <code>manifest.json</code> is directly inside the <code>Module-Engine</code> folder (not one level deeper) and that the extension is enabled in the extension manager.</li>
+      <li><b>Features do nothing</b> — a model connection is missing or down. See <a href="docs/troubleshooting.html">Troubleshooting</a>.</li>
+      <li>Still stuck? Open an <a href="https://github.com/IAmiGOI/Module-Engine/issues">issue on GitHub</a>.</li>
+    </ul>
+  </div>
+</main>
+<footer>
+  <div>© AmiGO · Free, open-source. Not affiliated with SillyTavern.</div>
+  <nav><a href="docs/overview.html">Docs</a><a href="install.html">Install</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

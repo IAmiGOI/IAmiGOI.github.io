@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tracker — ST Module Engine docs</title>
+<meta name="description" content="Values that update themselves: health, mood, location…">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Tracker — ST Module Engine docs">
+<meta property="og:description" content="Values that update themselves: health, mood, location…">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <a class="btn primary sm dl dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download</a>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="" href="modules.html">Modules</a><h4>Modules</h4><a class="on" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="music.html">Music</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a></div>
+  </aside>
+  <article class="article">
+    <div class="eyebrow">Modules</div>
+    <h1>Tracker</h1>
+    <p>The Tracker keeps named values (health, mood, location, anything) up to date by asking a model after or before replies, and exposes them as macros like {{tracker_health}} that can be used in prompts. Each tracker has fields, a trigger (after a reply, or before sending — then the reply waits for it), a model connection it is pinned to, and a sampler preset (Precise/Deterministic are best for strict JSON).
+Values are also saved per message, so rerolling or going back shows the value of that moment. Turn it on in <strong>Modules</strong> with module id <code>module.tracker</code>.</p>
+<h2 id="fields-on-screen">Fields on screen</h2>
+<p>Each tracker is one row; inside it:</p>
+<ul>
+<li><strong>Name</strong> — the tracker's id. Its values become macros, so keep it short, lowercase, no spaces.</li>
+<li><strong>Model connection</strong> — which connection answers the polls. A cheap fast one is fine; the answer is small JSON.</li>
+<li><strong>Fields</strong> — the values to keep (health, mood, location…). Each has a name, a short "prompt" telling the model what to write there (e.g. "how hurt the hero is, 0–100") and a starting value. Clear prompts matter more than anything else here. <strong>+ Add field</strong> adds one.</li>
+<li><strong>Poll when</strong> — what triggers an update: after every reply, every N replies, every N minutes, when the user sends a message, before the reply is generated, or only by hand ("Poll now").</li>
+<li><strong>Hold the generation until this tracker answers</strong> — only with "before the reply": the reply waits so it already sees the fresh value. Slower, but the value is never a step behind.</li>
+<li><strong>Poll prompt</strong> — the full text sent to the model. Empty = the engine's default, which is right almost always. <code>{fields}</code> inserts the field list.</li>
+<li><strong>Display template</strong> — how the value is shown in the small state window, e.g. <code>❤ {health} · 📍 {location}</code>. Empty = a plain "name: value" list. Click a token to append it.</li>
+<li><strong>Show the floating state window</strong> — the small always-on-screen panel with the current values.</li>
+<li><strong>Enabled</strong> — off means it stops polling but keeps its settings.</li>
+<li>Buttons: <strong>Save</strong> writes the configuration (nothing takes effect until saved); <strong>Poll now</strong> runs one update right away using the saved settings; <strong>Reset</strong> puts the values of this chat back to their starting values; <strong>Remove</strong> deletes the tracker.</li>
+<li>Sampler sliders and reasoning options belong to this tracker, not to the connection: low temperature / deterministic presets suit strict JSON.</li>
+</ul>
+    <div class="pager"><a href="modules.html"><small>← Previous</small>Modules</a><a class="nx" href="rp-time.html"><small>Next →</small>RP Time</a></div>
+  </article>
+  <aside class="toc"><b>On this page</b><a href="#fields-on-screen">Fields on screen</a></aside>
+</main>
+<footer>
+  <div>© AmiGO · Free, open-source. Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

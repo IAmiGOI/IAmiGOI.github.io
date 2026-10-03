@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scene Painter — ST Module Engine docs</title>
+<meta name="description" content="Paint the current scene into a picture.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Scene Painter — ST Module Engine docs">
+<meta property="og:description" content="Paint the current scene into a picture.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <a class="btn primary sm dl dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download</a>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="" href="modules.html">Modules</a><h4>Modules</h4><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="music.html">Music</a><a class="on" href="scene-painter.html">Scene Painter</a><a class="" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a></div>
+  </aside>
+  <article class="article">
+    <div class="eyebrow">Modules</div>
+    <h1>Scene Painter</h1>
+    <p>Scene Painter paints the current scene into the Picture window. A text model writes the image prompt from the last messages, an image backend draws it. The 🎨 Paint button sits under replies (or paint automatically after each reply).
+Image backends: Pollinations (free, no key), OpenAI-compatible (OpenAI, NanoGPT and similar), Automatic1111/Forge. With NanoGPT, character avatars are sent as reference photos so the picture keeps their looks — use a model that accepts image input (nano-banana, seedream, flux-kontext, gpt-image). Mature scenes are described as written; a backup prompt writer is asked when the first one refuses. Module id: <code>module.scenePainter</code>.</p>
+<h2 id="fields-on-screen">Fields on screen</h2>
+<ul>
+<li><strong>Image backend</strong> — which service draws (Pollinations is free; OpenAI-compatible needs a key; Automatic1111/Forge is your own machine). <strong>+ Pollinations / + OpenAI-compatible / + Automatic1111</strong> add one; <strong>Save backends</strong> stores them.</li>
+<li><strong>Prompt writer (text model)</strong> — the text model that turns the last messages into an image prompt. <strong>Backup prompt writer</strong> is asked when the first one refuses.</li>
+<li><strong>Instruction for the prompt writer</strong> — how the prompt should be written; the default is fine to start with.</li>
+<li><strong>Style (appended to every prompt)</strong> — a fixed style tail such as "watercolor, soft light".</li>
+<li><strong>Negative prompt</strong> — what to avoid. Used by Stable Diffusion and Pollinations; OpenAI ignores it.</li>
+<li><strong>Scene depth (last messages)</strong> — how many recent messages the prompt writer reads.</li>
+<li><strong>Width / Height</strong> — picture size in pixels; big sizes are slower and cost more.</li>
+<li><strong>Paint automatically after every reply</strong> — otherwise use the 🎨 button under a reply.</li>
+<li><strong>Open the Picture window when a picture is ready</strong> — off: the picture waits under its reply, 🖼 shows it.</li>
+<li><strong>Use character avatars as reference photos</strong> — the picture keeps the characters' looks. Needs a backend that accepts image input (NanoGPT models like nano-banana, seedream, flux-kontext, gpt-image); others ignore it. <strong>Also send the persona avatar</strong> adds yours.</li>
+<li><strong>Describe mature scenes as written</strong> — tells the prompt writer not to soften or refuse explicit scenes (all characters shown as adults). The image backend has its own filter.</li>
+</ul>
+    <div class="pager"><a href="music.html"><small>← Previous</small>Music</a><a class="nx" href="speaker-colors-map.html"><small>Next →</small>Speaker Colors &amp; Map</a></div>
+  </article>
+  <aside class="toc"><b>On this page</b><a href="#fields-on-screen">Fields on screen</a></aside>
+</main>
+<footer>
+  <div>© AmiGO · Free, open-source. Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

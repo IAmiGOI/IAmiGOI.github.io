@@ -3,17 +3,121 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ST Module Engine</title>
-<style>body{font:16px/1.6 system-ui,sans-serif;max-width:720px;margin:40px auto;padding:0 16px;color:#222}a{color:#1a73e8}</style>
+<title>ST Module Engine — modules, pipeline and memory for SillyTavern</title>
+<meta name="description" content="ST Module Engine is a SillyTavern extension: a modular engine with trackers, memory graph, prompt manager, scene painter, music and more.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="ST Module Engine — modules, pipeline and memory for SillyTavern">
+<meta property="og:description" content="ST Module Engine is a SillyTavern extension: a modular engine with trackers, memory graph, prompt manager, scene painter, music and more.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="assets/site.css">
+
 </head>
 <body>
-<h1>ST Module Engine</h1>
-<p>ST Module Engine is an extension for <a href="https://github.com/SillyTavern/SillyTavern">SillyTavern</a>. It adds modules, a generation pipeline, a memory graph and, optionally, synchronization of your SillyTavern files between your own devices.</p>
-<p>The optional cloud synchronization lets you sign in with your own Google Drive or Dropbox account so that your files can be kept in step on all your devices. Nothing is sent to the author of the extension: the extension runs entirely inside your browser and talks to your cloud account directly.</p>
-<ul>
-<li><a href="privacy.html">Privacy policy</a></li>
-<li><a href="terms.html">Terms of service</a></li>
-<li><a href="https://github.com/IAmiGOI/Module-Engine">Source code and issue tracker</a></li>
-</ul>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="index.html"><img src="assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="index.html#features">Features</a>
+    <a class="l" href="install.html">Install</a>
+    <a class="l" href="docs/overview.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <a class="btn primary sm dl dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download</a>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="marks"><img class="st" src="assets/st-logo.png" alt="SillyTavern"><span>×</span><img class="me" src="assets/me-logo.webp" alt="Module Engine"></div>
+    <h1>Turn SillyTavern into a<br><span class="grad">modular roleplay engine</span></h1>
+    <p class="lead">ST Module Engine is an extension that adds a generation pipeline, trackers, long-term memory, a prompt manager, pictures, music and more — as small modules you switch on when you want them.</p>
+    <div class="cta">
+      <a class="btn primary big dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download <span class="dl-version"></span></a>
+      <a class="btn big" href="install.html">Install guide</a>
+    </div>
+    <div class="meta"><span class="dl-meta">Free &amp; open source</span> · requires SillyTavern</div>
+    <div class="loadbar"></div>
+
+    <div class="preview rv">
+      <div class="chat">
+        <div class="bubble u">I push the tavern door open and step out into the rain.</div>
+        <div class="bubble"><b>Mira</b> pulls her hood up and follows you into the alley. "You really mean to go to the harbour tonight?"<br><span class="badge">🕒 Day 3 · 21:40</span></div>
+        <div class="bubble u">We don't have a choice.</div>
+      </div>
+      <div class="float"><div class="h"><span>Tracker</span><span>✕</span></div><div class="b"><span>❤ <i>health</i> 82</span><span>📍 <i>location</i> Harbour alley</span><span>🎭 <i>mood</i> Tense</span></div></div>
+      <div class="float two"><div class="h"><span>RP Time</span><span>✕</span></div><div class="b"><span>Day 3 · 21:40</span><span><i>raining</i></span></div></div>
+      <div class="dock"><i>▦</i><i>♪</i><i>🎨</i><i>🗺</i></div>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="eyebrow">Features</div>
+    <h2 class="sec">Everything is a module. Switch on what you need.</h2>
+    <p class="lead">Most features make their own model calls on the side, separate from the roleplay reply — so a cheap fast model can do the bookkeeping while your favourite model writes the story.</p>
+    <div class="grid"><div class="card rv"><div class="card-head"><strong>Generation pipeline</strong><small>Takes over generation</small></div><div class="card-body"><p>The engine sits in SillyTavern's generation path. It can hold a reply until a tracker has answered, rewrite it afterwards, or cancel it.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Model connections</strong><small>Bring any model</small></div><div class="card-body"><p>OpenAI-compatible, Anthropic, Google Gemini — or just reuse the model SillyTavern is already connected to. Parallel requests, health checks, automatic failover.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Tracker</strong><small>Values that update themselves</small></div><div class="card-body"><p>Health, mood, location — anything. A cheap model keeps them current and publishes them as macros like <code>{{tracker_health}}</code>.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>RP Time</strong><small>An in-world clock</small></div><div class="card-body"><p>Works out the story's time from the chat, shows a badge under replies and keeps the model aware of it.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Post-Turn Processor</strong><small>Polish every reply</small></div><div class="card-body"><p>A chain of independent rewrite passes — clean clichés, fix style, check continuity — each with its own prompt and model.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Chat Summary & memory graph</strong><small>Long chats that fit</small></div><div class="card-body"><p>Old messages fold into leveled summaries (never deleted). A memory graph tracks people, places and facts.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Prompt Manager</strong><small>Own the request</small></div><div class="card-body"><p>Reorder prompts, send blocks only when conditions are true, inspect tokens and cache hits, add Guided CoT steps and text rules.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Scene Painter</strong><small>Paint the scene</small></div><div class="card-body"><p>A text model writes the image prompt, a backend draws it — Pollinations, OpenAI-compatible or Automatic1111/Forge. Avatars can be used as references.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Music</strong><small>Soundtrack that follows</small></div><div class="card-body"><p>Tracks are matched to the scene by meaning, locally. Your own files or direct audio links.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Notebook & Secrets</strong><small>Working memory</small></div><div class="card-body"><p>A private notebook the AI writes to, and hidden facts tagged with who knows them.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Speaker Colors & Map</strong><small>Colour and place</small></div><div class="card-body"><p>Dialogue coloured per character, and a full-screen world map with distances and travel time.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Lorebook & Macros</strong><small>Your world, editable</small></div><div class="card-body"><p>See and edit World Info the engine sees; every tracker value becomes a macro for any prompt.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Sync & backups</strong><small>Your data, your devices</small></div><div class="card-body"><p>Sync settings and chats between devices through your own Google Drive, Dropbox or GitHub. Nothing passes through a server of ours.</p></div></div>
+<div class="card rv"><div class="card-head"><strong>Mea, the built-in guide</strong><small>Ask, don't search</small></div><div class="card-body"><p>A guide living inside the engine knows every setting and walks you through the first start.</p></div></div></div>
+  </section>
+
+  <section id="architecture">
+    <div class="eyebrow">Architecture</div>
+    <h2 class="sec">Built like a small operating system</h2>
+    <p class="lead">Every layer only talks to the next one through gates and rights, so a module can never touch the network or SillyTavern directly — and a SillyTavern update only ever breaks one layer.</p>
+    <div class="layers rv">
+      <div class="layer"><div class="n">1</div><div><strong>Runner</strong><p>The entry point. Starts everything in order and remembers which modules you switched on.</p></div></div>
+      <div class="layer"><div class="n">2</div><div><strong>Services</strong><p>The only layer that touches SillyTavern, the DOM, the network and timers. All ST-specific code lives here.</p></div></div>
+      <div class="layer"><div class="n">3</div><div><strong>Libraries</strong><p>Shared building blocks: buses, queues, stores, UI primitives.</p></div></div>
+      <div class="layer"><div class="n">4</div><div><strong>Cores</strong><p>The engine's own parts: model connections, memory, summaries, lorebook, sync, prompt pipeline, UI.</p></div></div>
+      <div class="layer"><div class="n">5</div><div><strong>Modules</strong><p>The features you toggle: Tracker, RP Time, Notebook, Music, Scene Painter, Map…</p></div></div>
+    </div>
+  </section>
+
+  <section id="sync">
+    <div class="eyebrow">Cloud sync &amp; Google sign-in</div>
+    <h2 class="sec">Your files stay yours</h2>
+    <div class="card rv"><div class="card-body">
+      <p>ST Module Engine is an extension for <a href="https://github.com/SillyTavern/SillyTavern">SillyTavern</a>. It adds modules, a generation pipeline, a memory graph and, optionally, synchronization of your SillyTavern files between your own devices.</p>
+      <p>The optional cloud synchronization lets you sign in with your own Google Drive or Dropbox account so that your files can be kept in step on all your devices. Nothing is sent to the author of the extension: the extension runs entirely inside your browser and talks to your cloud account directly.</p>
+      <p><a href="privacy.html">Privacy policy</a> · <a href="terms.html">Terms of service</a> · <a href="https://github.com/IAmiGOI/Module-Engine">Source code and issue tracker</a></p>
+    </div></div>
+  </section>
+
+  <section id="start">
+    <div class="eyebrow">Get started</div>
+    <h2 class="sec">Up and running in three steps</h2>
+    <ol class="steps rv">
+      <li><h3>Install</h3><p>In SillyTavern open <b>Extensions → Install extension</b> and paste the repository link — or unzip the release into your extensions folder.</p><p><a href="install.html">Full installation guide →</a></p></li>
+      <li><h3>Connect a model</h3><p>The quickest start: reuse SillyTavern's current connection with one click. Add a cheaper separate model later if you like.</p><p><a href="docs/models.html">Model connections →</a></p></li>
+      <li><h3>Switch on modules</h3><p>Open the engine from the dock on the right edge of the screen. Good first picks: Tracker and RP Time. Mea, the built-in guide, helps on the first launch.</p><p><a href="docs/modules.html">Modules →</a></p></li>
+    </ol>
+  </section>
+
+  <div class="final rv">
+    <h2>Ready to try it?</h2>
+    <p class="lead" style="margin:0 auto 22px">Free, open source and runs entirely in your browser.</p>
+    <div class="cta"><a class="btn primary big dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download <span class="dl-version"></span></a><a class="btn big" href="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 00-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 015.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.4-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0012 .5z"/></svg> View on GitHub</a></div>
+  </div>
+</main>
+<footer>
+  <div>© AmiGO · Free, open-source. Not affiliated with SillyTavern.</div>
+  <nav><a href="docs/overview.html">Docs</a><a href="install.html">Install</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="assets/site.js"></script>
 </body>
 </html>

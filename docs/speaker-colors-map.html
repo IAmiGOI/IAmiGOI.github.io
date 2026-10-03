@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speaker Colors &amp; Map — ST Module Engine docs</title>
+<meta name="description" content="Coloured dialogue and a world map.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Speaker Colors &amp; Map — ST Module Engine docs">
+<meta property="og:description" content="Coloured dialogue and a world map.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <a class="btn primary sm dl dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download</a>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="" href="modules.html">Modules</a><h4>Modules</h4><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="music.html">Music</a><a class="" href="scene-painter.html">Scene Painter</a><a class="on" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a></div>
+  </aside>
+  <article class="article">
+    <div class="eyebrow">Modules</div>
+    <h1>Speaker Colors &amp; Map</h1>
+    <p><strong>Speaker Colors</strong> colors each character's dialogue by who speaks, detected locally; it never changes the text sent to the model (module.speakerColors).
+<strong>Map</strong> is a floating, full-screen map window with a settings drawer, opened from its own draggable button (module.map).</p>
+<h2 id="fields-on-screen">Fields on screen</h2>
+<p><strong>Speaker Colors</strong></p>
+<ul>
+<li><strong>Add character</strong> — a name and a gender. The module only matches text against the cast you enter (names and pronouns), it does not guess who is speaking; each character on the list has its own colour.</li>
+<li><strong>Save current cast as preset</strong> — stores the current list of characters and colours under a name; <strong>Apply a saved preset</strong> brings it back (Apply, Delete, Remove buttons manage presets).</li>
+</ul>
+<p><strong>Map</strong> (inside its settings drawer)</p>
+<ul>
+<li><strong>Map width / height (m)</strong> — the real-world size the map stands for; distances and travel time are computed from it.</li>
+<li><strong>Walking speed (m/min)</strong> with <strong>Auto-calculate travel time</strong> — travel time between places is worked out from distance and this speed.</li>
+<li><strong>Auto-connect distance (m)</strong> — any two locations closer than this are connected even if their borders do not touch (blank = off).</li>
+<li><strong>Minimum traversable rank</strong> — locations ranked below this are excluded from movement (blank = no ceiling).</li>
+<li><strong>Nested-level scale coefficient</strong> — every nesting level without its own explicit size is this many times smaller than its parent.</li>
+<li><strong>Marker size</strong> — size of location markers on the map.</li>
+<li>Per location: <strong>Name</strong>, <strong>Description</strong>, <strong>Rank</strong> (free-form abstraction level, lower = more abstract, blank = unranked), <strong>Color</strong> (blank = theme colour), <strong>radius</strong>; <strong>+ Sub-region</strong> nests a region inside one; <strong>Delete location</strong> removes it.</li>
+</ul>
+    <div class="pager"><a href="scene-painter.html"><small>← Previous</small>Scene Painter</a><a class="nx" href="summary-memory.html"><small>Next →</small>Chat Summary &amp; memory graph</a></div>
+  </article>
+  <aside class="toc"><b>On this page</b><a href="#fields-on-screen">Fields on screen</a></aside>
+</main>
+<footer>
+  <div>© AmiGO · Free, open-source. Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

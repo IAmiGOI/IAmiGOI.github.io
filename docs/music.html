@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Music — ST Module Engine docs</title>
+<meta name="description" content="Background music that follows the scene.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Music — ST Module Engine docs">
+<meta property="og:description" content="Background music that follows the scene.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <a class="btn primary sm dl dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download</a>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="" href="modules.html">Modules</a><h4>Modules</h4><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="on" href="music.html">Music</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a></div>
+  </aside>
+  <article class="article">
+    <div class="eyebrow">Modules</div>
+    <h1>Music</h1>
+    <p>Music plays background music that matches the scene. Tracks are chosen locally by meaning (embeddings) — no model calls for picking. Tracks can be tagged by a model once, and direct audio links work. The player is a floating window, toggled from the dock. Module id: <code>module.music</code>.</p>
+<h2 id="fields-on-screen">Fields on screen</h2>
+<ul>
+<li><strong>Auto-switch with the scene</strong> — after each reply the module compares the scene with the tracks and may change the music. Off means the music only changes by hand.</li>
+<li><strong>Scene depth (last messages)</strong> — how many recent messages describe "the scene". More = steadier, fewer = reacts faster.</li>
+<li><strong>Min similarity</strong> — how close a track must be to the scene to be played at all. Higher = pickier (may stay silent); lower = always plays something.</li>
+<li><strong>Switch margin</strong> — how much better a new track must fit than the one playing before the music changes. Higher = fewer switches.</li>
+<li><strong>Describe new tracks with the model</strong> — after importing, a model writes a one-line mood description for each track (in batches of 10) so choosing by meaning works even when file names say nothing.</li>
+<li><strong>Describe with the model</strong> (button) — does that for tracks already in the library; descriptions you edited by hand are never overwritten.</li>
+<li><strong>Mood description</strong> (per track) — the text the track is matched by. Editing it marks the track as yours. A badge shows where a description came from: AI, Edited, or Title only.</li>
+<li><strong>Import audio files</strong> / <strong>Add a direct audio link</strong> — add your own files, or a link to an audio file or stream (.mp3, .ogg, .m4a, .flac…). Only the address of a link is stored, never the audio.</li>
+<li><strong>Save settings</strong> stores the sliders and toggles. The player window (progress, seek, volume, mute) is opened from the dock.</li>
+</ul>
+    <div class="pager"><a href="postprocess.html"><small>← Previous</small>Post-Turn Processor</a><a class="nx" href="scene-painter.html"><small>Next →</small>Scene Painter</a></div>
+  </article>
+  <aside class="toc"><b>On this page</b><a href="#fields-on-screen">Fields on screen</a></aside>
+</main>
+<footer>
+  <div>© AmiGO · Free, open-source. Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
