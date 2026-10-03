@@ -8,7 +8,6 @@ import markdown
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 KB = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/home/amigo/Module Engine/Client/Release/guide/knowledge")
 REPO = "https://github.com/IAmiGOI/Module-Engine"
-RELEASES = REPO + "/releases/latest"
 
 DOCS = [  # (group, slug, source file, title override, one-line description)
     ("Getting started", "overview", "engine-overview.md", "Overview", "What Module Engine is and how its parts fit together."),
@@ -74,6 +73,9 @@ Good first modules: **Tracker** (watch values like health or mood update by them
 def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
+ICON_CP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg>'
+def cpbtn(cls, label):
+    return f'<button type="button" class="btn {cls} copy-repo" data-copy="{REPO}">{ICON_CP} <span>{label}</span></button>'
 ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg>'
 ICON_GH = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 00-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 015.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.4-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0012 .5z"/></svg>'
 
@@ -113,7 +115,7 @@ def nav(base, cur):
     {a("docs/overview.html", "Docs", "docs")}
     <a class="l" href="{REPO}">GitHub</a>
   </nav>
-  <a class="btn primary sm dl dl-link" href="{RELEASES}">{ICON_DL} Download</a>
+  {cpbtn("primary sm dl", "Copy install link")}
 </header>
 """
 
@@ -157,10 +159,10 @@ def landing():
     <h1>Turn SillyTavern into a<br><span class="grad">modular roleplay engine</span></h1>
     <p class="lead">ST Module Engine is an extension that adds a generation pipeline, trackers, long-term memory, a prompt manager, pictures, music and more — as small modules you switch on when you want them.</p>
     <div class="cta">
-      <a class="btn primary big dl-link" href="{RELEASES}">{ICON_DL} Download <span class="dl-version"></span></a>
+      {cpbtn("primary big", "Copy install link")}
       <a class="btn big" href="install.html">Install guide</a>
     </div>
-    <div class="meta"><span class="dl-meta">Free &amp; open source</span> · requires SillyTavern</div>
+    <div class="meta">Paste it in SillyTavern → Extensions → Install extension · free &amp; open source</div>
     <div class="loadbar"></div>
 
     <div class="preview rv">
@@ -209,7 +211,7 @@ def landing():
     <div class="eyebrow">Get started</div>
     <h2 class="sec">Up and running in three steps</h2>
     <ol class="steps rv">
-      <li><h3>Install</h3><p>In SillyTavern open <b>Extensions → Install extension</b> and paste the repository link — or unzip the release into your extensions folder.</p><p><a href="install.html">Full installation guide →</a></p></li>
+      <li><h3>Install</h3><p>In SillyTavern open <b>Extensions → Install extension</b> and paste the repository link and press Install.</p><p><a href="install.html">Full installation guide →</a></p></li>
       <li><h3>Connect a model</h3><p>The quickest start: reuse SillyTavern's current connection with one click. Add a cheaper separate model later if you like.</p><p><a href="docs/models.html">Model connections →</a></p></li>
       <li><h3>Switch on modules</h3><p>Open the engine from the dock on the right edge of the screen. Good first picks: Tracker and RP Time. Mea, the built-in guide, helps on the first launch.</p><p><a href="docs/modules.html">Modules →</a></p></li>
     </ol>
@@ -218,7 +220,7 @@ def landing():
   <div class="final rv">
     <h2>Ready to try it?</h2>
     <p class="lead" style="margin:0 auto 22px">Free, open source and runs entirely in your browser.</p>
-    <div class="cta"><a class="btn primary big dl-link" href="{RELEASES}">{ICON_DL} Download <span class="dl-version"></span></a><a class="btn big" href="{REPO}">{ICON_GH} View on GitHub</a></div>
+    <div class="cta">{cpbtn("primary big", "Copy install link")}<a class="btn big" href="{REPO}">{ICON_GH} View on GitHub</a></div>
   </div>
 </main>
 """ + foot("")
@@ -226,29 +228,20 @@ def landing():
 # ---------------------------------------------------------------- install
 def install():
     def copy(t): return f'<div class="copy"><span>{t}</span><button class="btn sm" type="button">Copy</button></div>'
-    return head("Install — ST Module Engine", "How to install ST Module Engine into SillyTavern: from the in-app installer or from a release ZIP.", "") + nav("", "install") + f"""
+    return head("Install — ST Module Engine", "How to install ST Module Engine into SillyTavern: by pasting the repository link into the in-app installer.", "") + nav("", "install") + f"""
 <main>
   <div class="legal" style="max-width:860px">
     <div class="eyebrow">Install</div>
     <h1>Install ST Module Engine</h1>
-    <p class="lead">Two ways. The first takes thirty seconds and updates itself; the second is for offline or manual setups.</p>
+    <p class="lead">It takes thirty seconds, and the engine updates itself afterwards.</p>
 
     <div class="note"><b>You need:</b> a working <a href="https://github.com/SillyTavern/SillyTavern">SillyTavern</a> (a recent release) and a browser. A model connection is needed for most features — the setup guide inside the engine helps with that on first launch.</div>
 
-    <h2>Method 1 — from inside SillyTavern <span class="chip">recommended</span></h2>
+    <h2>Install from inside SillyTavern</h2>
     <ol class="steps">
       <li><h3>Open the installer</h3><p>In SillyTavern click the <b>Extensions</b> icon (stacked cubes) → <b>Install extension</b>.</p></li>
-      <li><h3>Paste the repository link</h3>{copy(REPO)}<p>Leave the branch empty and press <b>Install for all users</b> (or <b>Install just for me</b>).</p></li>
+      <li><h3>Paste the repository link</h3><p>{cpbtn('primary sm', 'Copy link')}</p>{copy(REPO)}<p>Leave the branch empty and press <b>Install for all users</b> (or <b>Install just for me</b>).</p></li>
       <li><h3>Reload the page</h3><p>The loading screen now shows <b>ST × ME</b>. The engine's dock appears on the right edge of the screen — hover it to open the panel.</p></li>
-    </ol>
-
-    <h2>Method 2 — from a release ZIP</h2>
-    <ol class="steps">
-      <li><h3>Download</h3><p><a class="btn primary dl-link" href="{RELEASES}">{ICON_DL} Download <span class="dl-version">latest release</span></a></p><p><span class="dl-meta" style="color:var(--muted);font-size:13px"></span></p></li>
-      <li><h3>Unzip into the extensions folder</h3><p>Create a folder named <code>Module-Engine</code> and put the contents of the ZIP in it, so that <code>manifest.json</code> sits directly inside:</p>
-        <pre><code>SillyTavern/public/scripts/extensions/third-party/Module-Engine/manifest.json</code></pre>
-        <p>Installing only for your user? Use <code>SillyTavern/data/&lt;your-user&gt;/extensions/Module-Engine/</code> instead.</p></li>
-      <li><h3>Restart and reload</h3><p>Restart SillyTavern if it was running, then reload the page.</p></li>
     </ol>
 
     <h2>First launch</h2>
@@ -259,13 +252,13 @@ def install():
     </ol>
 
     <h2>Updating</h2>
-    <p>The engine checks for new versions itself: open the <b>Updates</b> card on the settings screen and press install. You can also use SillyTavern's own extension manager, or download the newest ZIP and replace the folder (your settings are stored separately and are kept).</p>
+    <p>The engine checks for new versions itself: open the <b>Updates</b> card on the settings screen and press install. You can also use SillyTavern's own extension manager.</p>
     <h2>Uninstalling</h2>
-    <p>Open <b>Extensions → Manage extensions</b>, find <b>ST Module Engine</b> and remove it — or delete the <code>Module-Engine</code> folder. Your chats and characters are never touched.</p>
+    <p>Open <b>Extensions → Manage extensions</b>, find <b>ST Module Engine</b> and remove it. Your chats and characters are never touched.</p>
 
     <h2>Something went wrong?</h2>
     <ul>
-      <li><b>No dock after reload</b> — check that <code>manifest.json</code> is directly inside the <code>Module-Engine</code> folder (not one level deeper) and that the extension is enabled in the extension manager.</li>
+      <li><b>No dock after reload</b> — reload the page and check that the extension is enabled in <b>Extensions → Manage extensions</b>.</li>
       <li><b>Features do nothing</b> — a model connection is missing or down. See <a href="docs/troubleshooting.html">Troubleshooting</a>.</li>
       <li>Still stuck? Open an <a href="{REPO}/issues">issue on GitHub</a>.</li>
     </ul>

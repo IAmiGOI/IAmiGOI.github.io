@@ -7,20 +7,16 @@
   var nav = $('.nav'), bg = $('.burger');
   if (bg) bg.addEventListener('click', function () { nav.classList.toggle('open'); });
 
-  // latest release -> every .dl-link points straight at the release zip
-  fetch('https://api.github.com/repos/' + REPO + '/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (rel) {
-      if (!rel) return;
-      var asset = (rel.assets || []).filter(function (a) { return /\.zip$/i.test(a.name); })[0];
-      $$('.dl-link').forEach(function (a) { a.href = asset ? asset.browser_download_url : rel.html_url; });
-      $$('.dl-version').forEach(function (e) { e.textContent = rel.tag_name || rel.name; });
-      $$('.dl-meta').forEach(function (e) {
-        var d = new Date(rel.published_at);
-        var size = asset ? ' · ' + (asset.size / 1048576).toFixed(1) + ' MB' : '';
-        e.textContent = (rel.tag_name || '') + ' · ' + d.toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' }) + size;
-      });
-    }).catch(function () {});
+  // copy-repo-link buttons
+  $$('.copy-repo').forEach(function (b) {
+    var lab = b.querySelector('span'), orig = lab.textContent;
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-copy');
+      var done = function () { lab.textContent = 'Copied ✓'; setTimeout(function () { lab.textContent = orig; }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(done).catch(function () { window.prompt('Copy this link:', t); }); }
+      else { window.prompt('Copy this link:', t); }
+    });
+  });
 
   // copy buttons
   $$('.copy button').forEach(function (b) {

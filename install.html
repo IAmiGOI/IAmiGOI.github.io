@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Install — ST Module Engine</title>
-<meta name="description" content="How to install ST Module Engine into SillyTavern: from the in-app installer or from a release ZIP.">
+<meta name="description" content="How to install ST Module Engine into SillyTavern: by pasting the repository link into the in-app installer.">
 <meta name="theme-color" content="#0d0e12">
 <meta property="og:title" content="Install — ST Module Engine">
-<meta property="og:description" content="How to install ST Module Engine into SillyTavern: from the in-app installer or from a release ZIP.">
+<meta property="og:description" content="How to install ST Module Engine into SillyTavern: by pasting the repository link into the in-app installer.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="assets/me-logo.webp" type="image/webp">
@@ -28,31 +28,22 @@
     <a class="l" href="docs/overview.html">Docs</a>
     <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
   </nav>
-  <a class="btn primary sm dl dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download</a>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
 </header>
 
 <main>
   <div class="legal" style="max-width:860px">
     <div class="eyebrow">Install</div>
     <h1>Install ST Module Engine</h1>
-    <p class="lead">Two ways. The first takes thirty seconds and updates itself; the second is for offline or manual setups.</p>
+    <p class="lead">It takes thirty seconds, and the engine updates itself afterwards.</p>
 
     <div class="note"><b>You need:</b> a working <a href="https://github.com/SillyTavern/SillyTavern">SillyTavern</a> (a recent release) and a browser. A model connection is needed for most features — the setup guide inside the engine helps with that on first launch.</div>
 
-    <h2>Method 1 — from inside SillyTavern <span class="chip">recommended</span></h2>
+    <h2>Install from inside SillyTavern</h2>
     <ol class="steps">
       <li><h3>Open the installer</h3><p>In SillyTavern click the <b>Extensions</b> icon (stacked cubes) → <b>Install extension</b>.</p></li>
-      <li><h3>Paste the repository link</h3><div class="copy"><span>https://github.com/IAmiGOI/Module-Engine</span><button class="btn sm" type="button">Copy</button></div><p>Leave the branch empty and press <b>Install for all users</b> (or <b>Install just for me</b>).</p></li>
+      <li><h3>Paste the repository link</h3><p><button type="button" class="btn primary sm copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy link</span></button></p><div class="copy"><span>https://github.com/IAmiGOI/Module-Engine</span><button class="btn sm" type="button">Copy</button></div><p>Leave the branch empty and press <b>Install for all users</b> (or <b>Install just for me</b>).</p></li>
       <li><h3>Reload the page</h3><p>The loading screen now shows <b>ST × ME</b>. The engine's dock appears on the right edge of the screen — hover it to open the panel.</p></li>
-    </ol>
-
-    <h2>Method 2 — from a release ZIP</h2>
-    <ol class="steps">
-      <li><h3>Download</h3><p><a class="btn primary dl-link" href="https://github.com/IAmiGOI/Module-Engine/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg> Download <span class="dl-version">latest release</span></a></p><p><span class="dl-meta" style="color:var(--muted);font-size:13px"></span></p></li>
-      <li><h3>Unzip into the extensions folder</h3><p>Create a folder named <code>Module-Engine</code> and put the contents of the ZIP in it, so that <code>manifest.json</code> sits directly inside:</p>
-        <pre><code>SillyTavern/public/scripts/extensions/third-party/Module-Engine/manifest.json</code></pre>
-        <p>Installing only for your user? Use <code>SillyTavern/data/&lt;your-user&gt;/extensions/Module-Engine/</code> instead.</p></li>
-      <li><h3>Restart and reload</h3><p>Restart SillyTavern if it was running, then reload the page.</p></li>
     </ol>
 
     <h2>First launch</h2>
@@ -63,13 +54,13 @@
     </ol>
 
     <h2>Updating</h2>
-    <p>The engine checks for new versions itself: open the <b>Updates</b> card on the settings screen and press install. You can also use SillyTavern's own extension manager, or download the newest ZIP and replace the folder (your settings are stored separately and are kept).</p>
+    <p>The engine checks for new versions itself: open the <b>Updates</b> card on the settings screen and press install. You can also use SillyTavern's own extension manager.</p>
     <h2>Uninstalling</h2>
-    <p>Open <b>Extensions → Manage extensions</b>, find <b>ST Module Engine</b> and remove it — or delete the <code>Module-Engine</code> folder. Your chats and characters are never touched.</p>
+    <p>Open <b>Extensions → Manage extensions</b>, find <b>ST Module Engine</b> and remove it. Your chats and characters are never touched.</p>
 
     <h2>Something went wrong?</h2>
     <ul>
-      <li><b>No dock after reload</b> — check that <code>manifest.json</code> is directly inside the <code>Module-Engine</code> folder (not one level deeper) and that the extension is enabled in the extension manager.</li>
+      <li><b>No dock after reload</b> — reload the page and check that the extension is enabled in <b>Extensions → Manage extensions</b>.</li>
       <li><b>Features do nothing</b> — a model connection is missing or down. See <a href="docs/troubleshooting.html">Troubleshooting</a>.</li>
       <li>Still stuck? Open an <a href="https://github.com/IAmiGOI/Module-Engine/issues">issue on GitHub</a>.</li>
     </ul>
