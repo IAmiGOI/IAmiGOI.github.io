@@ -121,7 +121,7 @@ def nav(base, cur):
 
 def foot(base):
     return f"""<footer>
-  <div>© AmiGO · Free, open-source. Not affiliated with SillyTavern.</div>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="{REPO}/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
   <nav><a href="{base}docs/overview.html">Docs</a><a href="{base}install.html">Install</a><a href="{base}privacy.html">Privacy policy</a><a href="{base}terms.html">Terms</a><a href="{REPO}/issues">Issues</a><a href="{REPO}">GitHub</a></nav>
 </footer>
 <script src="{base}assets/site.js"></script>
@@ -162,7 +162,7 @@ def landing():
       {cpbtn("primary big", "Copy install link")}
       <a class="btn big" href="install.html">Install guide</a>
     </div>
-    <div class="meta">Paste it in SillyTavern → Extensions → Install extension · free &amp; open source</div>
+    <div class="meta">Paste it in SillyTavern → Extensions → Install extension</div>
     <div class="loadbar"></div>
 
     <div class="preview rv">
@@ -219,7 +219,7 @@ def landing():
 
   <div class="final rv">
     <h2>Ready to try it?</h2>
-    <p class="lead" style="margin:0 auto 22px">Free, open source and runs entirely in your browser.</p>
+    <p class="lead" style="margin:0 auto 22px">Runs entirely in your browser.</p>
     <div class="cta">{cpbtn("primary big", "Copy install link")}<a class="btn big" href="{REPO}">{ICON_GH} View on GitHub</a></div>
   </div>
 </main>
