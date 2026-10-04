@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Modules — ST Module Engine docs</title>
-<meta name="description" content="Turn features on and off.">
+<title>Modules at a glance — ST Module Engine docs</title>
+<meta name="description" content="Every module on one page, with what it is for and where to read more.">
 <meta name="theme-color" content="#0d0e12">
-<meta property="og:title" content="Modules — ST Module Engine docs">
-<meta property="og:description" content="Turn features on and off.">
+<meta property="og:title" content="Modules at a glance — ST Module Engine docs">
+<meta property="og:description" content="Every module on one page, with what it is for and where to read more.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../assets/me-logo.webp" type="image/webp">
@@ -25,7 +25,7 @@
   <nav class="links" style="display:contents">
     <a class="l" href="../index.html#features">Features</a>
     <a class="l" href="../install.html">Install</a>
-    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
     <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
   </nav>
   <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
@@ -35,77 +35,65 @@
   <aside class="side">
     <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
     <div class="results"></div>
-    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="on" href="modules.html">Modules</a><h4>Modules</h4><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="music.html">Music</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="on" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article">
-    <div class="eyebrow">Getting started</div>
-    <h1>Modules</h1>
-    <p>Modules are switched on and off in the <strong>Modules</strong> card; each module's own settings appear there once it is on. Most modules need a working <a href="models.html">model connection</a>.</p>
-<p>Good first modules: <strong>Tracker</strong> (watch values like health or mood update by themselves) and <strong>RP Time</strong> (an in-world clock).</p>
-<h2 id="all-modules">All modules</h2>
-<table>
-<thead>
-<tr>
-<th>Module</th>
-<th>What it does</th>
-<th>Id</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="tracker.html">Tracker</a></td>
-<td>Keeps named values up to date and publishes them as macros</td>
-<td><code>module.tracker</code></td>
-</tr>
-<tr>
-<td><a href="rp-time.html">RP Time</a></td>
-<td>Works out the in-world time from the chat</td>
-<td><code>module.time</code></td>
-</tr>
-<tr>
-<td><a href="notebook-secrets.html">Notebook</a></td>
-<td>Private working memory the AI writes to</td>
-<td><code>module.notebook</code></td>
-</tr>
-<tr>
-<td><a href="notebook-secrets.html">Secrets</a></td>
-<td>Hidden facts tagged with who knows them</td>
-<td><code>module.secrets</code></td>
-</tr>
-<tr>
-<td><a href="postprocess.html">Post-Turn Processor</a></td>
-<td>Rewrites each reply through a chain of passes</td>
-<td><code>module.postprocess</code></td>
-</tr>
-<tr>
-<td><a href="music.html">Music</a></td>
-<td>Background music that follows the scene</td>
-<td><code>module.music</code></td>
-</tr>
-<tr>
-<td><a href="scene-painter.html">Scene Painter</a></td>
-<td>Paints the current scene into a picture</td>
-<td><code>module.scenePainter</code></td>
-</tr>
-<tr>
-<td><a href="speaker-colors-map.html">Speaker Colors</a></td>
-<td>Colours dialogue by speaker</td>
-<td><code>module.speakerColors</code></td>
-</tr>
-<tr>
-<td><a href="speaker-colors-map.html">Map</a></td>
-<td>A floating world map with distances</td>
-<td><code>module.map</code></td>
-</tr>
-</tbody>
-</table>
-    <div class="pager"><a href="models.html"><small>← Previous</small>Model connections</a><a class="nx" href="tracker.html"><small>Next →</small>Tracker</a></div>
-  </article>
-  <aside class="toc"><b>On this page</b><a href="#all-modules">All modules</a></aside>
+  <article class="article"><div class="eyebrow">Modules</div><h1>Modules at a glance</h1><div class="glance"><div><small>Needs</small><span>Most modules need a model connection</span></div><div><small>Find it</small><span>Engine panel → Modules</span></div></div><p class="lead">Switch modules on and off in the <strong>Modules</strong> card. Each module's own settings appear there once it is on. Most modules need a working <a href="models.html">model connection</a>.</p>
+<div class="note tip">
+<p><strong>Good first modules:</strong> <a href="tracker.html">Tracker</a> — watch values like health or mood update by themselves — and <a href="rp-time.html">RP Time</a> — an in-world clock.</p>
+</div>
+<h2 id="story-awareness">Story awareness</h2>
+<div class="cards">
+<a class="mini" href="tracker.html">
+<p><strong>Tracker</strong> · <code>module.tracker</code>
+Named values that a model keeps up to date and publishes as macros.</p>
+</a>
+<a class="mini" href="rp-time.html">
+<p><strong>RP Time</strong> · <code>module.time</code>
+Works out the story's time from the chat and shows a badge.</p>
+</a>
+<a class="mini" href="notebook-secrets.html">
+<p><strong>Notebook</strong> · <code>module.notebook</code>
+Private working memory the AI writes to and reads back.</p>
+</a>
+<a class="mini" href="notebook-secrets.html">
+<p><strong>Secrets</strong> · <code>module.secrets</code>
+Hidden facts tagged with who knows them.</p>
+</a>
+</div>
+<h2 id="writing-quality">Writing quality</h2>
+<div class="cards">
+<a class="mini" href="postprocess.html">
+<p><strong>Post-Turn Processor</strong> · <code>module.postprocess</code>
+Rewrites every fresh reply through a chain of passes.</p>
+</a>
+<a class="mini" href="speaker-colors.html">
+<p><strong>Speaker Colors</strong> · <code>module.speakerColors</code>
+Colours each character's dialogue by who speaks.</p>
+</a>
+</div>
+<h2 id="atmosphere">Atmosphere</h2>
+<div class="cards">
+<a class="mini" href="scene-painter.html">
+<p><strong>Scene Painter</strong> · <code>module.scenePainter</code>
+Paints the current scene into a picture.</p>
+</a>
+<a class="mini" href="music.html">
+<p><strong>Music</strong> · <code>module.music</code>
+Plays background music that matches the scene.</p>
+</a>
+<a class="mini" href="map.html">
+<p><strong>Map</strong> · <code>module.map</code>
+A floating world map with distances and travel time.</p>
+</a>
+</div>
+<div class="note">
+<p>The <code>module.*</code> ids are the names the engine uses internally (for example in the guide's actions). You never need to type them.</p>
+</div><div class="pager"><a href="models.html"><small>← Previous</small>Model connections</a><a class="nx" href="tracker.html"><small>Next →</small>Tracker</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#story-awareness">Story awareness</a><a href="#writing-quality">Writing quality</a><a href="#atmosphere">Atmosphere</a></aside>
 </main>
 <footer>
   <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
-  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
 </footer>
 <script src="../assets/site.js"></script>
 </body>

@@ -9,66 +9,15 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 KB = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/home/amigo/Module Engine/Client/Release/guide/knowledge")
 REPO = "https://github.com/IAmiGOI/Module-Engine"
 
-DOCS = [  # (group, slug, source file, title override, one-line description)
-    ("Getting started", "overview", "engine-overview.md", "Overview", "What Module Engine is and how its parts fit together."),
-    ("Getting started", "models", "models.md", "Model connections", "Connect the models the engine uses for its own calls."),
-    ("Getting started", "modules", "modules.md", "Modules", "Turn features on and off."),
-    ("Modules", "tracker", "tracker.md", "Tracker", "Values that update themselves: health, mood, location…"),
-    ("Modules", "rp-time", "rp-time.md", "RP Time", "An in-world clock worked out from the chat."),
-    ("Modules", "notebook-secrets", "notebook-secrets.md", "Notebook & Secrets", "Working memory and who-knows-what."),
-    ("Modules", "postprocess", "postprocess.md", "Post-Turn Processor", "Rewrite every reply through a chain of passes."),
-    ("Modules", "music", "music.md", "Music", "Background music that follows the scene."),
-    ("Modules", "scene-painter", "scene-painter.md", "Scene Painter", "Paint the current scene into a picture."),
-    ("Modules", "speaker-colors-map", "speaker-colors-map.md", "Speaker Colors & Map", "Coloured dialogue and a world map."),
-    ("Memory & prompts", "summary-memory", "summary-memory.md", "Chat Summary & memory graph", "Long chats that still fit the context."),
-    ("Memory & prompts", "lorebook-macros", "lorebook-macros.md", "Lorebook & Macros", "World Info and the values you can use in prompts."),
-    ("Memory & prompts", "prompt-manager", "prompt-manager.md", "Prompt Manager", "Build the request the way you want it."),
-    ("Interface & data", "chat-viewport-home", "chat-viewport-home.md", "Chat Viewport & desktop", "The engine's own chat view and home screen."),
-    ("Interface & data", "preset-sync-updates", "preset-sync-updates.md", "Preset, sync, updates", "Back up, sync between devices, update."),
-    ("Help", "troubleshooting", "troubleshooting.md", "Troubleshooting", "When something does not work."),
-]
-
-# the guide articles are written for an in-app assistant too; keep only what a reader needs
-DROP_PAR = re.compile(r"for the user yourself|Write them as full briefs|do not pin one at random|You can read and explain|never mention them", re.I)
-DROP_SENT = re.compile(r"\s*When you add passes for someone, check auto-run and offer to turn it on\.")
-
-def clean(md):
-    md = re.sub(r"\A---.*?---\s*", "", md, flags=re.S)                       # front matter
-    md = re.sub(r"\[([^\]]+)\]\(stme:[^)]+\)", r"**\1**", md)               # in-app links -> bold
-    md = md.replace("(know this before you build or advise)", "")
-    md = md.replace("## How it really works ", "## How it works")
-    md = re.sub(r"(module id:? )(module\.\w+)", r"\1`\2`", md, flags=re.I)
-    md = DROP_SENT.sub("", md)
-    md = md.replace(" (the state below tells you which)", "").replace(" — still say it in your own words if it matters", "")
-    out = []
-    for block in re.split(r"\n(?=- |\n)", md):
-        if DROP_PAR.search(block):
-            continue
-        out.append(block)
-    md = "\n".join(out)
-    md = re.sub(r"(?m)^([^\s\-].*[^\n])\n(- )", r"\1\n\n\2", md)  # markdown needs a blank line before a list
-    md = re.sub(r"\n{3,}", "\n\n", md)
-    # first paragraph before any heading becomes the intro; keep as-is
-    return md.strip()
-
-MODULES_PAGE = """Modules are switched on and off in the **Modules** card; each module's own settings appear there once it is on. Most modules need a working [model connection](models.html).
-
-Good first modules: **Tracker** (watch values like health or mood update by themselves) and **RP Time** (an in-world clock).
-
-## All modules
-
-| Module | What it does | Id |
-|---|---|---|
-| [Tracker](tracker.html) | Keeps named values up to date and publishes them as macros | `module.tracker` |
-| [RP Time](rp-time.html) | Works out the in-world time from the chat | `module.time` |
-| [Notebook](notebook-secrets.html) | Private working memory the AI writes to | `module.notebook` |
-| [Secrets](notebook-secrets.html) | Hidden facts tagged with who knows them | `module.secrets` |
-| [Post-Turn Processor](postprocess.html) | Rewrites each reply through a chain of passes | `module.postprocess` |
-| [Music](music.html) | Background music that follows the scene | `module.music` |
-| [Scene Painter](scene-painter.html) | Paints the current scene into a picture | `module.scenePainter` |
-| [Speaker Colors](speaker-colors-map.html) | Colours dialogue by speaker | `module.speakerColors` |
-| [Map](speaker-colors-map.html) | A floating world map with distances | `module.map` |
-"""
+GROUPS = ["Start here", "Setup", "Modules", "Memory & prompts", "Interface & data", "Help"]
+GROUP_BLURB = {
+    "Start here": "New to Module Engine? Begin here.",
+    "Setup": "Connect the models the engine works with.",
+    "Modules": "Every feature, step by step.",
+    "Memory & prompts": "Long-term memory and full control of the request.",
+    "Interface & data": "The look of the engine, and keeping your data safe.",
+    "Help": "When something is unclear or broken.",
+}
 
 def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
@@ -112,7 +61,7 @@ def nav(base, cur):
   <nav class="links" style="display:contents">
     {a("index.html#features", "Features", "home")}
     {a("install.html", "Install", "install")}
-    {a("docs/overview.html", "Docs", "docs")}
+    {a("docs/index.html", "Docs", "docs")}
     <a class="l" href="{REPO}">GitHub</a>
   </nav>
   {cpbtn("primary sm dl", "Copy install link")}
@@ -122,7 +71,7 @@ def nav(base, cur):
 def foot(base):
     return f"""<footer>
   <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="{REPO}/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
-  <nav><a href="{base}docs/overview.html">Docs</a><a href="{base}install.html">Install</a><a href="{base}privacy.html">Privacy policy</a><a href="{base}terms.html">Terms</a><a href="{REPO}/issues">Issues</a><a href="{REPO}">GitHub</a></nav>
+  <nav><a href="{base}docs/index.html">Docs</a><a href="{base}install.html">Install</a><a href="{base}privacy.html">Privacy policy</a><a href="{base}terms.html">Terms</a><a href="{REPO}/issues">Issues</a><a href="{REPO}">GitHub</a></nav>
 </footer>
 <script src="{base}assets/site.js"></script>
 </body>
@@ -211,7 +160,7 @@ def landing():
     <div class="eyebrow">Get started</div>
     <h2 class="sec">Up and running in three steps</h2>
     <ol class="steps rv">
-      <li><h3>Install</h3><p>In SillyTavern open <b>Extensions → Install extension</b> and paste the repository link and press Install.</p><p><a href="install.html">Full installation guide →</a></p></li>
+      <li><h3>Install</h3><p>In SillyTavern open <b>Extensions → Install extension</b>, paste the repository link and press Install.</p><p><a href="install.html">Full installation guide →</a></p></li>
       <li><h3>Connect a model</h3><p>The quickest start: reuse SillyTavern's current connection with one click. Add a cheaper separate model later if you like.</p><p><a href="docs/models.html">Model connections →</a></p></li>
       <li><h3>Switch on modules</h3><p>Open the engine from the dock on the right edge of the screen. Good first picks: Tracker and RP Time. Mea, the built-in guide, helps on the first launch.</p><p><a href="docs/modules.html">Modules →</a></p></li>
     </ol>
@@ -267,55 +216,100 @@ def install():
 """ + foot("")
 
 # ---------------------------------------------------------------- docs
+def read_page(path):
+    raw = path.read_text(encoding="utf-8")
+    m = re.match(r"---\n(.*?)\n---\n(.*)", raw, re.S)
+    meta = dict(l.split(": ", 1) for l in m.group(1).splitlines() if ": " in l)
+    return meta, m.group(2)
+
+def render_md(md, text):
+    # <a class="mini"> cards: python-markdown only reads block elements, so go through a div and swap back
+    text = re.sub(r'<a class="mini" href="([^"]+)" markdown="1">(.*?)</a>', r'<div class="mini" data-href="\1" markdown="1">\2</div>', text, flags=re.S)
+    # <ol class="steps"><li> -> divs (li is not a block python-markdown reads into)
+    text = text.replace('<ol class="steps">', '<div class="steps" markdown="1">').replace('</ol>', '</div>')
+    text = text.replace('<li markdown="1">', '<div class="step" markdown="1">').replace('</li>', '</div>')
+    md.reset()
+    out = md.convert(text)
+    out = re.sub(r'<div class="mini" data-href="([^"]+)">(.*?)</div>', r'<a class="mini" href="\1">\2</a>', out, flags=re.S)
+    return out
+
 def docs():
-    md = markdown.Markdown(extensions=["tables", "fenced_code", "sane_lists"])
-    pages, index = [], []
-    for group, sl, src, title, desc in DOCS:
-        md.reset()
-        text = MODULES_PAGE if sl == "modules" else clean((KB / src).read_text(encoding="utf-8"))
-        body = md.convert(text)
-        # ids on h2 for the in-page nav
+    md = markdown.Markdown(extensions=["tables", "fenced_code", "sane_lists", "md_in_html"])
+    pages = []
+    for f in sorted((ROOT / "tools" / "pages").glob("*.md")):
+        meta, text = read_page(f)
+        body = render_md(md, text)
         heads = []
         def addid(m):
             t = re.sub(r"<[^>]+>", "", m.group(1)); i = slug(t)
             heads.append((i, html.unescape(t)))
             return f'<h2 id="{i}">{m.group(1)}</h2>'
         body = re.sub(r"<h2>(.*?)</h2>", addid, body)
-        # the first paragraph (before any heading) is the module's own summary
-        pages.append(dict(group=group, slug=sl, title=title, desc=desc, body=body, heads=heads))
-        index.append(dict(title=title, url=f"docs/{sl}.html", text=re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html.unescape(body)))))
+        pages.append(dict(meta, slug=f.stem, body=body, heads=heads, order=int(meta.get("order", 99))))
+    pages.sort(key=lambda p: p["order"])
+    index = []
+    outdir = ROOT / "docs"; outdir.mkdir(exist_ok=True)
 
-    (ROOT / "docs").mkdir(exist_ok=True)
-    for n, p in enumerate(pages):
+    def sidebar(cur):
         groups = {}
         for q in pages: groups.setdefault(q["group"], []).append(q)
-        side = "".join(
-            f'<h4>{g}</h4>' + "".join(f'<a class="{"on" if q["slug"] == p["slug"] else ""}" href="{q["slug"]}.html">{html.escape(q["title"])}</a>' for q in qs)
-            for g, qs in groups.items())
-        toc = "".join(f'<a href="#{i}">{html.escape(t)}</a>' for i, t in p["heads"])
-        prev_ = pages[n - 1] if n else None
-        next_ = pages[n + 1] if n + 1 < len(pages) else None
-        pager = '<div class="pager">' + (f'<a href="{prev_["slug"]}.html"><small>← Previous</small>{html.escape(prev_["title"])}</a>' if prev_ else "<span></span>") + \
-                (f'<a class="nx" href="{next_["slug"]}.html"><small>Next →</small>{html.escape(next_["title"])}</a>' if next_ else "") + "</div>"
-        page = head(f'{p["title"]} — ST Module Engine docs', p["desc"], "../") + nav("../", "docs") + f"""
+        h = f'<a class="{"on" if cur == "index" else ""}" href="index.html">Documentation home</a>'
+        for g in GROUPS:
+            h += f"<h4>{g}</h4>" + "".join(f'<a class="{"on" if q["slug"] == cur else ""}" href="{q["slug"]}.html">{html.escape(q["title"])}</a>' for q in groups.get(g, []))
+        return h
+
+    def shell(title, desc, cur, inner, toc=""):
+        return head(f"{title} — ST Module Engine docs", desc, "../") + nav("../", "docs") + f"""
 <main class="docs">
   <aside class="side">
     <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
     <div class="results"></div>
-    <div class="side-nav">{side}</div>
+    <div class="side-nav">{sidebar(cur)}</div>
   </aside>
-  <article class="article">
-    <div class="eyebrow">{p["group"]}</div>
-    <h1>{html.escape(p["title"])}</h1>
-    {p["body"]}
-    {pager}
-  </article>
-  <aside class="toc">{"<b>On this page</b>" + toc if toc else ""}</aside>
+  <article class="article">{inner}</article>
+  <aside class="toc">{toc}</aside>
 </main>
 """ + foot("../")
-        (ROOT / "docs" / f'{p["slug"]}.html').write_text(page, encoding="utf-8")
-    # search index lives next to the docs so data-base="" resolves
-    (ROOT / "docs" / "search-index.json").write_text(json.dumps([dict(i, url=i["url"].split("/")[-1]) for i in index], ensure_ascii=False), encoding="utf-8")
+
+    for n, p in enumerate(pages):
+        glance = ""
+        if p.get("needs") or p.get("where") or p.get("id"):
+            items = [("Needs", p.get("needs")), ("Find it", p.get("where")), ("Module id", p.get("id"))]
+            glance = '<div class="glance">' + "".join(f"<div><small>{k}</small><span>{v if k != 'Module id' else '<code>' + html.escape(v) + '</code>'}</span></div>" for k, v in items if v) + "</div>"
+        # first paragraph is the lead
+        body = re.sub(r"<p>", '<p class="lead">', p["body"], count=1)
+        prev_ = pages[n - 1] if n else None
+        next_ = pages[n + 1] if n + 1 < len(pages) else None
+        pager = '<div class="pager">' + (f'<a href="{prev_["slug"]}.html"><small>← Previous</small>{html.escape(prev_["title"])}</a>' if prev_ else "<span></span>") + \
+                (f'<a class="nx" href="{next_["slug"]}.html"><small>Next →</small>{html.escape(next_["title"])}</a>' if next_ else "") + "</div>"
+        inner = f'<div class="eyebrow">{p["group"]}</div><h1>{html.escape(p["title"])}</h1>{glance}{body}{pager}'
+        toc = ("<b>On this page</b>" + "".join(f'<a href="#{i}">{html.escape(t)}</a>' for i, t in p["heads"])) if p["heads"] else ""
+        (outdir / f'{p["slug"]}.html').write_text(shell(p["title"], p["desc"], p["slug"], inner, toc), encoding="utf-8")
+        index.append(dict(title=p["title"], url=f'{p["slug"]}.html', text=re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html.unescape(p["body"])))))
+
+    # docs home
+    bycat = {}
+    for q in pages: bycat.setdefault(q["group"], []).append(q)
+    start = [q for q in pages if q["slug"] in ("quick-start", "concepts", "models")]
+    big = "".join(f'<a class="mini big" href="{q["slug"]}.html"><b>{html.escape(q["title"])}</b><p>{html.escape(q["desc"])}</p></a>' for q in start)
+    tasks = [("Track health, mood and location", "tracker"), ("Make a long chat fit the context", "summary"), ("Clean up the writing of replies", "postprocess"),
+             ("Illustrate a scene", "scene-painter"), ("Control the prompt precisely", "prompt-manager"), ("Fix an error", "troubleshooting")]
+    tk = "".join(f'<a class="task" href="{u}.html">{html.escape(t)} <span>→</span></a>' for t, u in tasks)
+    topics = ""
+    for g in GROUPS:
+        qs = bycat.get(g, [])
+        if not qs or g == "Start here": continue
+        topics += f'<h2 class="sec-h">{g}<small>{GROUP_BLURB[g]}</small></h2><div class="cards">' + "".join(f'<a class="mini" href="{q["slug"]}.html"><b>{html.escape(q["title"])}</b><p>{html.escape(q["desc"])}</p></a>' for q in qs) + "</div>"
+    inner = f"""<div class="eyebrow">Documentation</div><h1>Learn Module Engine</h1>
+<p class="lead">Everything you need to install, set up and get the most out of the engine — written around what you want to do, not around the settings screen.</p>
+<h2 class="sec-h">Start here<small>{GROUP_BLURB["Start here"]}</small></h2><div class="cards big3">{big}</div>
+<h2 class="sec-h">I want to…</h2><div class="tasks">{tk}</div>{topics}"""
+    (outdir / "index.html").write_text(shell("Documentation", "Install, set up and use ST Module Engine: guides for every module, memory, prompts and troubleshooting.", "index", inner), encoding="utf-8")
+    (outdir / "search-index.json").write_text(json.dumps(index, ensure_ascii=False), encoding="utf-8")
+    # drop pages of the previous doc layout
+    keep = {f'{p["slug"]}.html' for p in pages} | {"index.html"}
+    for old in outdir.glob("*.html"):
+        if old.name not in keep: old.unlink()
 
 # ---------------------------------------------------------------- legal pages (text untouched, restyled)
 def restyle_legal(name, cur_title):

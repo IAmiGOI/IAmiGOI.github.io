@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sync, backup &amp; updates — ST Module Engine docs</title>
+<meta name="description" content="Export your configuration, sync between devices, update the extension and manage backgrounds.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Sync, backup &amp; updates — ST Module Engine docs">
+<meta property="og:description" content="Export your configuration, sync between devices, update the extension and manage backgrounds.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="on" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Interface & data</div><h1>Sync, backup &amp; updates</h1><div class="glance"><div><small>Needs</small><span>Optional cloud account</span></div><div><small>Find it</small><span>Settings screen</span></div></div><p class="lead">Four cards on the <strong>settings screen</strong> keep your setup safe and current.</p>
+<div class="cards">
+<div class="mini">
+<p><strong>Preset</strong>
+Exports and imports the engine's whole configuration — handy for backups and sharing a setup.</p>
+</div>
+<div class="mini">
+<p><strong>Sync</strong>
+Keeps settings and chats in step between your devices — through the cloud or GitHub.</p>
+</div>
+<div class="mini">
+<p><strong>Updates</strong>
+Checks for and installs new versions of the extension.</p>
+</div>
+<div class="mini">
+<p><strong>Backgrounds</strong>
+Manages chat backgrounds.</p>
+</div>
+</div>
+<h2 id="cloud-sync-your-account-nothing-in-between">Cloud sync — your account, nothing in between</h2>
+<p>Optional. Sign in with <strong>your own Google Drive or Dropbox account</strong> and the engine keeps the SillyTavern data you choose (for example characters, chats, lorebooks, backgrounds) in step on all your devices.</p>
+<ul>
+<li>It runs entirely <strong>in your browser</strong> and talks to your cloud account directly. Nothing is sent to the author.</li>
+<li>With Google, it requests only the <code>drive.file</code> permission: it can see and change <strong>only the files and the folder it created itself</strong> ("ST Module Engine Sync") — not the rest of your Drive.</li>
+<li>Disconnect any time in the extension; revoke access at myaccount.google.com/permissions.</li>
+</ul>
+<p>Read the full <a href="../privacy.html">Privacy policy</a>.</p>
+<div class="note warn">
+<p><strong>Keep your own backups.</strong> Sync copies files between devices; it is not a substitute for a backup. Export a <strong>Preset</strong> before big changes.</p>
+</div>
+<h2 id="updating">Updating</h2>
+<p>Open the <strong>Updates</strong> card and install. The engine updates itself and shows an update overlay while it does. Your settings are stored separately and are kept.</p><div class="pager"><a href="chat-viewport.html"><small>← Previous</small>Chat Viewport &amp; desktop</a><a class="nx" href="troubleshooting.html"><small>Next →</small>Troubleshooting</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#cloud-sync-your-account-nothing-in-between">Cloud sync — your account, nothing in between</a><a href="#updating">Updating</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

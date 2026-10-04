@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick start — ST Module Engine docs</title>
+<meta name="description" content="From a fresh install to a working tracker and clock in about five minutes.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Quick start — ST Module Engine docs">
+<meta property="og:description" content="From a fresh install to a working tracker and clock in about five minutes.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="on" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Start here</div><h1>Quick start</h1><p class="lead">This takes about five minutes. You will install the engine, connect a model and see your first tracker update on its own.</p>
+<div class="steps">
+<div class="step">
+<h3>Install the extension</h3>
+<p>In SillyTavern open <strong>Extensions → Install extension</strong>, paste <code>https://github.com/IAmiGOI/Module-Engine</code> and install. Reload the page — the loading screen now says <strong>ST × ME</strong>.</p>
+<p>Details and troubleshooting: <a href="../install.html">Install</a>.</p>
+</div>
+<div class="step">
+<h3>Open the engine</h3>
+<p>Hover the thin glowing line on the <strong>right edge</strong> of the screen. The dock slides out; click the engine icon to open the main panel. On the very first launch the guide <strong>Mea</strong> opens by herself.</p>
+</div>
+<div class="step">
+<h3>Connect a model</h3>
+<p>Press <strong>+ SillyTavern main connection</strong> in the <strong>Model connections</strong> card (or choose the same option in Mea's chat). The engine now reuses whatever SillyTavern is connected to — no key needed.</p>
+<p>Prefer a separate cheaper model? Choose <strong>Add connection</strong> and fill in the format, endpoint, key and model name. See <a href="models.html">Model connections</a>.</p>
+</div>
+<div class="step">
+<h3>Switch on two modules</h3>
+<p>Open the <strong>Modules</strong> card and turn on <strong>Tracker</strong> and <strong>RP Time</strong>. They are the easiest to understand and need nothing else.</p>
+</div>
+<div class="step">
+<h3>Make your first tracker</h3>
+<p>In the Tracker settings add a tracker called <code>status</code>, pick your connection, and add a field <code>location</code> with the prompt <em>"where the scene takes place"</em>. Set <strong>Poll when</strong> to <em>after every reply</em> and press <strong>Save</strong>. Now chat — a small window shows the location and updates by itself. Full walkthrough: <a href="tracker.html">Tracker</a>.</p>
+</div>
+</div>
+<h2 id="where-to-go-next">Where to go next</h2>
+<table>
+<thead>
+<tr>
+<th>I want to…</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Make the AI remember a long story</td>
+<td><a href="summary.html">Chat Summary</a> and <a href="memory-graph.html">Memory graph</a></td>
+</tr>
+<tr>
+<td>Clean up the writing of every reply</td>
+<td><a href="postprocess.html">Post-Turn Processor</a></td>
+</tr>
+<tr>
+<td>Illustrate scenes</td>
+<td><a href="scene-painter.html">Scene Painter</a></td>
+</tr>
+<tr>
+<td>Take control of what is sent to the model</td>
+<td><a href="prompt-manager.html">Prompt Manager</a></td>
+</tr>
+<tr>
+<td>Use a tracker value inside my prompts</td>
+<td><a href="lorebook-macros.html">Lorebook &amp; Macros</a></td>
+</tr>
+<tr>
+<td>Move to another device</td>
+<td><a href="sync-backup-updates.html">Sync, backup &amp; updates</a></td>
+</tr>
+</tbody>
+</table>
+<div class="note">
+<p><strong>Stuck?</strong> Almost every problem is a model connection that is down or rejected — its last error is shown under it in the Model connections card. See <a href="troubleshooting.html">Troubleshooting</a>.</p>
+</div><div class="pager"><a href="introduction.html"><small>← Previous</small>Introduction</a><a class="nx" href="concepts.html"><small>Next →</small>Core concepts</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#where-to-go-next">Where to go next</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

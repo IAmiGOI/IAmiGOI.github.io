@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Map — ST Module Engine docs</title>
+<meta name="description" content="A floating full-screen world map with regions, distances and travel time.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Map — ST Module Engine docs">
+<meta property="og:description" content="A floating full-screen world map with regions, distances and travel time.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="on" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Modules</div><h1>Map</h1><div class="glance"><div><small>Needs</small><span>No model</span></div><div><small>Find it</small><span>Its own draggable button</span></div><div><small>Module id</small><span><code>module.map</code></span></div></div><p class="lead">Map is a floating, full-screen <strong>map window</strong> with a settings drawer. It opens from its own draggable button. Locations, regions and sub-regions give you real distances and <strong>travel time</strong> between places.</p>
+<h2 id="set-it-up">Set it up</h2>
+<div class="steps">
+<div class="step">
+<h3>Switch it on</h3>
+<p>Modules card → <strong>Map</strong>. A draggable button appears.</p>
+</div>
+<div class="step">
+<h3>Set the scale</h3>
+<p>In the settings drawer enter the real-world <strong>Map width / height (m)</strong> the map stands for. Distances and travel time are computed from it.</p>
+</div>
+<div class="step">
+<h3>Add locations</h3>
+<p>Add a location (name, description, colour, radius). Use <strong>+ Sub-region</strong> to nest a region inside another one.</p>
+</div>
+</div>
+<h2 id="map-settings">Map settings</h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Map width / height (m)</strong></td>
+<td>The real-world size the map stands for</td>
+</tr>
+<tr>
+<td><strong>Walking speed (m/min)</strong> + <strong>Auto-calculate travel time</strong></td>
+<td>Travel time between places is worked out from distance and this speed</td>
+</tr>
+<tr>
+<td><strong>Auto-connect distance (m)</strong></td>
+<td>Any two locations closer than this are connected even if their borders do not touch (blank = off)</td>
+</tr>
+<tr>
+<td><strong>Minimum traversable rank</strong></td>
+<td>Locations ranked below this are excluded from movement (blank = no ceiling)</td>
+</tr>
+<tr>
+<td><strong>Nested-level scale coefficient</strong></td>
+<td>Each nesting level without its own explicit size is this many times smaller than its parent</td>
+</tr>
+<tr>
+<td><strong>Marker size</strong></td>
+<td>Size of location markers</td>
+</tr>
+</tbody>
+</table>
+<h2 id="per-location">Per location</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Name</strong> / <strong>Description</strong></td>
+<td>What it is</td>
+</tr>
+<tr>
+<td><strong>Rank</strong></td>
+<td>Free-form abstraction level — lower = more abstract, blank = unranked</td>
+</tr>
+<tr>
+<td><strong>Color</strong></td>
+<td>Blank = theme colour</td>
+</tr>
+<tr>
+<td><strong>Radius</strong></td>
+<td>Size of the location</td>
+</tr>
+<tr>
+<td><strong>+ Sub-region</strong></td>
+<td>Nest a region inside this one</td>
+</tr>
+<tr>
+<td><strong>Delete location</strong></td>
+<td>Removes it</td>
+</tr>
+</tbody>
+</table><div class="pager"><a href="speaker-colors.html"><small>← Previous</small>Speaker Colors</a><a class="nx" href="notebook-secrets.html"><small>Next →</small>Notebook &amp; Secrets</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#set-it-up">Set it up</a><a href="#map-settings">Map settings</a><a href="#per-location">Per location</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

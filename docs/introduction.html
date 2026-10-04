@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introduction — ST Module Engine docs</title>
+<meta name="description" content="What Module Engine is, what it adds to SillyTavern and who it is for.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Introduction — ST Module Engine docs">
+<meta property="og:description" content="What Module Engine is, what it adds to SillyTavern and who it is for.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="on" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Start here</div><h1>Introduction</h1><p class="lead">Module Engine (ME) is an extension for SillyTavern that adds a second layer on top of your roleplay: <strong>small, switchable features that work alongside the model that writes your story</strong>.</p>
+<p>While your main model writes the reply, ME can quietly keep track of the hero's health, work out what time it is in the story, rewrite the reply to remove clichés, fold old messages into summaries, paint the scene, pick music — each job done by a model you choose, usually a cheaper and faster one.</p>
+<h2 id="what-it-gives-you">What it gives you</h2>
+<div class="cards">
+<a class="mini" href="tracker.html">
+<p><strong>Track the story</strong>
+Health, mood, location, relationships — values that update themselves after every reply.</p>
+</a>
+<a class="mini" href="summary.html">
+<p><strong>Remember everything</strong>
+Leveled summaries and a memory graph so long chats still fit the context.</p>
+</a>
+<a class="mini" href="postprocess.html">
+<p><strong>Polish replies</strong>
+Chains of rewrite passes that clean up style, grammar and continuity.</p>
+</a>
+<a class="mini" href="prompt-manager.html">
+<p><strong>Control the prompt</strong>
+Reorder blocks, send them only when conditions are true, inspect tokens and cache.</p>
+</a>
+<a class="mini" href="scene-painter.html">
+<p><strong>Pictures and music</strong>
+Paint the current scene and play a soundtrack that follows it.</p>
+</a>
+<a class="mini" href="sync-backup-updates.html">
+<p><strong>Keep it safe</strong>
+Back up and sync your settings and chats between devices.</p>
+</a>
+</div>
+<h2 id="how-it-feels-to-use">How it feels to use</h2>
+<p>You keep using SillyTavern the way you always did. Module Engine adds:</p>
+<ul>
+<li>a <strong>dock</strong> on the right edge of the screen — hover it to open the engine's panel;</li>
+<li><strong>floating windows</strong> (tracker values, the in-world clock, the music player, pictures, the map) that you can drag around;</li>
+<li>small <strong>badges and buttons under replies</strong> (time, 🎨 Paint);</li>
+<li>a built-in guide, <strong>Mea</strong>, who knows every setting and can walk you through the first start.</li>
+</ul>
+<p>Nothing is forced on you: every feature is a <strong>module</strong> that is off until you switch it on, and the engine never deletes your messages.</p>
+<h2 id="good-to-know-before-you-start">Good to know before you start</h2>
+<div class="note tip">
+<p><strong>You need a model for the "side jobs".</strong> Trackers, summaries, pictures and rewrite passes make their own model calls. The quickest start is to reuse the model SillyTavern is already connected to — one click, no key. Later you can add a cheaper separate model just for these jobs. See <a href="models.html">Model connections</a>.</p>
+</div>
+<ul>
+<li>ME takes over part of the <strong>generation pipeline</strong>: it can hold a reply until a tracker has answered, rewrite it afterwards, or cancel it.</li>
+<li>Everything runs in your browser. Cloud sync is optional and goes straight to your own account.</li>
+</ul>
+<p><strong>Next:</strong> <a href="quick-start.html">Quick start →</a></p><div class="pager"><span></span><a class="nx" href="quick-start.html"><small>Next →</small>Quick start</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#what-it-gives-you">What it gives you</a><a href="#how-it-feels-to-use">How it feels to use</a><a href="#good-to-know-before-you-start">Good to know before you start</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

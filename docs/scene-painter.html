@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Scene Painter — ST Module Engine docs</title>
-<meta name="description" content="Paint the current scene into a picture.">
+<meta name="description" content="Turn the current scene into a picture, with free and paid image backends.">
 <meta name="theme-color" content="#0d0e12">
 <meta property="og:title" content="Scene Painter — ST Module Engine docs">
-<meta property="og:description" content="Paint the current scene into a picture.">
+<meta property="og:description" content="Turn the current scene into a picture, with free and paid image backends.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../assets/me-logo.webp" type="image/webp">
@@ -25,7 +25,7 @@
   <nav class="links" style="display:contents">
     <a class="l" href="../index.html#features">Features</a>
     <a class="l" href="../install.html">Install</a>
-    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
     <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
   </nav>
   <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
@@ -35,34 +35,121 @@
   <aside class="side">
     <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
     <div class="results"></div>
-    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="" href="modules.html">Modules</a><h4>Modules</h4><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="music.html">Music</a><a class="on" href="scene-painter.html">Scene Painter</a><a class="" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="on" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article">
-    <div class="eyebrow">Modules</div>
-    <h1>Scene Painter</h1>
-    <p>Scene Painter paints the current scene into the Picture window. A text model writes the image prompt from the last messages, an image backend draws it. The 🎨 Paint button sits under replies (or paint automatically after each reply).
-Image backends: Pollinations (free, no key), OpenAI-compatible (OpenAI, NanoGPT and similar), Automatic1111/Forge. With NanoGPT, character avatars are sent as reference photos so the picture keeps their looks — use a model that accepts image input (nano-banana, seedream, flux-kontext, gpt-image). Mature scenes are described as written; a backup prompt writer is asked when the first one refuses. Module id: <code>module.scenePainter</code>.</p>
-<h2 id="fields-on-screen">Fields on screen</h2>
-<ul>
-<li><strong>Image backend</strong> — which service draws (Pollinations is free; OpenAI-compatible needs a key; Automatic1111/Forge is your own machine). <strong>+ Pollinations / + OpenAI-compatible / + Automatic1111</strong> add one; <strong>Save backends</strong> stores them.</li>
-<li><strong>Prompt writer (text model)</strong> — the text model that turns the last messages into an image prompt. <strong>Backup prompt writer</strong> is asked when the first one refuses.</li>
-<li><strong>Instruction for the prompt writer</strong> — how the prompt should be written; the default is fine to start with.</li>
-<li><strong>Style (appended to every prompt)</strong> — a fixed style tail such as "watercolor, soft light".</li>
-<li><strong>Negative prompt</strong> — what to avoid. Used by Stable Diffusion and Pollinations; OpenAI ignores it.</li>
-<li><strong>Scene depth (last messages)</strong> — how many recent messages the prompt writer reads.</li>
-<li><strong>Width / Height</strong> — picture size in pixels; big sizes are slower and cost more.</li>
-<li><strong>Paint automatically after every reply</strong> — otherwise use the 🎨 button under a reply.</li>
-<li><strong>Open the Picture window when a picture is ready</strong> — off: the picture waits under its reply, 🖼 shows it.</li>
-<li><strong>Use character avatars as reference photos</strong> — the picture keeps the characters' looks. Needs a backend that accepts image input (NanoGPT models like nano-banana, seedream, flux-kontext, gpt-image); others ignore it. <strong>Also send the persona avatar</strong> adds yours.</li>
-<li><strong>Describe mature scenes as written</strong> — tells the prompt writer not to soften or refuse explicit scenes (all characters shown as adults). The image backend has its own filter.</li>
-</ul>
-    <div class="pager"><a href="music.html"><small>← Previous</small>Music</a><a class="nx" href="speaker-colors-map.html"><small>Next →</small>Speaker Colors &amp; Map</a></div>
-  </article>
-  <aside class="toc"><b>On this page</b><a href="#fields-on-screen">Fields on screen</a></aside>
+  <article class="article"><div class="eyebrow">Modules</div><h1>Scene Painter</h1><div class="glance"><div><small>Needs</small><span>A text model for prompts + an image backend</span></div><div><small>Find it</small><span>Modules → Scene Painter</span></div><div><small>Module id</small><span><code>module.scenePainter</code></span></div></div><p class="lead">Scene Painter paints the <strong>current scene</strong> into the <strong>Picture window</strong>. A text model reads the last messages and writes an image prompt; an image backend draws it. A <strong>🎨 Paint</strong> button appears under replies — or paint automatically after every reply.</p>
+<div class="flow" markdown="0"><span>Last messages</span><b>→</b><span>Prompt writer<br><small>text model</small></span><b>→</b><span>Image backend</span><b>→</b><span class="ok">Picture window</span></div>
+
+<h2 id="choose-a-backend">Choose a backend</h2>
+<table>
+<thead>
+<tr>
+<th>Backend</th>
+<th>Cost</th>
+<th>Needs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pollinations</strong></td>
+<td>Free</td>
+<td>No key — easiest start</td>
+</tr>
+<tr>
+<td><strong>OpenAI-compatible</strong></td>
+<td>Paid</td>
+<td>OpenAI, NanoGPT and similar — an endpoint and key</td>
+</tr>
+<tr>
+<td><strong>Automatic1111 / Forge</strong></td>
+<td>Your own PC</td>
+<td>A running local server</td>
+</tr>
+</tbody>
+</table>
+<p>With <strong>NanoGPT</strong>, character avatars are sent as <strong>reference photos</strong> so the picture keeps their looks. Use a model that accepts image input (nano-banana, seedream, flux-kontext, gpt-image).</p>
+<h2 id="set-it-up">Set it up</h2>
+<div class="steps">
+<div class="step">
+<h3>Turn on Scene Painter</h3>
+<p>Modules card → <strong>Scene Painter</strong>.</p>
+</div>
+<div class="step">
+<h3>Add an image backend</h3>
+<p>Press <strong>+ Pollinations</strong>, <strong>+ OpenAI-compatible</strong> or <strong>+ Automatic1111</strong>, fill it in and press <strong>Save backends</strong>.</p>
+</div>
+<div class="step">
+<h3>Pick the prompt writer</h3>
+<p>Choose the text model that writes the image prompt. Optionally set a <strong>Backup prompt writer</strong>, asked when the first one refuses.</p>
+</div>
+<div class="step">
+<h3>Paint</h3>
+<p>Press <strong>🎨 Paint</strong> under any reply — or switch on <em>Paint automatically after every reply</em>.</p>
+</div>
+</div>
+<h2 id="settings">Settings</h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Image backend</strong></td>
+<td>Which service draws</td>
+</tr>
+<tr>
+<td><strong>Prompt writer</strong> / <strong>Backup prompt writer</strong></td>
+<td>The text model that turns messages into an image prompt; the backup is asked if the first refuses</td>
+</tr>
+<tr>
+<td><strong>Instruction for the prompt writer</strong></td>
+<td>How the prompt should be written. The default is fine to start with</td>
+</tr>
+<tr>
+<td><strong>Style</strong></td>
+<td>A fixed tail added to every prompt, e.g. <em>watercolor, soft light</em></td>
+</tr>
+<tr>
+<td><strong>Negative prompt</strong></td>
+<td>What to avoid. Used by Stable Diffusion and Pollinations; OpenAI ignores it</td>
+</tr>
+<tr>
+<td><strong>Scene depth</strong></td>
+<td>How many recent messages the prompt writer reads</td>
+</tr>
+<tr>
+<td><strong>Width / Height</strong></td>
+<td>Picture size in pixels. Bigger is slower and costs more</td>
+</tr>
+<tr>
+<td><strong>Paint automatically after every reply</strong></td>
+<td>Otherwise use the 🎨 button</td>
+</tr>
+<tr>
+<td><strong>Open the Picture window when ready</strong></td>
+<td>Off: the picture waits under its reply; 🖼 shows it</td>
+</tr>
+<tr>
+<td><strong>Use character avatars as reference photos</strong></td>
+<td>Keeps the characters' looks. Needs a backend that accepts image input. <strong>Also send the persona avatar</strong> adds yours</td>
+</tr>
+<tr>
+<td><strong>Describe mature scenes as written</strong></td>
+<td>Tells the prompt writer not to soften or refuse explicit scenes (all characters shown as adults). The image backend has its own filter</td>
+</tr>
+</tbody>
+</table>
+<div class="note tip">
+<p><strong>Pictures look off?</strong> Add a style tail and a negative prompt, raise <strong>Scene depth</strong> for more context, and use a backend that supports reference images so characters stay consistent.</p>
+</div><div class="pager"><a href="postprocess.html"><small>← Previous</small>Post-Turn Processor</a><a class="nx" href="music.html"><small>Next →</small>Music</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#choose-a-backend">Choose a backend</a><a href="#set-it-up">Set it up</a><a href="#settings">Settings</a></aside>
 </main>
 <footer>
   <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
-  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
 </footer>
 <script src="../assets/site.js"></script>
 </body>

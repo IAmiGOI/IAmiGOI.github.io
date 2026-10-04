@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prompt Manager — ST Module Engine docs</title>
-<meta name="description" content="Build the request the way you want it.">
+<meta name="description" content="Build the request that goes to the model — order, conditions, cache, chain-of-thought and text rules.">
 <meta name="theme-color" content="#0d0e12">
 <meta property="og:title" content="Prompt Manager — ST Module Engine docs">
-<meta property="og:description" content="Build the request the way you want it.">
+<meta property="og:description" content="Build the request that goes to the model — order, conditions, cache, chain-of-thought and text rules.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../assets/me-logo.webp" type="image/webp">
@@ -25,7 +25,7 @@
   <nav class="links" style="display:contents">
     <a class="l" href="../index.html#features">Features</a>
     <a class="l" href="../install.html">Install</a>
-    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
     <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
   </nav>
   <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
@@ -35,44 +35,136 @@
   <aside class="side">
     <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
     <div class="results"></div>
-    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="" href="modules.html">Modules</a><h4>Modules</h4><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="music.html">Music</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="on" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="on" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article">
-    <div class="eyebrow">Memory & prompts</div>
-    <h1>Prompt Manager</h1>
-    <p>The <strong>Prompt Manager (PM)</strong> builds the request that goes to the model instead of SillyTavern's own prompt manager. It works with Chat Completion and single chats; in group chats and Text Completion it steps aside and the ordinary ST prompt is used. It opens with the <strong>Prompt Manager button of ST</strong> (the native window is hidden while PM is on).</p>
+  <article class="article"><div class="eyebrow">Memory & prompts</div><h1>Prompt Manager</h1><div class="glance"><div><small>Needs</small><span>Chat Completion presets</span></div><div><small>Find it</small><span>SillyTavern's Prompt Manager button</span></div></div><p class="lead">The <strong>Prompt Manager (PM)</strong> builds the request that goes to the model <strong>instead of SillyTavern's own prompt manager</strong>. It opens with SillyTavern's <strong>Prompt Manager button</strong> (the native window is hidden while PM is on).</p>
+<div class="note">
+<p><strong>Scope.</strong> PM works with <strong>Chat Completion</strong> and single chats. In group chats and Text Completion it steps aside and the ordinary SillyTavern prompt is used. If PM ever fails while assembling, the original request is sent — PM never blocks a generation (except after a second failed CoT step).</p>
+</div>
 <h2 id="first-start">First start</h2>
-<p>All your ST Chat Completion presets are copied into PM automatically (the ST files are never changed). The preset selected in ST becomes the active one. Import and export work with ST files too — passwords and keys are removed on export.</p>
-<h2 id="tabs">Tabs</h2>
+<p>All your SillyTavern Chat Completion presets are <strong>copied</strong> into PM automatically — the ST files are never changed. The preset selected in ST becomes the active one. Import and export also work with ST files; passwords and keys are removed on export.</p>
+<h2 id="the-six-tabs">The six tabs</h2>
+<div class="cards">
+<div class="mini">
+<p><strong>Order</strong>
+The preset's prompts as a tree. Drag to reorder, tick to send or not, edit a row.</p>
+</div>
+<div class="mini">
+<p><strong>Preview</strong>
+What would be sent right now, tokens per block, what was trimmed, warnings.</p>
+</div>
+<div class="mini">
+<p><strong>Log &amp; cache</strong>
+Last requests and how much of each matches the previous one.</p>
+</div>
+<div class="mini">
+<p><strong>CoT</strong>
+Guided chain-of-thought: hidden thinking steps before the answer.</p>
+</div>
+<div class="mini">
+<p><strong>Text rules</strong>
+Replace, remove or regex text in what is sent — never in your chat.</p>
+</div>
+<div class="mini">
+<p><strong>Settings</strong>
+Sampler, trimming, per-model overrides, plugins, versions.</p>
+</div>
+</div>
+<h2 id="order">Order</h2>
+<p>The prompts of the preset as a tree: <strong>drag</strong> to reorder, <strong>tick</strong> to send or not. Groups can wrap their content in tags (<code>&lt;info&gt; … &lt;/info&gt;</code>) and stay silent when empty. Click a row to edit it:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name, role, text</td>
+<td>The block itself</td>
+</tr>
+<tr>
+<td><strong>Position</strong></td>
+<td>In order, or <em>N messages from the end</em> of the chat</td>
+</tr>
+<tr>
+<td><strong>Trim priority</strong></td>
+<td>Which blocks are cut first when the context is too full</td>
+</tr>
+<tr>
+<td><strong>Send only when…</strong></td>
+<td>A plain-words condition builder (below)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Module rows</strong> (memory graph, Notebook, Summary…) can be placed wherever you want; a button returns one to the place the module suggested.</p>
+<h3>"Send only when…" conditions</h3>
+<p>Build a condition from:</p>
 <ul>
-<li><strong>Order</strong> — the prompts of the preset as a tree: drag to reorder, tick to send or not, groups can wrap their content in tags (<code>&lt;info&gt; … &lt;/info&gt;</code> — and stay silent when empty). Click a row to edit it: name, role, text, position (in order, or N messages from the end of the chat), trim priority, and <strong>"Send only when…"</strong> — a plain-words condition builder (keywords in the last messages, message length, tracker value, variable, chance, every N-th message, cooldown). Modules (memory graph, Notebook, Summary…) appear as <strong>module</strong> rows: put them wherever you want; the button returns one to the place the module suggested.</li>
-<li><strong>Preview</strong> — what would be sent for the current chat, tokens per block, what was trimmed, warnings about random or unknown macros.</li>
-<li><strong>Log &amp; cache</strong> — the last requests and how much of the start of each request is the same as in the previous one. Providers cache only that shared start, so anything that changes early (a memory block above long stable rules) costs you the cache. The tab names the block that changed and tells which stable blocks stand after it.</li>
-<li><strong>CoT</strong> — Guided CoT: hidden thinking steps before the answer. Each step is a separate request sent as a user message after the whole prompt; steps see the previous answers and reasoning; a different model can be chosen per step. The result is added to the final prompt and stored under the message as a collapsed block (it never goes into later history). A failed step is retried once, a second failure cancels the generation. Off by default.</li>
-<li><strong>Text rules</strong> — replace or remove a phrase, cut everything between two marks, or use regex; choose roles and how far from the end. They change only what is sent, never your saved chat. You can import ST regex scripts.</li>
-<li><strong>Settings</strong> — sampler and other generation values of the preset, trimming headroom, overrides per model, character or chat (off by default), plugins, versions with rollback.</li>
+<li>keywords in the last messages</li>
+<li>message length</li>
+<li>a <strong>tracker value</strong></li>
+<li>a variable</li>
+<li>a chance</li>
+<li>every N-th message</li>
+<li>a cooldown</li>
+<li><strong>Jev answers a question</strong> (below)</li>
 </ul>
-<h2 id="dividers-and-jev">Dividers and Jev</h2>
+<h3>Dividers</h3>
+<p><strong>+ Divider</strong> adds two coloured strips. Everything between the top and bottom strip is one region; the strips send nothing themselves. The <strong>top strip carries the condition</strong> — while it is false, every block between the strips is left out. Regions can nest (each pair gets its own colour). A pair that lost one strip does nothing, and the Preview says so. Removing one strip removes both; the blocks stay.</p>
+<h3>Jev — a yes/no classifier</h3>
+<p><em>Jev answers a question</em> gives the <strong>chance (0–100%) that a statement you write is true</strong>, for example <em>"The player is in danger in <code>player_message</code>"</em>. The condition is true when that chance is at least the percentage you set. The statement may use <code>player_message</code> (your newest message), <code>latest_turn</code> (the newest reply) and <code>history</code> (the older ones). The connection is set in <strong>Model connections</strong>, in the <strong>Classifiers</strong> category.</p>
+<h2 id="preview">Preview</h2>
+<p>Shows what would be sent for the current chat: tokens per block, what was trimmed, and warnings about random or unknown macros.</p>
+<h2 id="log-amp-cache">Log &amp; cache</h2>
+<p>Providers cache only the <strong>start</strong> of a request that is identical to the previous one. This tab shows the last requests and how much of each is shared with the one before. Anything that changes early (a memory block above long stable rules) <strong>costs you the cache</strong>; the tab names the block that changed and which stable blocks stand after it.</p>
+<div class="note tip">
+<p>A block that appears and disappears changes the request from that place on. Put such regions <strong>near the end</strong> of the request.</p>
+</div>
+<h2 id="cot-guided-chain-of-thought">CoT — guided chain-of-thought</h2>
+<p>Hidden thinking steps before the answer. <strong>Off by default.</strong></p>
 <ul>
-<li><strong>Dividers</strong> ("+ Divider" in Order) are two coloured strips in the list. Everything between the top strip and the bottom strip belongs to one region; the strips themselves send nothing. They are not a group: no tags, no children. A region can sit inside another one (each pair gets its own colour). The top strip carries the condition: while it is false, every block between the strips is left out. A pair that lost one of its strips does nothing, and the Preview says so. Removing one strip removes both; the blocks stay.</li>
-<li><strong>Jev answers a question</strong> is a condition type (blocks, groups and the top strip of a divider). Jev is a small classifier: it gives the chance, 0 to 100%, that a statement you write is true (for example "The player is in danger in <code>player_message</code>"). The condition is true when that chance is at least the percentage you set. It reads the last N of your messages and N replies; the statement may refer to <code>player_message</code> (your newest message), <code>latest_turn</code> (the newest reply) and <code>history</code> (the older ones). The connection (endpoint, model, key) is set in the Models card, in the Classifiers category; the condition can name one of them, and with no name the first is used. If Jev does not answer in time, the condition counts as TRUE and the block is sent. Answers for the same message and statement are remembered, so a reroll or swipe costs no new call, and one call carries all the questions that read the same messages.</li>
-<li>A block that appears and disappears changes the request from that place on, so the provider cache restarts there: put such regions near the end of the request. The Log &amp; cache tab shows what changed.</li>
+<li>Each step is a <strong>separate request</strong>, sent as a user message after the whole prompt. Steps see the previous answers and reasoning; a <strong>different model can be chosen per step</strong>.</li>
+<li>The result is added to the final prompt and stored under the message as a <strong>collapsed block</strong> (it never goes into later history).</li>
+<li>A failed step is <strong>retried once</strong>; a second failure cancels the generation.</li>
 </ul>
+<h2 id="text-rules">Text rules</h2>
+<p>Replace or remove a phrase, cut everything between two marks, or use regex; choose roles and how far from the end. Rules change <strong>only what is sent</strong>, never your saved chat. You can import ST regex scripts.</p>
+<h2 id="settings">Settings</h2>
+<p>Sampler and other generation values of the preset, trimming headroom, <strong>overrides per model, character or chat</strong> (off by default), plugins, and <strong>versions with rollback</strong>.</p>
 <h2 id="good-to-know">Good to know</h2>
-<ul>
-<li><strong>Character prompts.</strong> The character card's own system prompt, post-history instructions and depth prompt are applied the way SillyTavern's manager applies them: the card's system prompt fills the preset's <code>main</code> block, the post-history text fills <code>jailbreak</code> (a block set to forbid overrides is left alone; <code>{{original}}</code> inserts the block's own text), and the depth prompt is injected at the depth and role the card names. Turn "Prefer Char. Prompt/Jailbreak" off in SillyTavern to ignore them.</li>
-<li><strong>Trimming</strong> cuts the oldest history first and cuts a little extra at once, so the start of the history does not move every turn (that would break the provider cache).</li>
-<li><strong>Random macros</strong> break the cache; "Freeze random" (Settings) keeps one value per chat.</li>
-<li><strong>Streaming</strong> from the preset is applied by switching ST's own setting for the generation and switching it back afterwards.</li>
-<li>If PM ever fails while assembling, the original ST request is sent — PM never blocks a generation (except after a second failed CoT step).</li>
-</ul>
-    <div class="pager"><a href="lorebook-macros.html"><small>← Previous</small>Lorebook &amp; Macros</a><a class="nx" href="chat-viewport-home.html"><small>Next →</small>Chat Viewport &amp; desktop</a></div>
-  </article>
-  <aside class="toc"><b>On this page</b><a href="#first-start">First start</a><a href="#tabs">Tabs</a><a href="#dividers-and-jev">Dividers and Jev</a><a href="#good-to-know">Good to know</a></aside>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Character prompts</strong></td>
+<td>The card's system prompt fills the preset's <code>main</code> block, post-history text fills <code>jailbreak</code> (a block set to forbid overrides is left alone; <code>{{original}}</code> inserts the block's own text), the depth prompt goes in at the depth and role the card names. Turn off <em>Prefer Char. Prompt/Jailbreak</em> in ST to ignore them.</td>
+</tr>
+<tr>
+<td><strong>Trimming</strong></td>
+<td>Cuts the oldest history first and a little extra at once, so the start of the history does not move every turn (that would break the cache).</td>
+</tr>
+<tr>
+<td><strong>Random macros</strong></td>
+<td>Break the cache. <strong>Freeze random</strong> keeps one value per chat.</td>
+</tr>
+<tr>
+<td><strong>Streaming</strong></td>
+<td>The preset's streaming is applied by switching ST's own setting for the generation and back afterwards.</td>
+</tr>
+</tbody>
+</table><div class="pager"><a href="lorebook-macros.html"><small>← Previous</small>Lorebook &amp; Macros</a><a class="nx" href="chat-viewport.html"><small>Next →</small>Chat Viewport &amp; desktop</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#first-start">First start</a><a href="#the-six-tabs">The six tabs</a><a href="#order">Order</a><a href="#preview">Preview</a><a href="#log-amp-cache">Log &amp; cache</a><a href="#cot-guided-chain-of-thought">CoT — guided chain-of-thought</a><a href="#text-rules">Text rules</a><a href="#settings">Settings</a><a href="#good-to-know">Good to know</a></aside>
 </main>
 <footer>
   <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
-  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
 </footer>
 <script src="../assets/site.js"></script>
 </body>

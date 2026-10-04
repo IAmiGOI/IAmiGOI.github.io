@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tracker — ST Module Engine docs</title>
-<meta name="description" content="Values that update themselves: health, mood, location…">
+<meta name="description" content="Keep named values — health, mood, location — up to date automatically and use them in prompts.">
 <meta name="theme-color" content="#0d0e12">
 <meta property="og:title" content="Tracker — ST Module Engine docs">
-<meta property="og:description" content="Values that update themselves: health, mood, location…">
+<meta property="og:description" content="Keep named values — health, mood, location — up to date automatically and use them in prompts.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../assets/me-logo.webp" type="image/webp">
@@ -25,7 +25,7 @@
   <nav class="links" style="display:contents">
     <a class="l" href="../index.html#features">Features</a>
     <a class="l" href="../install.html">Install</a>
-    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
     <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
   </nav>
   <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
@@ -35,35 +35,214 @@
   <aside class="side">
     <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
     <div class="results"></div>
-    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="" href="modules.html">Modules</a><h4>Modules</h4><a class="on" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="music.html">Music</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="on" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article">
-    <div class="eyebrow">Modules</div>
-    <h1>Tracker</h1>
-    <p>The Tracker keeps named values (health, mood, location, anything) up to date by asking a model after or before replies, and exposes them as macros like {{tracker_health}} that can be used in prompts. Each tracker has fields, a trigger (after a reply, or before sending — then the reply waits for it), a model connection it is pinned to, and a sampler preset (Precise/Deterministic are best for strict JSON).
-Values are also saved per message, so rerolling or going back shows the value of that moment. Turn it on in <strong>Modules</strong> with module id <code>module.tracker</code>.</p>
-<h2 id="fields-on-screen">Fields on screen</h2>
-<p>Each tracker is one row; inside it:</p>
+  <article class="article"><div class="eyebrow">Modules</div><h1>Tracker</h1><div class="glance"><div><small>Needs</small><span>A model connection</span></div><div><small>Find it</small><span>Modules → Tracker</span></div><div><small>Module id</small><span><code>module.tracker</code></span></div></div><p class="lead">The Tracker keeps <strong>named values</strong> (health, mood, location, anything) up to date by asking a model after or before replies. The values appear in a small always-on-screen window and become <strong>macros</strong> you can use in prompts.</p>
+<div class="float demo" markdown="0"><div class="h"><span>Tracker · status</span><span>✕</span></div><div class="b"><span>❤ <i>health</i> 82</span><span>📍 <i>location</i> Harbour alley</span><span>🎭 <i>mood</i> Tense</span></div></div>
+
+<h2 id="what-it-is-good-for">What it is good for</h2>
 <ul>
-<li><strong>Name</strong> — the tracker's id. Its values become macros, so keep it short, lowercase, no spaces.</li>
-<li><strong>Model connection</strong> — which connection answers the polls. A cheap fast one is fine; the answer is small JSON.</li>
-<li><strong>Fields</strong> — the values to keep (health, mood, location…). Each has a name, a short "prompt" telling the model what to write there (e.g. "how hurt the hero is, 0–100") and a starting value. Clear prompts matter more than anything else here. <strong>+ Add field</strong> adds one.</li>
-<li><strong>Poll when</strong> — what triggers an update: after every reply, every N replies, every N minutes, when the user sends a message, before the reply is generated, or only by hand ("Poll now").</li>
-<li><strong>Hold the generation until this tracker answers</strong> — only with "before the reply": the reply waits so it already sees the fresh value. Slower, but the value is never a step behind.</li>
-<li><strong>Poll prompt</strong> — the full text sent to the model. Empty = the engine's default, which is right almost always. <code>{fields}</code> inserts the field list.</li>
-<li><strong>Display template</strong> — how the value is shown in the small state window, e.g. <code>❤ {health} · 📍 {location}</code>. Empty = a plain "name: value" list. Click a token to append it.</li>
-<li><strong>Show the floating state window</strong> — the small always-on-screen panel with the current values.</li>
-<li><strong>Enabled</strong> — off means it stops polling but keeps its settings.</li>
-<li>Buttons: <strong>Save</strong> writes the configuration (nothing takes effect until saved); <strong>Poll now</strong> runs one update right away using the saved settings; <strong>Reset</strong> puts the values of this chat back to their starting values; <strong>Remove</strong> deletes the tracker.</li>
-<li>Sampler sliders and reasoning options belong to this tracker, not to the connection: low temperature / deterministic presets suit strict JSON.</li>
+<li>Show the hero's health, money, mood or location at a glance.</li>
+<li>Make the model <em>aware</em> of the state: put <code>{{tracker_health}}</code> in your prompt and the reply can react to it.</li>
+<li>Keep long-running facts (who is allied with whom, what day it is) from drifting.</li>
 </ul>
-    <div class="pager"><a href="modules.html"><small>← Previous</small>Modules</a><a class="nx" href="rp-time.html"><small>Next →</small>RP Time</a></div>
-  </article>
-  <aside class="toc"><b>On this page</b><a href="#fields-on-screen">Fields on screen</a></aside>
+<p>Values are saved <strong>per message</strong>, so rerolling or going back to an older message shows the value of that moment.</p>
+<h2 id="set-up-your-first-tracker">Set up your first tracker</h2>
+<div class="steps">
+<div class="step">
+<h3>Switch the module on</h3>
+<p>Modules card → turn on <strong>Tracker</strong>.</p>
+</div>
+<div class="step">
+<h3>Create a tracker</h3>
+<p>Add a tracker and give it a short, lowercase name without spaces, such as <code>status</code>. The name becomes part of its macros.</p>
+</div>
+<div class="step">
+<h3>Pick a connection</h3>
+<p>Choose which model answers. A cheap fast one is fine — the answer is small JSON.</p>
+</div>
+<div class="step">
+<h3>Add fields</h3>
+<p>Press <strong>+ Add field</strong>. Give each field a <strong>name</strong>, a short <strong>prompt</strong> that tells the model what to write, and a <strong>starting value</strong>. Clear prompts matter more than anything else here.</p>
+</div>
+<div class="step">
+<h3>Choose when it updates and Save</h3>
+<p>Set <strong>Poll when</strong> (see below), then press <strong>Save</strong> — nothing takes effect until saved. Use <strong>Poll now</strong> to test.</p>
+</div>
+</div>
+<h3>Example fields</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Prompt</th>
+<th>Starting value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>health</code></td>
+<td>how hurt the hero is, 0–100</td>
+<td>100</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td>where the scene currently takes place</td>
+<td>Unknown</td>
+</tr>
+<tr>
+<td><code>mood</code></td>
+<td>the hero's dominant emotion, one or two words</td>
+<td>Calm</td>
+</tr>
+</tbody>
+</table>
+<h2 id="when-should-it-update">When should it update?</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Poll when…</strong></th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>after every reply</td>
+<td>Most trackers — the value is fresh for the next turn</td>
+</tr>
+<tr>
+<td>every N replies</td>
+<td>Slow-changing values; saves cost</td>
+</tr>
+<tr>
+<td>every N minutes</td>
+<td>Real-time pacing</td>
+</tr>
+<tr>
+<td>when I send a message</td>
+<td>Reacting to your input</td>
+</tr>
+<tr>
+<td><strong>before the reply is generated</strong></td>
+<td>Values the reply must already know (see below)</td>
+</tr>
+<tr>
+<td>only by hand</td>
+<td>Tracker you update yourself with <strong>Poll now</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="note warn">
+<p><strong>Hold the generation until this tracker answers.</strong> Only available with <em>before the reply</em>. The reply waits so it already sees the fresh value — never a step behind, but slower. If replies pause before generating, a tracker set this way is probably polling.</p>
+</div>
+<h2 id="all-settings">All settings</h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Name</strong></td>
+<td>The tracker's id. Its values become macros — keep it short, lowercase, no spaces.</td>
+</tr>
+<tr>
+<td><strong>Model connection</strong></td>
+<td>Which connection answers the polls.</td>
+</tr>
+<tr>
+<td><strong>Fields</strong></td>
+<td>The values to keep: name, prompt, starting value.</td>
+</tr>
+<tr>
+<td><strong>Poll prompt</strong></td>
+<td>The full text sent to the model. Empty = the engine's default, which is right almost always. <code>{fields}</code> inserts the field list.</td>
+</tr>
+<tr>
+<td><strong>Display template</strong></td>
+<td>How the value looks in the small window, e.g. <code>❤ {health} · 📍 {location}</code>. Empty = a plain "name: value" list. Click a token to append it.</td>
+</tr>
+<tr>
+<td><strong>Show the floating state window</strong></td>
+<td>The small always-on-screen panel with current values.</td>
+</tr>
+<tr>
+<td><strong>Sampler &amp; reasoning</strong></td>
+<td>Belong to this tracker, not the connection. Low temperature / <em>Precise</em> or <em>Deterministic</em> presets suit strict JSON.</td>
+</tr>
+<tr>
+<td><strong>Enabled</strong></td>
+<td>Off = stops polling but keeps its settings.</td>
+</tr>
+</tbody>
+</table>
+<h3>Buttons</h3>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Save</strong></td>
+<td>Writes the configuration</td>
+</tr>
+<tr>
+<td><strong>Poll now</strong></td>
+<td>Runs one update right away using the saved settings</td>
+</tr>
+<tr>
+<td><strong>Reset</strong></td>
+<td>Puts this chat's values back to their starting values</td>
+</tr>
+<tr>
+<td><strong>Remove</strong></td>
+<td>Deletes the tracker</td>
+</tr>
+</tbody>
+</table>
+<h2 id="use-the-values-in-prompts">Use the values in prompts</h2>
+<p>Every field becomes a macro you can write into a character card, a lorebook entry or a Prompt Manager block. Open the <strong>Macros</strong> card to see the exact names currently available.</p>
+<blockquote>
+<p>The hero's current health is {{tracker_health}} out of 100. Describe injuries accordingly.</p>
+</blockquote>
+<p>See <a href="lorebook-macros.html">Lorebook &amp; Macros</a>. To send a block only when a value matters (for example health below 30), use a condition in the <a href="prompt-manager.html">Prompt Manager</a>.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Try</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Value never changes</td>
+<td>Is the module on, a connection chosen, and the tracker <strong>Enabled</strong> and <strong>Saved</strong>?</td>
+</tr>
+<tr>
+<td>Values are garbage</td>
+<td>Make field prompts more specific; use a <em>Precise</em> / <em>Deterministic</em> sampler preset</td>
+</tr>
+<tr>
+<td>Reply waits</td>
+<td>A <em>before the reply</em> tracker is polling — switch to <em>after every reply</em></td>
+</tr>
+<tr>
+<td>Wrong value after reroll</td>
+<td>Expected: each message keeps its own value; <strong>Reset</strong> restores the start</td>
+</tr>
+</tbody>
+</table><div class="pager"><a href="modules.html"><small>← Previous</small>Modules at a glance</a><a class="nx" href="rp-time.html"><small>Next →</small>RP Time</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#what-it-is-good-for">What it is good for</a><a href="#set-up-your-first-tracker">Set up your first tracker</a><a href="#when-should-it-update">When should it update?</a><a href="#all-settings">All settings</a><a href="#use-the-values-in-prompts">Use the values in prompts</a><a href="#troubleshooting">Troubleshooting</a></aside>
 </main>
 <footer>
   <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
-  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
 </footer>
 <script src="../assets/site.js"></script>
 </body>

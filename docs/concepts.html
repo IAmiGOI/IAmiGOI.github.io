@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core concepts — ST Module Engine docs</title>
+<meta name="description" content="The handful of ideas that make every other page easy to understand.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Core concepts — ST Module Engine docs">
+<meta property="og:description" content="The handful of ideas that make every other page easy to understand.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="on" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Start here</div><h1>Core concepts</h1><p class="lead">Five ideas explain almost everything in Module Engine.</p>
+<h2 id="1-modules-the-features-you-toggle">1. Modules — the features you toggle</h2>
+<p>A <strong>module</strong> is one feature: Tracker, RP Time, Music, Scene Painter and so on. Each is switched on or off in the <strong>Modules</strong> card, and its settings appear only after it is on. Modules cannot reach the network or SillyTavern directly — they only get what their <em>rights</em> allow, through gates. That is why a misbehaving module cannot break your chats.</p>
+<h2 id="2-cores-the-engine-s-own-parts">2. Cores — the engine's own parts</h2>
+<p><strong>Cores</strong> are what modules stand on: model connections, chat memory, summaries, the lorebook, sync, the prompt pipeline, the interface. You rarely touch them directly — they appear as <strong>cards</strong> in the engine panel (Model connections, Chat Summary, Lorebook, Sync, Updates…).</p>
+<div class="layers-mini">
+<p><strong>Runner</strong> starts everything → <strong>Services</strong> touch SillyTavern, the page and the network → <strong>Libraries</strong> share building blocks → <strong>Cores</strong> do the engine's work → <strong>Modules</strong> are the features you see.</p>
+</div>
+<h2 id="3-model-connections-who-does-the-side-jobs">3. Model connections — who does the side jobs</h2>
+<p>A <strong>model connection</strong> (internally a <em>worker</em>) is a model the engine may call: format, endpoint, key, model name. Features pick a connection, or leave it on <em>Default</em> and the engine uses any working one. Every connection is health-checked, and unstable ones automatically get fewer requests. <a href="models.html">More →</a></p>
+<div class="note tip">
+<p><strong>Rule of thumb.</strong> Let your best model write the story in SillyTavern. Give the side jobs (trackers, summaries, clean-up passes) to a cheap, fast one.</p>
+</div>
+<h2 id="4-macros-values-you-can-use-anywhere">4. Macros — values you can use anywhere</h2>
+<p>When a tracker or RP Time knows something, it publishes it as a <strong>macro</strong> — a placeholder such as <code>{{tracker_health}}</code> that you can write into any SillyTavern prompt, character card or lorebook entry. The text is replaced with the current value when the prompt is built. The <strong>Macros</strong> card lists every macro that exists right now. <a href="lorebook-macros.html">More →</a></p>
+<h2 id="5-nothing-is-deleted">5. Nothing is deleted</h2>
+<p>The engine is careful with your story:</p>
+<ul>
+<li>summaries <strong>hide</strong> old messages from the prompt, they never delete them;</li>
+<li>text rules change only <strong>what is sent</strong>, never your saved chat;</li>
+<li>tracker values are saved <strong>per message</strong>, so rerolling or going back shows the value of that moment;</li>
+<li>if the engine's prompt assembly ever fails, the original SillyTavern request is sent instead.</li>
+</ul>
+<h2 id="where-things-live">Where things live</h2>
+<table>
+<thead>
+<tr>
+<th>Place</th>
+<th>What is there</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dock</strong> (right edge, hover)</td>
+<td>Opens the engine panel, the music player, the map and other windows</td>
+</tr>
+<tr>
+<td><strong>Engine panel</strong></td>
+<td>Cards: Modules, Model connections, Chat Summary, Memory graph, Lorebook, Macros, Chat Viewport…</td>
+</tr>
+<tr>
+<td><strong>Settings screen</strong></td>
+<td>Preset (export/import), Sync, Updates, Backgrounds</td>
+</tr>
+<tr>
+<td><strong>Under replies</strong></td>
+<td>Time badge and the 🎨 Paint button</td>
+</tr>
+<tr>
+<td><strong>Floating windows</strong></td>
+<td>Tracker values, clock, music player, picture, map</td>
+</tr>
+<tr>
+<td><strong>Mea (the guide)</strong></td>
+<td>A chat of her own — never mixed into your roleplay chats</td>
+</tr>
+</tbody>
+</table><div class="pager"><a href="quick-start.html"><small>← Previous</small>Quick start</a><a class="nx" href="models.html"><small>Next →</small>Model connections</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#1-modules-the-features-you-toggle">1. Modules — the features you toggle</a><a href="#2-cores-the-engine-s-own-parts">2. Cores — the engine&#x27;s own parts</a><a href="#3-model-connections-who-does-the-side-jobs">3. Model connections — who does the side jobs</a><a href="#4-macros-values-you-can-use-anywhere">4. Macros — values you can use anywhere</a><a href="#5-nothing-is-deleted">5. Nothing is deleted</a><a href="#where-things-live">Where things live</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

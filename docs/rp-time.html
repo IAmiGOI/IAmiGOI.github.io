@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RP Time — ST Module Engine docs</title>
-<meta name="description" content="An in-world clock worked out from the chat.">
+<meta name="description" content="An in-world clock worked out from the conversation, shown under replies.">
 <meta name="theme-color" content="#0d0e12">
 <meta property="og:title" content="RP Time — ST Module Engine docs">
-<meta property="og:description" content="An in-world clock worked out from the chat.">
+<meta property="og:description" content="An in-world clock worked out from the conversation, shown under replies.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../assets/me-logo.webp" type="image/webp">
@@ -25,7 +25,7 @@
   <nav class="links" style="display:contents">
     <a class="l" href="../index.html#features">Features</a>
     <a class="l" href="../install.html">Install</a>
-    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
     <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
   </nav>
   <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
@@ -35,30 +35,82 @@
   <aside class="side">
     <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
     <div class="results"></div>
-    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="" href="modules.html">Modules</a><h4>Modules</h4><a class="" href="tracker.html">Tracker</a><a class="on" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="music.html">Music</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="on" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article">
-    <div class="eyebrow">Modules</div>
-    <h1>RP Time</h1>
-    <p>RP Time works out the in-world time from the conversation and keeps it as a macro, and shows a time badge under replies. It can inject the current time before a reply is generated so the model keeps track of it. Module id: <code>module.time</code>.</p>
-<h2 id="fields-on-screen">Fields on screen</h2>
+  <article class="article"><div class="eyebrow">Modules</div><h1>RP Time</h1><div class="glance"><div><small>Needs</small><span>A model connection</span></div><div><small>Find it</small><span>Modules → RP Time</span></div><div><small>Module id</small><span><code>module.time</code></span></div></div><p class="lead">RP Time works out <strong>what time it is in the story</strong> from the conversation. It shows a time badge under replies, keeps a floating clock, publishes the time as a macro, and can tell the model the current time before it writes — so the story stops forgetting that it is already midnight.</p>
+<div class="float demo" markdown="0"><div class="h"><span>RP Time</span><span>✕</span></div><div class="b"><span>Day 3 · 21:40</span><span><i>raining</i></span></div></div>
+
+<h2 id="set-it-up">Set it up</h2>
+<div class="steps">
+<div class="step">
+<h3>Turn on RP Time</h3>
+<p>Modules card → switch on <strong>RP Time</strong>.</p>
+</div>
+<div class="step">
+<h3>Choose a connection</h3>
+<p>Pick which model works out the time. Any cheap one will do.</p>
+</div>
+<div class="step">
+<h3>Set the starting time</h3>
+<p>Where the clock begins before anything has been worked out — for example <em>Day 1, 08:00</em>.</p>
+</div>
+<div class="step">
+<h3>(Optional) Start from a preset</h3>
+<p>Choose a <strong>Preset</strong> and press <strong>Apply preset</strong> — it fills the instruction and sampler fields from a ready-made setup. Nothing changes until you press Apply.</p>
+</div>
+</div>
+<h2 id="settings">Settings</h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Model connection</strong></td>
+<td>Works out the time from the chat</td>
+</tr>
+<tr>
+<td><strong>Preset</strong> + <strong>Apply preset</strong></td>
+<td>Fills the neighbouring fields from a ready-made setup</td>
+</tr>
+<tr>
+<td><strong>Starting time</strong></td>
+<td>Where the clock starts</td>
+</tr>
+<tr>
+<td><strong>Display template</strong></td>
+<td>How the time is written in the badge and the floating window. Click a token to append it</td>
+</tr>
+<tr>
+<td><strong>Show in chat</strong></td>
+<td>The badge under each reply. Off only hides the badge — tracking keeps running</td>
+</tr>
+<tr>
+<td><strong>Floating time window</strong></td>
+<td>A small always-on-screen clock. Closing it with ✕ hides it, it does not stop tracking; this switch brings it back</td>
+</tr>
+<tr>
+<td><strong>Enabled</strong></td>
+<td>The whole module on or off</td>
+</tr>
+</tbody>
+</table>
+<h2 id="buttons">Buttons</h2>
 <ul>
-<li><strong>Model connection</strong> — which connection works out the time from the chat.</li>
-<li><strong>Preset</strong> with <strong>Apply preset</strong> — fills the neighbouring fields (instruction, sampler) from a ready-made setup; nothing changes until Apply is pressed.</li>
-<li><strong>Starting time</strong> — where the in-world clock starts before anything has been worked out yet.</li>
-<li><strong>Display template</strong> — how the time is written in the badge and the floating window. Click a token to append it.</li>
-<li><strong>Show in chat</strong> — the time badge under each reply. Turning it off only hides the badge; tracking keeps running.</li>
-<li><strong>Floating time window</strong> — a small always-on-screen clock. Closing it with ✕ hides it, it does not turn tracking off; this switch brings it back.</li>
-<li><strong>Enabled</strong> — the whole module on or off.</li>
-<li><strong>Advance now</strong> — works the time out right now instead of waiting for the next reply. <strong>Reset for this chat</strong> forgets the time of this chat and starts again from the starting time.</li>
+<li><strong>Advance now</strong> — works the time out right now instead of waiting for the next reply.</li>
+<li><strong>Reset for this chat</strong> — forgets this chat's time and starts again from the starting time.</li>
 </ul>
-    <div class="pager"><a href="tracker.html"><small>← Previous</small>Tracker</a><a class="nx" href="notebook-secrets.html"><small>Next →</small>Notebook &amp; Secrets</a></div>
-  </article>
-  <aside class="toc"><b>On this page</b><a href="#fields-on-screen">Fields on screen</a></aside>
+<div class="note tip">
+<p>Because the time is a macro, you can use it in prompts and lorebook entries — for example an entry that only matters "at night". Check the <strong>Macros</strong> card for the exact name.</p>
+</div><div class="pager"><a href="tracker.html"><small>← Previous</small>Tracker</a><a class="nx" href="postprocess.html"><small>Next →</small>Post-Turn Processor</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#set-it-up">Set it up</a><a href="#settings">Settings</a><a href="#buttons">Buttons</a></aside>
 </main>
 <footer>
   <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
-  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
 </footer>
 <script src="../assets/site.js"></script>
 </body>

@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Troubleshooting — ST Module Engine docs</title>
-<meta name="description" content="When something does not work.">
+<meta name="description" content="Find your symptom, get the fix.">
 <meta name="theme-color" content="#0d0e12">
 <meta property="og:title" content="Troubleshooting — ST Module Engine docs">
-<meta property="og:description" content="When something does not work.">
+<meta property="og:description" content="Find your symptom, get the fix.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../assets/me-logo.webp" type="image/webp">
@@ -25,7 +25,7 @@
   <nav class="links" style="display:contents">
     <a class="l" href="../index.html#features">Features</a>
     <a class="l" href="../install.html">Install</a>
-    <a class="l on" href="../docs/overview.html">Docs</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
     <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
   </nav>
   <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
@@ -35,24 +35,116 @@
   <aside class="side">
     <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
     <div class="results"></div>
-    <div class="side-nav"><h4>Getting started</h4><a class="" href="overview.html">Overview</a><a class="" href="models.html">Model connections</a><a class="" href="modules.html">Modules</a><h4>Modules</h4><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="music.html">Music</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="speaker-colors-map.html">Speaker Colors &amp; Map</a><h4>Memory & prompts</h4><a class="" href="summary-memory.html">Chat Summary &amp; memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport-home.html">Chat Viewport &amp; desktop</a><a class="" href="preset-sync-updates.html">Preset, sync, updates</a><h4>Help</h4><a class="on" href="troubleshooting.html">Troubleshooting</a></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="on" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article">
-    <div class="eyebrow">Help</div>
-    <h1>Troubleshooting</h1>
-    <p>First look at the live state: most problems are a model connection that is down or rejected — its last error is shown under it in <strong>Model connections</strong>.</p>
-<ul>
-<li>"HTTP 401/403" — wrong or expired API key. "HTTP 404" — wrong endpoint or model name. "HTTP 429" — rate limit, add another connection or raise nothing, it recovers. "Failed to fetch" — the endpoint is unreachable or blocks the browser (CORS).</li>
-<li>A feature does nothing: check its module is on in <strong>Modules</strong> and that it has a connection selected.</li>
-<li>Replies wait before generating: a tracker set to run before sending is polling; a slow connection makes the whole reply wait.</li>
-</ul>
-    <div class="pager"><a href="preset-sync-updates.html"><small>← Previous</small>Preset, sync, updates</a></div>
-  </article>
-  <aside class="toc"></aside>
+  <article class="article"><div class="eyebrow">Help</div><h1>Troubleshooting</h1><p class="lead"><strong>Always start here:</strong> open <strong>Model connections</strong>. Most problems are a connection that is <strong>down</strong> or <strong>rejected</strong> — its last error is shown right under it.</p>
+<h2 id="by-symptom">By symptom</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HTTP 401 / 403</strong></td>
+<td>Wrong or expired API key</td>
+<td>Re-enter the key in the connection</td>
+</tr>
+<tr>
+<td><strong>HTTP 404</strong></td>
+<td>Wrong endpoint or model name</td>
+<td>Check the endpoint (OpenAI-compatible usually ends with <code>/v1</code>) and the exact model name</td>
+</tr>
+<tr>
+<td><strong>HTTP 429</strong></td>
+<td>Rate limit</td>
+<td>Add another connection; it recovers on its own</td>
+</tr>
+<tr>
+<td><strong>"Failed to fetch"</strong></td>
+<td>Endpoint unreachable, or it blocks the browser (CORS)</td>
+<td>Check the address; try another provider or a proxy</td>
+</tr>
+<tr>
+<td>A feature does nothing</td>
+<td>Module is off, or has no connection</td>
+<td>Modules card: switch it on and select a connection</td>
+</tr>
+<tr>
+<td>Replies wait before generating</td>
+<td>A tracker set to <em>before the reply</em> is polling, or a connection is slow</td>
+<td>Change <em>Poll when</em> to <em>after every reply</em>; check connection latency</td>
+</tr>
+<tr>
+<td>A tracker never updates</td>
+<td>Not saved, not enabled, or vague field prompts</td>
+<td>Press <strong>Save</strong>, check <strong>Enabled</strong>, rewrite field prompts, try <strong>Poll now</strong></td>
+</tr>
+<tr>
+<td>Post-Turn pass never runs</td>
+<td>Auto-run is off, or the pass is empty</td>
+<td>Enable <strong>Auto-run after each reply</strong> and write an instruction</td>
+</tr>
+<tr>
+<td>Rewritten replies are cut off</td>
+<td>A reasoning model used the token limit on thinking</td>
+<td>Disable reasoning for the pass; raise max tokens to ≥ 2× the reply length</td>
+</tr>
+<tr>
+<td>Music is silent</td>
+<td><strong>Min similarity</strong> too high, or tracks have no descriptions</td>
+<td>Lower it; describe tracks with the model</td>
+</tr>
+<tr>
+<td>Music switches constantly</td>
+<td><strong>Switch margin</strong> too low</td>
+<td>Raise <strong>Switch margin</strong> and <strong>Scene depth</strong></td>
+</tr>
+<tr>
+<td>Picture ignores the characters</td>
+<td>The backend has no reference-image support</td>
+<td>Use a model that accepts image input (e.g. nano-banana, seedream, flux-kontext, gpt-image)</td>
+</tr>
+<tr>
+<td>No dock after install</td>
+<td>Extension disabled or page not reloaded</td>
+<td>Reload; check <strong>Extensions → Manage extensions</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="reading-connection-states">Reading connection states</h2>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Up</strong></td>
+<td>Healthy</td>
+</tr>
+<tr>
+<td><strong>Unstable</strong></td>
+<td>Gets fewer requests automatically</td>
+</tr>
+<tr>
+<td><strong>Down</strong></td>
+<td>Only used when nothing else works</td>
+</tr>
+</tbody>
+</table>
+<h2 id="still-stuck">Still stuck?</h2>
+<p>Ask <strong>Mea</strong> — she sees the live state of your connections and modules. Or open an <a href="https://github.com/IAmiGOI/Module-Engine/issues">issue on GitHub</a> with the connection's last error and what you expected.</p><div class="pager"><a href="sync-backup-updates.html"><small>← Previous</small>Sync, backup &amp; updates</a><a class="nx" href="faq.html"><small>Next →</small>FAQ</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#by-symptom">By symptom</a><a href="#reading-connection-states">Reading connection states</a><a href="#still-stuck">Still stuck?</a></aside>
 </main>
 <footer>
   <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
-  <nav><a href="../docs/overview.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
 </footer>
 <script src="../assets/site.js"></script>
 </body>

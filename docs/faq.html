@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ — ST Module Engine docs</title>
+<meta name="description" content="Short answers to the questions people ask first.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="FAQ — ST Module Engine docs">
+<meta property="og:description" content="Short answers to the questions people ask first.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l on" href="../docs/index.html">Docs</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="on" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Help</div><h1>FAQ</h1><h2 id="do-i-need-a-second-model">Do I need a second model?</h2>
+<p class="lead">No. You can reuse SillyTavern's connection for everything. A separate cheap, fast model for the side jobs is just cheaper and quicker. See <a href="models.html">Model connections</a>.</p>
+<h2 id="does-it-change-or-delete-my-chats">Does it change or delete my chats?</h2>
+<p>No deleting. Summaries <strong>hide</strong> old messages from the prompt but keep them. The <a href="postprocess.html">Post-Turn Processor</a> <em>does</em> replace a reply with the rewritten one — that is its job — so write passes that keep events unchanged. Text rules and macros only change what is <strong>sent</strong>.</p>
+<h2 id="does-it-work-with-text-completion">Does it work with Text Completion?</h2>
+<p>Model connections: yes, the <em>SillyTavern main connection</em> works with Chat Completion and Text Completion (not Kobold Horde or NovelAI). The <a href="prompt-manager.html">Prompt Manager</a> is Chat Completion only and steps aside in group chats and Text Completion.</p>
+<h2 id="where-is-my-data-stored">Where is my data stored?</h2>
+<p>In your browser and SillyTavern's own settings. Cloud sync is optional and goes straight to <em>your</em> Google Drive, Dropbox or GitHub. See the <a href="../privacy.html">Privacy policy</a>.</p>
+<h2 id="can-i-use-several-modules-together">Can I use several modules together?</h2>
+<p>Yes — that is the point. A tracker value can feed a lorebook entry, a Prompt Manager condition, and a rewrite pass at once.</p>
+<h2 id="how-do-i-update">How do I update?</h2>
+<p>Open the <strong>Updates</strong> card. See <a href="sync-backup-updates.html">Sync, backup &amp; updates</a>.</p>
+<h2 id="how-do-i-remove-it">How do I remove it?</h2>
+<p><strong>Extensions → Manage extensions</strong> → remove ST Module Engine. Your chats and characters are not touched.</p>
+<h2 id="what-is-mea">What is Mea?</h2>
+<p>The engine's built-in guide. She has a chat of her own — separate from your roleplay chats — and knows every setting. She opens by herself on the first launch, and from her widget on the desktop later.</p>
+<h2 id="is-it-affiliated-with-sillytavern">Is it affiliated with SillyTavern?</h2>
+<p>No. It is an independent extension for SillyTavern.</p><div class="pager"><a href="troubleshooting.html"><small>← Previous</small>Troubleshooting</a><a class="nx" href="glossary.html"><small>Next →</small>Glossary</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#do-i-need-a-second-model">Do I need a second model?</a><a href="#does-it-change-or-delete-my-chats">Does it change or delete my chats?</a><a href="#does-it-work-with-text-completion">Does it work with Text Completion?</a><a href="#where-is-my-data-stored">Where is my data stored?</a><a href="#can-i-use-several-modules-together">Can I use several modules together?</a><a href="#how-do-i-update">How do I update?</a><a href="#how-do-i-remove-it">How do I remove it?</a><a href="#what-is-mea">What is Mea?</a><a href="#is-it-affiliated-with-sillytavern">Is it affiliated with SillyTavern?</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
