@@ -15,21 +15,32 @@ Details and troubleshooting: [Install](../install.html).
 </li>
 <li markdown="1">
 ### Open the engine
-Hover the thin glowing line on the **right edge** of the screen. The dock slides out; click the engine icon to open the main panel. On the very first launch the guide **Mea** opens by herself.
+Hover the thin glowing line on the **right edge** of the screen. The dock slides out — its top button (the flask) opens the engine. On the very first launch the guide **Mea** opens by herself.
+
+<figure class="shot dock"><img src="../assets/shots/dock.webp" alt="The dock" loading="lazy"></figure>
+The dock, top to bottom: engine, memory graph, music, picture, engine settings.
+
+The engine opens as a set of tiles:
+
+<figure class="shot "><img src="../assets/shots/hub.webp" alt="The engine panel." loading="lazy"><figcaption>The engine panel.</figcaption></figure>
+
 </li>
 <li markdown="1">
 ### Connect a model
-Press **+ SillyTavern main connection** in the **Model connections** card (or choose the same option in Mea's chat). The engine now reuses whatever SillyTavern is connected to — no key needed.
+Open the **Models** tile and press **+ SillyTavern main connection** (or choose the same option in Mea's chat). The engine now reuses whatever SillyTavern is connected to — no key needed.
 
-Prefer a separate cheaper model? Choose **Add connection** and fill in the format, endpoint, key and model name. See [Model connections](models.html).
+Prefer a separate cheaper model? Press **+ Add connection** and fill in the format, endpoint, key and model name. See [Model connections](models.html).
 </li>
 <li markdown="1">
 ### Switch on two modules
-Open the **Modules** card and turn on **Tracker** and **RP Time**. They are the easiest to understand and need nothing else.
+Open the **Modules** tile and switch on **Tracker** and **RP Time**. They are the easiest to understand and need nothing else.
+
+<figure class="shot "><img src="../assets/shots/modules.webp" alt="The Modules screen: every module has its own switch and a ⌄ for its settings." loading="lazy"><figcaption>The Modules screen: every module has its own switch and a ⌄ for its settings.</figcaption></figure>
+
 </li>
 <li markdown="1">
 ### Make your first tracker
-In the Tracker settings add a tracker called `status`, pick your connection, and add a field `location` with the prompt *"where the scene takes place"*. Set **Poll when** to *after every reply* and press **Save**. Now chat — a small window shows the location and updates by itself. Full walkthrough: [Tracker](tracker.html).
+Open Tracker's settings and press **+ Add tracker**. Rename it `status`, pick your connection, add a field `location` with the hint *"where the scene takes place"*, set **Poll when** to *after every reply* (the default is *Manual only*) and press **Save**. Now chat — a small window shows the location and updates by itself. Full walkthrough: [Tracker](tracker.html).
 </li>
 </ol>
 

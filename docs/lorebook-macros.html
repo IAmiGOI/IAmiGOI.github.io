@@ -37,11 +37,13 @@
     <div class="results"></div>
     <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="on" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article"><div class="eyebrow">Memory & prompts</div><h1>Lorebook &amp; Macros</h1><div class="glance"><div><small>Needs</small><span>Nothing extra</span></div><div><small>Find it</small><span>Engine panel → Lorebook / Macros</span></div></div><p class="lead">Two cards that connect the engine to the way you already write prompts in SillyTavern.</p>
+  <article class="article"><div class="eyebrow">Memory & prompts</div><h1>Lorebook &amp; Macros</h1><div class="glance"><div><small>Needs</small><span>Nothing extra</span></div><div><small>Find it</small><span>Engine panel → Lorebook, Macros</span></div></div><p class="lead">Two cards that connect the engine to the way you already write prompts in SillyTavern.</p>
 <h2 id="lorebook">Lorebook</h2>
-<p>The <strong>Lorebook</strong> card shows the World Info entries the engine sees — <strong>global, character, chat and persona books</strong> — and lets modules read and edit them. The guide Mea can also open a book, search it by meaning ("where is the mill described") and change or delete an entry for you.</p>
+<p>The <strong>Lorebook</strong> tile shows the World Info entries the engine sees — <strong>global, character, chat and persona books</strong> — and lets modules read and edit them. The guide Mea can also open a book, search it by meaning ("where is the mill described") and change or delete an entry for you.</p>
 <h2 id="macros">Macros</h2>
-<p>The <strong>Macros</strong> card lists every value the engine publishes — from the <a href="tracker.html">Tracker</a>, <a href="rp-time.html">RP Time</a> and others — each usable in <strong>any SillyTavern prompt</strong> as <code>{{name}}</code>.</p>
+<p>Values the engine publishes — from the <a href="tracker.html">Tracker</a>, <a href="rp-time.html">RP Time</a> and others — are usable in <strong>any SillyTavern prompt</strong> as <code>{{name}}</code>. The <strong>Macros</strong> tile lets you define <strong>your own</strong>: fixed text, or a small computed program. In the Lorebook, a <strong>Publish</strong> toggle on an entry exposes its full content as a real <code>{{macro}}</code> too.</p>
+<figure class="shot "><img src="../assets/shots/macros.webp" alt="The Macros screen: define your own {{macro}}." loading="lazy"><figcaption>The Macros screen: define your own {{macro}}.</figcaption></figure>
+
 <table>
 <thead>
 <tr>
@@ -65,7 +67,7 @@
 </tbody>
 </table>
 <div class="note warn">
-<p><strong>Macro names depend on your setup.</strong> The names above are examples. The tracker's name and its fields decide the exact macro — open the <strong>Macros</strong> card to copy the real ones.</p>
+<p><strong>Macro names depend on your setup.</strong> The names above are examples. The tracker's name and its fields decide the exact macro.</p>
 </div>
 <h2 id="using-macros-well">Using macros well</h2>
 <ul>

@@ -26,7 +26,7 @@ Yes — that is the point. A tracker value can feed a lorebook entry, a Prompt M
 
 ## How do I update?
 
-Open the **Updates** card. See [Sync, backup & updates](sync-backup-updates.html).
+Open the **Updates** tile on the settings screen. See [Sync, backup & updates](sync-backup-updates.html).
 
 ## How do I remove it?
 

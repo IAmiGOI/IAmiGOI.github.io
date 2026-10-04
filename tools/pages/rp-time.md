@@ -16,7 +16,7 @@ RP Time works out **what time it is in the story** from the conversation. It sho
 <ol class="steps">
 <li markdown="1">
 ### Turn on RP Time
-Modules card → switch on **RP Time**.
+Engine panel → **Modules** → switch on **RP Time**.
 </li>
 <li markdown="1">
 ### Choose a connection
@@ -24,11 +24,14 @@ Pick which model works out the time. Any cheap one will do.
 </li>
 <li markdown="1">
 ### Set the starting time
-Where the clock begins before anything has been worked out — for example *Day 1, 08:00*.
+Where the clock begins before anything has been worked out. The default is *Year 1, Month 1, Day 1, 08:00 (Morning)*.
 </li>
 <li markdown="1">
 ### (Optional) Start from a preset
-Choose a **Preset** and press **Apply preset** — it fills the instruction and sampler fields from a ready-made setup. Nothing changes until you press Apply.
+Choose a **Preset** (the default is *Year · Month · Day · Time · Period*) and press **Apply preset** — it fills the instruction and sampler fields from a ready-made setup. Nothing changes until you press Apply.
+
+<figure class="shot "><img src="../assets/shots/time-form.webp" alt="RP Time settings: preset, model connection, display template and the fields the model fills in." loading="lazy"><figcaption>RP Time settings: preset, model connection, display template and the fields the model fills in.</figcaption></figure>
+
 </li>
 </ol>
 
@@ -39,7 +42,7 @@ Choose a **Preset** and press **Apply preset** — it fills the instruction and 
 | **Model connection** | Works out the time from the chat |
 | **Preset** + **Apply preset** | Fills the neighbouring fields from a ready-made setup |
 | **Starting time** | Where the clock starts |
-| **Display template** | How the time is written in the badge and the floating window. Click a token to append it |
+| **Display template** | How the time is written in the badge and the floating window, e.g. `Year {year}, Month {month}, Day {day}, {time} ({period})`. Click a token — `{year}` `{month}` `{day}` `{time}` `{period}` — to append it |
 | **Show in chat** | The badge under each reply. Off only hides the badge — tracking keeps running |
 | **Floating time window** | A small always-on-screen clock. Closing it with ✕ hides it, it does not stop tracking; this switch brings it back |
 | **Enabled** | The whole module on or off |

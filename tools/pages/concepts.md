@@ -8,11 +8,14 @@ Five ideas explain almost everything in Module Engine.
 
 ## 1. Modules — the features you toggle
 
-A **module** is one feature: Tracker, RP Time, Music, Scene Painter and so on. Each is switched on or off in the **Modules** card, and its settings appear only after it is on. Modules cannot reach the network or SillyTavern directly — they only get what their *rights* allow, through gates. That is why a misbehaving module cannot break your chats.
+A **module** is one feature: Tracker, RP Time, Music, Scene Painter and so on. Each is switched on or off on the **Modules** screen, and its settings appear only after it is on. Modules cannot reach the network or SillyTavern directly — they only get what their *rights* allow, through gates. That is why a misbehaving module cannot break your chats.
 
 ## 2. Cores — the engine's own parts
 
-**Cores** are what modules stand on: model connections, chat memory, summaries, the lorebook, sync, the prompt pipeline, the interface. You rarely touch them directly — they appear as **cards** in the engine panel (Model connections, Chat Summary, Lorebook, Sync, Updates…).
+**Cores** are what modules stand on: model connections, chat memory, summaries, the lorebook, sync, the prompt pipeline, the interface. You rarely touch them directly — they appear as **tiles** in the engine panel (Models, Classifiers, Macros, Lorebook, Chat Summary) and on the settings screen (Preset, Sync, Updates…).
+
+<figure class="shot "><img src="../assets/shots/hub.webp" alt="The engine panel." loading="lazy"><figcaption>The engine panel.</figcaption></figure>
+
 
 <div class="layers-mini" markdown="1">
 **Runner** starts everything → **Services** touch SillyTavern, the page and the network → **Libraries** share building blocks → **Cores** do the engine's work → **Modules** are the features you see.
@@ -28,7 +31,7 @@ A **model connection** (internally a *worker*) is a model the engine may call: f
 
 ## 4. Macros — values you can use anywhere
 
-When a tracker or RP Time knows something, it publishes it as a **macro** — a placeholder such as `{{tracker_health}}` that you can write into any SillyTavern prompt, character card or lorebook entry. The text is replaced with the current value when the prompt is built. The **Macros** card lists every macro that exists right now. [More →](lorebook-macros.html)
+When a tracker or RP Time knows something, it publishes it as a **macro** — a placeholder such as `{{tracker_health}}` that you can write into any SillyTavern prompt, character card or lorebook entry. The text is replaced with the current value when the prompt is built. Tracker and RP Time publish their values this way; the **Macros** tile lets you define your own too. [More →](lorebook-macros.html)
 
 ## 5. Nothing is deleted
 
@@ -43,9 +46,9 @@ The engine is careful with your story:
 
 | Place | What is there |
 |---|---|
-| **Dock** (right edge, hover) | Opens the engine panel, the music player, the map and other windows |
-| **Engine panel** | Cards: Modules, Model connections, Chat Summary, Memory graph, Lorebook, Macros, Chat Viewport… |
-| **Settings screen** | Preset (export/import), Sync, Updates, Backgrounds |
+| **Dock** (right edge, hover) | Engine panel, Memory graph, Music player, Picture window, engine settings |
+| **Engine panel** | Tiles: Models, Classifiers, Modules, Macros, Lorebook, Chat Summary |
+| **Settings screen** (gear on the dock) | Engine, Chat Viewport, Preset, Updates, Sync, Backgrounds |
 | **Under replies** | Time badge and the 🎨 Paint button |
 | **Floating windows** | Tracker values, clock, music player, picture, map |
 | **Mea (the guide)** | A chat of her own — never mixed into your roleplay chats |

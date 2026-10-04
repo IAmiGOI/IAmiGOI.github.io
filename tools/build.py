@@ -79,34 +79,24 @@ def foot(base):
 """
 
 # ---------------------------------------------------------------- landing
-FEATURES = [
-    ("Generation pipeline", "Takes over generation", "The engine sits in SillyTavern's generation path. It can hold a reply until a tracker has answered, rewrite it afterwards, or cancel it."),
-    ("Model connections", "Bring any model", "OpenAI-compatible, Anthropic, Google Gemini — or just reuse the model SillyTavern is already connected to. Parallel requests, health checks, automatic failover."),
-    ("Tracker", "Values that update themselves", "Health, mood, location — anything. A cheap model keeps them current and publishes them as macros like <code>{{tracker_health}}</code>."),
-    ("RP Time", "An in-world clock", "Works out the story's time from the chat, shows a badge under replies and keeps the model aware of it."),
-    ("Post-Turn Processor", "Polish every reply", "A chain of independent rewrite passes — clean clichés, fix style, check continuity — each with its own prompt and model."),
-    ("Chat Summary & memory graph", "Long chats that fit", "Old messages fold into leveled summaries (never deleted). A memory graph tracks people, places and facts."),
-    ("Prompt Manager", "Own the request", "Reorder prompts, send blocks only when conditions are true, inspect tokens and cache hits, add Guided CoT steps and text rules."),
-    ("Scene Painter", "Paint the scene", "A text model writes the image prompt, a backend draws it — Pollinations, OpenAI-compatible or Automatic1111/Forge. Avatars can be used as references."),
-    ("Music", "Soundtrack that follows", "Tracks are matched to the scene by meaning, locally. Your own files or direct audio links."),
-    ("Notebook & Secrets", "Working memory", "A private notebook the AI writes to, and hidden facts tagged with who knows them."),
-    ("Speaker Colors & Map", "Colour and place", "Dialogue coloured per character, and a full-screen world map with distances and travel time."),
-    ("Lorebook & Macros", "Your world, editable", "See and edit World Info the engine sees; every tracker value becomes a macro for any prompt."),
-    ("Sync & backups", "Your data, your devices", "Sync settings and chats between devices through your own Google Drive, Dropbox or GitHub. Nothing passes through a server of ours."),
-    ("Mea, the built-in guide", "Ask, don't search", "A guide living inside the engine knows every setting and walks you through the first start."),
-]
+GRAPH_SVG = """<svg viewBox="0 0 320 210" class="graph" aria-hidden="true">
+<g stroke="currentColor" stroke-opacity=".35" stroke-width="1.5" fill="none">
+<path d="M160 105 L70 50 M160 105 L250 45 M160 105 L60 150 M160 105 L255 160 M70 50 L25 95 M250 45 L295 90 M60 150 L110 190 M255 160 L200 195"/></g>
+<g fill="var(--surface)" stroke-width="2">
+<circle cx="160" cy="105" r="22" stroke="#8da8ff"/><circle cx="70" cy="50" r="14" stroke="#ff7b6e"/><circle cx="250" cy="45" r="14" stroke="#5bb8ff"/>
+<circle cx="60" cy="150" r="14" stroke="#c86bff"/><circle cx="255" cy="160" r="14" stroke="#8da8ff"/>
+<circle cx="25" cy="95" r="8" stroke="#ff7b6e"/><circle cx="295" cy="90" r="8" stroke="#5bb8ff"/><circle cx="110" cy="190" r="8" stroke="#c86bff"/><circle cx="200" cy="195" r="8" stroke="#8da8ff"/></g>
+<g fill="#dfe3ea" font-size="10" font-family="Noto Sans, sans-serif" text-anchor="middle">
+<text x="160" y="109">Mira</text><text x="70" y="54">Tavern</text><text x="250" y="49">Harbour</text><text x="60" y="154">Key</text><text x="255" y="164">Guild</text></g></svg>"""
 
 def landing():
-    cards = "\n".join(
-        f'<div class="card rv"><div class="card-head"><strong>{t}</strong><small>{s}</small></div><div class="card-body"><p>{b}</p></div></div>'
-        for t, s, b in FEATURES)
     return head("ST Module Engine — modules, pipeline and memory for SillyTavern",
-                "ST Module Engine is a SillyTavern extension: a modular engine with trackers, memory graph, prompt manager, scene painter, music and more.", "") + nav("", "") + f"""
+                "ST Module Engine is a SillyTavern extension: trackers, long-term memory, a prompt manager, scene pictures, music and more — as modules you switch on.", "") + nav("", "") + f"""
 <main>
   <div class="hero">
     <div class="marks"><img class="st" src="assets/st-logo.png" alt="SillyTavern"><span>×</span><img class="me" src="assets/me-logo.webp" alt="Module Engine"></div>
-    <h1>Turn SillyTavern into a<br><span class="grad">modular roleplay engine</span></h1>
-    <p class="lead">ST Module Engine is an extension that adds a generation pipeline, trackers, long-term memory, a prompt manager, pictures, music and more — as small modules you switch on when you want them.</p>
+    <h1>Your model writes the story.<br><span class="grad">Module Engine does the rest.</span></h1>
+    <p class="lead">It keeps track of health, time and places, remembers what happened, polishes every reply, paints the scene and plays the music — each job done by a small module you switch on only when you want it.</p>
     <div class="cta">
       {cpbtn("primary big", "Copy install link")}
       <a class="btn big" href="install.html">Install guide</a>
@@ -126,29 +116,137 @@ def landing():
     </div>
   </div>
 
-  <section id="features">
-    <div class="eyebrow">Features</div>
-    <h2 class="sec">Everything is a module. Switch on what you need.</h2>
-    <p class="lead">Most features make their own model calls on the side, separate from the roleplay reply — so a cheap fast model can do the bookkeeping while your favourite model writes the story.</p>
-    <div class="grid">{cards}</div>
+  <section id="see">
+    <div class="eyebrow">The real thing</div>
+    <h2 class="sec">This is what it looks like</h2>
+    <p class="lead">Screenshots from the engine itself, running inside SillyTavern.</p>
+    <div class="gallery rv">
+      <figure class="shot wide"><img src="assets/shots/modules.webp" alt="The Modules screen" loading="lazy"><figcaption>Modules — every feature has its own switch and its own settings.</figcaption></figure>
+      <figure class="shot"><img src="assets/shots/tracker-form.webp" alt="Tracker settings" loading="lazy"><figcaption>Tracker — name the values you care about.</figcaption></figure>
+      <figure class="shot"><img src="assets/shots/pass-form.webp" alt="Post-Turn pass" loading="lazy"><figcaption>Post-Turn Processor — a pass is just an instruction and a model.</figcaption></figure>
+      <figure class="shot wide"><img src="assets/shots/summary.webp" alt="Chat Summary settings" loading="lazy"><figcaption>Chat Summary — a pyramid of summaries with a protected window.</figcaption></figure>
+    </div>
   </section>
 
-  <section id="architecture">
-    <div class="eyebrow">Architecture</div>
-    <h2 class="sec">Built like a small operating system</h2>
-    <p class="lead">Every layer only talks to the next one through gates and rights, so a module can never touch the network or SillyTavern directly — and a SillyTavern update only ever breaks one layer.</p>
-    <div class="layers rv">
-      <div class="layer"><div class="n">1</div><div><strong>Runner</strong><p>The entry point. Starts everything in order and remembers which modules you switched on.</p></div></div>
-      <div class="layer"><div class="n">2</div><div><strong>Services</strong><p>The only layer that touches SillyTavern, the DOM, the network and timers. All ST-specific code lives here.</p></div></div>
-      <div class="layer"><div class="n">3</div><div><strong>Libraries</strong><p>Shared building blocks: buses, queues, stores, UI primitives.</p></div></div>
-      <div class="layer"><div class="n">4</div><div><strong>Cores</strong><p>The engine's own parts: model connections, memory, summaries, lorebook, sync, prompt pipeline, UI.</p></div></div>
-      <div class="layer"><div class="n">5</div><div><strong>Modules</strong><p>The features you toggle: Tracker, RP Time, Notebook, Music, Scene Painter, Map…</p></div></div>
+  <section id="how">
+    <div class="eyebrow">How it works</div>
+    <h2 class="sec">A helper team around every message</h2>
+    <p class="lead">Your favourite model still writes the reply. Around it, small cheap models do the bookkeeping — before, after and in the background.</p>
+    <div class="timeline rv">
+      <div class="tl"><i>1</i><b>You send</b><span>a message as usual</span></div>
+      <div class="tl pre"><i>2</i><b>Before</b><span>Trackers can hold the reply until values are fresh · the Prompt Manager assembles the request</span></div>
+      <div class="tl main"><i>3</i><b>Your model writes</b><span>the roleplay reply</span></div>
+      <div class="tl post"><i>4</i><b>After</b><span>Post-Turn passes polish the text</span></div>
+      <div class="tl bg"><i>5</i><b>In the background</b><span>values, time, summaries and memory update · a picture and music follow the scene</span></div>
+    </div>
+  </section>
+
+  <section class="show rv" id="tracker">
+    <div class="txt">
+      <div class="eyebrow">Tracker · RP Time</div>
+      <h2 class="sec">Know the state of the story at a glance</h2>
+      <p>Health, mood, location, money — any value you name. A cheap model keeps it current after every reply and shows it in a small window you can drag anywhere.</p>
+      <ul class="ticks"><li>Use values in prompts as macros</li><li>Saved per message — rerolls show the right value</li><li>An in-world clock that knows it is already midnight</li></ul>
+      <a class="more" href="docs/tracker.html">Tracker guide →</a>
+    </div>
+    <div class="vis">
+      <div class="float st"><div class="h"><span>Tracker · status</span><span>✕</span></div><div class="b"><span>❤ <i>health</i> 82</span><span>💰 <i>gold</i> 140</span><span>📍 <i>location</i> Harbour alley</span><span>🎭 <i>mood</i> Tense</span></div></div>
+      <div class="float st t2"><div class="h"><span>RP Time</span><span>✕</span></div><div class="b"><span>Day 3 · 21:40</span><span><i>night · raining</i></span></div></div>
+      <div class="macro"><code>{{{{tracker_health}}}}</code> → <b>82</b></div>
+    </div>
+  </section>
+
+  <section class="show rev rv" id="memory">
+    <div class="txt">
+      <div class="eyebrow">Chat Summary · Memory graph</div>
+      <h2 class="sec">Long chats that still fit the context</h2>
+      <p>Old messages fold into summaries, level by level — originals are hidden from the prompt, never deleted. A memory graph keeps who is connected to what, and pulls the right memories in by meaning.</p>
+      <ul class="ticks"><li>Three levels of summaries, with a protected recent window</li><li>A mind-map of people, places and facts</li><li>Can start from your lorebook</li></ul>
+      <a class="more" href="docs/summary.html">Memory guide →</a>
+    </div>
+    <div class="vis">
+      <div class="levels sm"><div class="lv"><b>Newest messages</b><span>as they are</span></div><div class="lv l1"><b>Level 1</b><span>summary</span></div><div class="lv l2"><b>Level 2</b><span>summary of summaries</span></div></div>
+      {GRAPH_SVG}
+    </div>
+  </section>
+
+  <section class="show rv" id="polish">
+    <div class="txt">
+      <div class="eyebrow">Post-Turn Processor</div>
+      <h2 class="sec">Every reply, polished</h2>
+      <p>Chain independent rewrite passes — cut clichés, fix style, check continuity — each with its own prompt and its own model. The final text replaces the reply.</p>
+      <ul class="ticks"><li>Passes run in order; each sees the previous result</li><li>Auto-run after each reply, or by hand</li><li>You say what must stay unchanged</li></ul>
+      <a class="more" href="docs/postprocess.html">Post-Turn guide →</a>
+    </div>
+    <div class="vis">
+      <div class="diff"><small>Before</small><p>Her eyes <s>sparkled like stars</s> as <s>a shiver ran down her spine</s>. She <s>let out a breath she didn't know she was holding</s>.</p></div>
+      <div class="diff after"><small>After</small><p>Mira's hand found the doorframe. Rain hissed on the slates; she counted three breaths before she spoke.</p></div>
+      <span class="eg">Illustrative example</span>
+    </div>
+  </section>
+
+  <section class="show rev rv" id="prompt">
+    <div class="txt">
+      <div class="eyebrow">Prompt Manager</div>
+      <h2 class="sec">Decide exactly what the model sees</h2>
+      <p>Reorder prompt blocks by dragging, send a block only when a condition is true, preview the real request and watch how much of it the provider can cache.</p>
+      <ul class="ticks"><li>Conditions: keywords, tracker values, chance, cooldown…</li><li>Guided chain-of-thought steps with their own models</li><li>Text rules that change only what is sent</li></ul>
+      <a class="more" href="docs/prompt-manager.html">Prompt Manager guide →</a>
+    </div>
+    <div class="vis">
+      <div class="pm">
+        <div class="row"><u>⠿</u><em>☑</em>Main prompt</div>
+        <div class="row"><u>⠿</u><em>☑</em>World Info</div>
+        <div class="row cond"><u>⠿</u><em>☑</em>Injury rules <span class="chip">only when health &lt; 30</span></div>
+        <div class="row mod"><u>⠿</u><em>☑</em>Memory graph <span class="chip">module</span></div>
+        <div class="row"><u>⠿</u><em>☑</em>Chat history</div>
+        <div class="cache"><small>Cache: shared start of the request</small><div class="bar"><i style="width:82%"></i></div><small>82% reused from the previous request</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="show rv" id="atmosphere">
+    <div class="txt">
+      <div class="eyebrow">Scene Painter · Music</div>
+      <h2 class="sec">See it. Hear it.</h2>
+      <p>A text model turns the last messages into an image prompt and your backend draws it — with character avatars as reference photos. Music is picked by the meaning of the scene, locally, from your own tracks.</p>
+      <ul class="ticks"><li>Pollinations (free), OpenAI-compatible, Automatic1111</li><li>🎨 button under every reply, or paint automatically</li><li>Your files or direct audio links</li></ul>
+      <a class="more" href="docs/scene-painter.html">Scene Painter guide →</a>
+    </div>
+    <div class="vis">
+      <div class="frame"><div class="art"></div><small>Harbour alley, rain</small></div>
+      <div class="player"><b>♪</b><div><span>Rain on the Docks</span><div class="bar"><i style="width:38%"></i></div></div></div>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="eyebrow">And more</div>
+    <h2 class="sec">Small modules for particular needs</h2>
+    <div class="chips rv">
+      <a href="docs/notebook-secrets.html"><b>Notebook &amp; Secrets</b><span>The AI's own memory, and facts only some characters know</span></a>
+      <a href="docs/speaker-colors.html"><b>Speaker Colors</b><span>Every character's dialogue in their own colour</span></a>
+      <a href="docs/map.html"><b>Map</b><span>A world map with distances and travel time</span></a>
+      <a href="docs/lorebook-macros.html"><b>Lorebook &amp; Macros</b><span>Edit World Info; use live values anywhere</span></a>
+      <a href="docs/chat-viewport.html"><b>Chat Viewport</b><span>An experimental chat view and a desktop home</span></a>
+      <a href="docs/sync-backup-updates.html"><b>Sync &amp; backups</b><span>Between devices, via your own cloud account</span></a>
+      <a href="docs/models.html"><b>Any model</b><span>OpenAI-compatible, Anthropic, Gemini — or SillyTavern's own</span></a>
+      <a href="docs/introduction.html"><b>Mea, the guide</b><span>Lives inside the engine and walks you through the first start</span></a>
+    </div>
+  </section>
+
+  <section id="safe">
+    <div class="eyebrow">Built with care</div>
+    <h2 class="sec">Your story is safe</h2>
+    <div class="trio rv">
+      <div><b>Nothing is deleted</b><p>Summaries hide old messages, they never remove them. Text rules change only what is sent. If prompt assembly ever fails, the original request goes through.</p></div>
+      <div><b>Modules stay in their lane</b><p>A module can only reach what its rights allow, through gates — it cannot touch the network or SillyTavern directly.</p></div>
+      <div><b>Your data stays yours</b><p>Everything runs in your browser. Optional sync goes straight to your own Google Drive, Dropbox or GitHub.</p></div>
     </div>
   </section>
 
   <section id="sync">
     <div class="eyebrow">Cloud sync &amp; Google sign-in</div>
-    <h2 class="sec">Your files stay yours</h2>
+    <h2 class="sec">About the optional sync</h2>
     <div class="card rv"><div class="card-body">
       <p>ST Module Engine is an extension for <a href="https://github.com/SillyTavern/SillyTavern">SillyTavern</a>. It adds modules, a generation pipeline, a memory graph and, optionally, synchronization of your SillyTavern files between your own devices.</p>
       <p>The optional cloud synchronization lets you sign in with your own Google Drive or Dropbox account so that your files can be kept in step on all your devices. Nothing is sent to the author of the extension: the extension runs entirely inside your browser and talks to your cloud account directly.</p>
@@ -156,20 +254,10 @@ def landing():
     </div></div>
   </section>
 
-  <section id="start">
-    <div class="eyebrow">Get started</div>
-    <h2 class="sec">Up and running in three steps</h2>
-    <ol class="steps rv">
-      <li><h3>Install</h3><p>In SillyTavern open <b>Extensions → Install extension</b>, paste the repository link and press Install.</p><p><a href="install.html">Full installation guide →</a></p></li>
-      <li><h3>Connect a model</h3><p>The quickest start: reuse SillyTavern's current connection with one click. Add a cheaper separate model later if you like.</p><p><a href="docs/models.html">Model connections →</a></p></li>
-      <li><h3>Switch on modules</h3><p>Open the engine from the dock on the right edge of the screen. Good first picks: Tracker and RP Time. Mea, the built-in guide, helps on the first launch.</p><p><a href="docs/modules.html">Modules →</a></p></li>
-    </ol>
-  </section>
-
   <div class="final rv">
-    <h2>Ready to try it?</h2>
-    <p class="lead" style="margin:0 auto 22px">Runs entirely in your browser.</p>
-    <div class="cta">{cpbtn("primary big", "Copy install link")}<a class="btn big" href="{REPO}">{ICON_GH} View on GitHub</a></div>
+    <h2>Add it to SillyTavern in thirty seconds</h2>
+    <p class="lead" style="margin:0 auto 22px">Copy the link, then Extensions → Install extension → paste → Install.</p>
+    <div class="cta">{cpbtn("primary big", "Copy install link")}<a class="btn big" href="docs/quick-start.html">Quick start guide</a></div>
   </div>
 </main>
 """ + foot("")

@@ -4,11 +4,11 @@ group: Memory & prompts
 desc: A mind-map of people, places and facts built from your chat, in its own window.
 order: 15
 needs: A model connection
-where: Engine panel → Memory graph
+where: Dock → Memory graph button
 ---
 The **Memory graph** builds a **mind-map** from your chat: *nodes* with text (people, places, facts, events) connected by typed links, with one central node and a network around it. It runs alongside the Chat Summary and the Notebook — it complements them, it does not replace them.
 
-It opens in its own window, where you can look at the graph, edit nodes and see which memories were pulled into the last prompt (the *pathway* overlay).
+It opens from the **dock** in its own window with two tabs, **Graph** and **Library**, where you can look at the graph, edit nodes and see which memories were pulled into the last prompt (the *pathway* overlay).
 
 ## Why a graph
 

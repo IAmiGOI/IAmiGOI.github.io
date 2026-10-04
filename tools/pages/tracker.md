@@ -4,7 +4,7 @@ group: Modules
 desc: Keep named values — health, mood, location — up to date automatically and use them in prompts.
 order: 6
 needs: A model connection
-where: Modules → Tracker
+where: Modules → Tracker (⌄)
 id: module.tracker
 ---
 The Tracker keeps **named values** (health, mood, location, anything) up to date by asking a model after or before replies. The values appear in a small always-on-screen window and become **macros** you can use in prompts.
@@ -24,11 +24,11 @@ Values are saved **per message**, so rerolling or going back to an older message
 <ol class="steps">
 <li markdown="1">
 ### Switch the module on
-Modules card → turn on **Tracker**.
+Engine panel → **Modules** → switch on **Tracker**.
 </li>
 <li markdown="1">
 ### Create a tracker
-Add a tracker and give it a short, lowercase name without spaces, such as `status`. The name becomes part of its macros.
+Press **+ Add tracker**. It is created as `tracker_1` — rename it to something short, lowercase and without spaces, such as `status`. The name becomes part of its macros.
 </li>
 <li markdown="1">
 ### Pick a connection
@@ -36,11 +36,14 @@ Choose which model answers. A cheap fast one is fine — the answer is small JSO
 </li>
 <li markdown="1">
 ### Add fields
-Press **+ Add field**. Give each field a **name**, a short **prompt** that tells the model what to write, and a **starting value**. Clear prompts matter more than anything else here.
+Press **+ Add field**. Give each field a **name** (*Field name, e.g. health*) and, in *How to decide it*, a short hint telling the model what to write. Each field becomes a JSON key the model must fill in. Clear hints matter more than anything else here.
 </li>
 <li markdown="1">
 ### Choose when it updates and Save
-Set **Poll when** (see below), then press **Save** — nothing takes effect until saved. Use **Poll now** to test.
+Set **Poll when** — it starts as *Manual only* (see below) — then press **Save**; nothing takes effect until saved. Use **Poll now** to test.
+
+<figure class="shot "><img src="../assets/shots/tracker-form.webp" alt="A new tracker: name, model connection, fields, Poll when, display template." loading="lazy"><figcaption>A new tracker: name, model connection, fields, Poll when, display template.</figcaption></figure>
+
 </li>
 </ol>
 
@@ -61,7 +64,7 @@ Set **Poll when** (see below), then press **Save** — nothing takes effect unti
 | every N minutes | Real-time pacing |
 | when I send a message | Reacting to your input |
 | **before the reply is generated** | Values the reply must already know (see below) |
-| only by hand | Tracker you update yourself with **Poll now** |
+| **Manual only** *(the default)* | A tracker you update yourself with **Poll now** |
 
 <div class="note warn" markdown="1">
 **Hold the generation until this tracker answers.** Only available with *before the reply*. The reply waits so it already sees the fresh value — never a step behind, but slower. If replies pause before generating, a tracker set this way is probably polling.
@@ -73,11 +76,11 @@ Set **Poll when** (see below), then press **Save** — nothing takes effect unti
 |---|---|
 | **Name** | The tracker's id. Its values become macros — keep it short, lowercase, no spaces. |
 | **Model connection** | Which connection answers the polls. |
-| **Fields** | The values to keep: name, prompt, starting value. |
+| **Fields** | The values to keep: a name and an optional *How to decide it* hint for each. |
 | **Poll prompt** | The full text sent to the model. Empty = the engine's default, which is right almost always. `{fields}` inserts the field list. |
 | **Display template** | How the value looks in the small window, e.g. `❤ {health} · 📍 {location}`. Empty = a plain "name: value" list. Click a token to append it. |
 | **Show the floating state window** | The small always-on-screen panel with current values. |
-| **Sampler & reasoning** | Belong to this tracker, not the connection. Low temperature / *Precise* or *Deterministic* presets suit strict JSON. |
+| **Generation settings (advanced)** / **Prompt template (advanced)** | Belong to this tracker, not the connection. Low temperature / *Precise* or *Deterministic* presets suit strict JSON. |
 | **Enabled** | Off = stops polling but keeps its settings. |
 
 ### Buttons

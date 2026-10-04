@@ -16,7 +16,7 @@ The player is a floating window you toggle from the dock.
 <ol class="steps">
 <li markdown="1">
 ### Switch the module on
-Modules card → **Music**.
+Engine panel → **Modules** → **Music**.
 </li>
 <li markdown="1">
 ### Add tracks

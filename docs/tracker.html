@@ -37,7 +37,7 @@
     <div class="results"></div>
     <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="on" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article"><div class="eyebrow">Modules</div><h1>Tracker</h1><div class="glance"><div><small>Needs</small><span>A model connection</span></div><div><small>Find it</small><span>Modules → Tracker</span></div><div><small>Module id</small><span><code>module.tracker</code></span></div></div><p class="lead">The Tracker keeps <strong>named values</strong> (health, mood, location, anything) up to date by asking a model after or before replies. The values appear in a small always-on-screen window and become <strong>macros</strong> you can use in prompts.</p>
+  <article class="article"><div class="eyebrow">Modules</div><h1>Tracker</h1><div class="glance"><div><small>Needs</small><span>A model connection</span></div><div><small>Find it</small><span>Modules → Tracker (⌄)</span></div><div><small>Module id</small><span><code>module.tracker</code></span></div></div><p class="lead">The Tracker keeps <strong>named values</strong> (health, mood, location, anything) up to date by asking a model after or before replies. The values appear in a small always-on-screen window and become <strong>macros</strong> you can use in prompts.</p>
 <div class="float demo" markdown="0"><div class="h"><span>Tracker · status</span><span>✕</span></div><div class="b"><span>❤ <i>health</i> 82</span><span>📍 <i>location</i> Harbour alley</span><span>🎭 <i>mood</i> Tense</span></div></div>
 
 <h2 id="what-it-is-good-for">What it is good for</h2>
@@ -51,11 +51,11 @@
 <div class="steps">
 <div class="step">
 <h3>Switch the module on</h3>
-<p>Modules card → turn on <strong>Tracker</strong>.</p>
+<p>Engine panel → <strong>Modules</strong> → switch on <strong>Tracker</strong>.</p>
 </div>
 <div class="step">
 <h3>Create a tracker</h3>
-<p>Add a tracker and give it a short, lowercase name without spaces, such as <code>status</code>. The name becomes part of its macros.</p>
+<p>Press <strong>+ Add tracker</strong>. It is created as <code>tracker_1</code> — rename it to something short, lowercase and without spaces, such as <code>status</code>. The name becomes part of its macros.</p>
 </div>
 <div class="step">
 <h3>Pick a connection</h3>
@@ -63,11 +63,12 @@
 </div>
 <div class="step">
 <h3>Add fields</h3>
-<p>Press <strong>+ Add field</strong>. Give each field a <strong>name</strong>, a short <strong>prompt</strong> that tells the model what to write, and a <strong>starting value</strong>. Clear prompts matter more than anything else here.</p>
+<p>Press <strong>+ Add field</strong>. Give each field a <strong>name</strong> (<em>Field name, e.g. health</em>) and, in <em>How to decide it</em>, a short hint telling the model what to write. Each field becomes a JSON key the model must fill in. Clear hints matter more than anything else here.</p>
 </div>
 <div class="step">
 <h3>Choose when it updates and Save</h3>
-<p>Set <strong>Poll when</strong> (see below), then press <strong>Save</strong> — nothing takes effect until saved. Use <strong>Poll now</strong> to test.</p>
+<p>Set <strong>Poll when</strong> — it starts as <em>Manual only</em> (see below) — then press <strong>Save</strong>; nothing takes effect until saved. Use <strong>Poll now</strong> to test.</p>
+<figure class="shot "><img src="../assets/shots/tracker-form.webp" alt="A new tracker: name, model connection, fields, Poll when, display template." loading="lazy"><figcaption>A new tracker: name, model connection, fields, Poll when, display template.</figcaption></figure>
 </div>
 </div>
 <h3>Example fields</h3>
@@ -127,8 +128,8 @@
 <td>Values the reply must already know (see below)</td>
 </tr>
 <tr>
-<td>only by hand</td>
-<td>Tracker you update yourself with <strong>Poll now</strong></td>
+<td><strong>Manual only</strong> <em>(the default)</em></td>
+<td>A tracker you update yourself with <strong>Poll now</strong></td>
 </tr>
 </tbody>
 </table>
@@ -154,7 +155,7 @@
 </tr>
 <tr>
 <td><strong>Fields</strong></td>
-<td>The values to keep: name, prompt, starting value.</td>
+<td>The values to keep: a name and an optional <em>How to decide it</em> hint for each.</td>
 </tr>
 <tr>
 <td><strong>Poll prompt</strong></td>
@@ -169,7 +170,7 @@
 <td>The small always-on-screen panel with current values.</td>
 </tr>
 <tr>
-<td><strong>Sampler &amp; reasoning</strong></td>
+<td><strong>Generation settings (advanced)</strong> / <strong>Prompt template (advanced)</strong></td>
 <td>Belong to this tracker, not the connection. Low temperature / <em>Precise</em> or <em>Deterministic</em> presets suit strict JSON.</td>
 </tr>
 <tr>

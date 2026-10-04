@@ -37,13 +37,16 @@
     <div class="results"></div>
     <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="on" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article"><div class="eyebrow">Memory & prompts</div><h1>Chat Summary</h1><div class="glance"><div><small>Needs</small><span>A model connection</span></div><div><small>Find it</small><span>Engine panel → Chat Summary</span></div></div><p class="lead">Long chats outgrow the model's context. <strong>Chat Summary</strong> folds old messages into <strong>summaries</strong>, in levels, and <strong>hides the originals from the prompt</strong> — it never deletes them. A protected window of recent messages is never folded.</p>
+  <article class="article"><div class="eyebrow">Memory & prompts</div><h1>Chat Summary</h1><div class="glance"><div><small>Needs</small><span>A model connection</span></div><div><small>Find it</small><span>Engine panel → Chat Summary (tile)</span></div></div><p class="lead">Long chats outgrow the model's context. <strong>Chat Summary</strong> folds old messages into <strong>summaries</strong>, in levels, and <strong>hides the originals from the prompt</strong> — it never deletes them. A protected window of recent messages is never folded.</p>
 <div class="levels" markdown="0">
 <div class="lv"><b>Newest messages</b><span>always sent as they are · <i>protected window</i></span></div>
 <div class="lv l1"><b>Level 1</b><span>oldest raw messages folded into one summary</span></div>
 <div class="lv l2"><b>Level 2</b><span>several level-1 summaries folded into one</span></div>
 <div class="lv l3"><b>Level 3</b><span>several level-2 summaries folded into one</span></div>
 </div>
+
+<p>The <strong>Chat Summary</strong> screen, with its defaults:</p>
+<figure class="shot "><img src="../assets/shots/summary.webp" alt="Protected window 20, level batches 10 / 5 / 5, an optional verify pass." loading="lazy"><figcaption>Protected window 20, level batches 10 / 5 / 5, an optional verify pass.</figcaption></figure>
 
 <h2 id="how-it-works">How it works</h2>
 <ol>
@@ -62,7 +65,7 @@
 <tbody>
 <tr>
 <td><strong>Protected window</strong></td>
-<td>How many of the newest messages never get folded</td>
+<td>How many of the newest messages never get folded (20 by default)</td>
 </tr>
 <tr>
 <td><strong>Worker</strong></td>
@@ -73,8 +76,24 @@
 <td>Level 1 folds this many of the <strong>oldest raw messages</strong> into one summary; level 2 folds this many level-1 summaries; level 3 does the same with level 2. Bigger batches = fewer, coarser summaries</td>
 </tr>
 <tr>
+<td><strong>Verify level &gt;1 summaries</strong></td>
+<td>Off by default. When on, after folding a summary of summaries the model double-checks it against the original content one level further down — it catches drift higher up the pyramid</td>
+</tr>
+<tr>
 <td><strong>Verify worker</strong></td>
-<td>The connection that checks each summary (<em>Same as fold worker</em> by default)</td>
+<td>The connection that does the check (<em>Same as fold worker</em> by default)</td>
+</tr>
+<tr>
+<td><strong>+ Add level</strong> / <strong>Remove</strong></td>
+<td>Add or remove a level of the pyramid</td>
+</tr>
+<tr>
+<td><strong>Save settings</strong></td>
+<td>Stores the values</td>
+</tr>
+<tr>
+<td><strong>Fold now</strong></td>
+<td>Folds eligible messages immediately instead of waiting</td>
 </tr>
 </tbody>
 </table>

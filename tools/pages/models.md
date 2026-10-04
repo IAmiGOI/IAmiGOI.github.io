@@ -4,9 +4,13 @@ group: Setup
 desc: Connect the models the engine uses for trackers, summaries, pictures and rewrite passes.
 order: 4
 needs: This is the first thing to set up
-where: Engine panel → Model connections
+where: Engine panel → Models
 ---
 Module Engine makes its own model calls on the side of your roleplay. **Model connections** is the list of models it is allowed to use for that. Without at least one working connection, trackers, summaries and pictures cannot work.
+
+Open the **Models** tile. The **Model connections** card inside it lists your connections and has four buttons: **+ Add connection**, **Save**, **+ SillyTavern main connection** and **Check all**.
+
+<figure class="shot "><img src="../assets/shots/models.webp" alt="The Model connections card, before the first connection is added." loading="lazy"><figcaption>The Model connections card, before the first connection is added.</figcaption></figure>
 
 ## Pick the easy path first
 

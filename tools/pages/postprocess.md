@@ -33,11 +33,14 @@ The Post-Turn Processor takes each fresh reply and runs it through a **chain of 
 <ol class="steps">
 <li markdown="1">
 ### Switch the module on
-Modules card → **Post-Turn Processor**.
+Engine panel → **Modules** → **Post-Turn Processor**.
 </li>
 <li markdown="1">
 ### Add a pass
-Write an **Instruction** — a proper brief, not a one-liner — and optionally pick a **Model connection** for it. Add more passes for more steps; ↑ / ↓ change the order.
+Press **+ Add**. A pass named *New pass* appears: write its **Instruction** — a proper brief, not a one-liner — and optionally pick a **Model connection** (the default is *Any connection, load-balanced*). Add more passes for more steps; ↑ / ↓ change the order, **Remove** deletes one.
+
+<figure class="shot "><img src="../assets/shots/pass-form.webp" alt="A new pass: name, Enabled, Instruction, Model connection, optional chat context." loading="lazy"><figcaption>A new pass: name, Enabled, Instruction, Model connection, optional chat context.</figcaption></figure>
+
 </li>
 <li markdown="1">
 ### Turn on auto-run
@@ -48,6 +51,8 @@ Nothing runs unless the module is **Enabled**, at least one pass is on with a no
 **Save** stores the chain.
 </li>
 </ol>
+
+After a reply is processed, a **✎ toggle** appears under the message and shows exactly what changed.
 
 ## Example passes
 

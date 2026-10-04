@@ -16,7 +16,7 @@ The module only matches text against the **cast you enter** (names and pronouns)
 <ol class="steps">
 <li markdown="1">
 ### Switch it on
-Modules card → **Speaker Colors**.
+Engine panel → **Modules** → **Speaker Colors**.
 </li>
 <li markdown="1">
 ### Add your cast

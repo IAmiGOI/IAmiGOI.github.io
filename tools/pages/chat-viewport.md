@@ -4,7 +4,7 @@ group: Interface & data
 desc: An experimental replacement for SillyTavern's chat view, and the desktop home screen.
 order: 18
 needs: Nothing extra
-where: Engine panel → Chat Viewport
+where: Settings screen → Chat Viewport
 ---
 **Chat Viewport** *(experimental)* replaces SillyTavern's chat view with the engine's own.
 

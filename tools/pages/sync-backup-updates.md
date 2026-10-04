@@ -6,7 +6,10 @@ order: 19
 needs: Optional cloud account
 where: Settings screen
 ---
-Four cards on the **settings screen** keep your setup safe and current.
+The **settings screen** (the gear at the bottom of the dock) keeps your setup safe and current. It has six tiles — Engine, Chat Viewport, Preset, Updates, Sync and Backgrounds.
+
+<figure class="shot "><img src="../assets/shots/settings.webp" alt="The engine settings screen." loading="lazy"><figcaption>The engine settings screen.</figcaption></figure>
+
 
 <div class="cards" markdown="1">
 
@@ -17,7 +20,7 @@ Exports and imports the engine's whole configuration — handy for backups and s
 
 <div class="mini" markdown="1">
 **Sync**
-Keeps settings and chats in step between your devices — through the cloud or GitHub.
+Keeps devices in step over WebRTC (peer to peer), with an optional cloud drive or GitHub repository as a go-between.
 </div>
 
 <div class="mini" markdown="1">
@@ -48,4 +51,4 @@ Read the full [Privacy policy](../privacy.html).
 
 ## Updating
 
-Open the **Updates** card and install. The engine updates itself and shows an update overlay while it does. Your settings are stored separately and are kept.
+Open the **Updates** tile — it checks GitHub for a newer engine — and install. The engine updates itself and shows an update overlay while it does. Your settings are stored separately and are kept.

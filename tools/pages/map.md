@@ -14,7 +14,7 @@ Map is a floating, full-screen **map window** with a settings drawer. It opens f
 <ol class="steps">
 <li markdown="1">
 ### Switch it on
-Modules card → **Map**. A draggable button appears.
+Engine panel → **Modules** → **Map**. A draggable button appears.
 </li>
 <li markdown="1">
 ### Set the scale

@@ -39,9 +39,11 @@
   </aside>
   <article class="article"><div class="eyebrow">Start here</div><h1>Core concepts</h1><p class="lead">Five ideas explain almost everything in Module Engine.</p>
 <h2 id="1-modules-the-features-you-toggle">1. Modules — the features you toggle</h2>
-<p>A <strong>module</strong> is one feature: Tracker, RP Time, Music, Scene Painter and so on. Each is switched on or off in the <strong>Modules</strong> card, and its settings appear only after it is on. Modules cannot reach the network or SillyTavern directly — they only get what their <em>rights</em> allow, through gates. That is why a misbehaving module cannot break your chats.</p>
+<p>A <strong>module</strong> is one feature: Tracker, RP Time, Music, Scene Painter and so on. Each is switched on or off on the <strong>Modules</strong> screen, and its settings appear only after it is on. Modules cannot reach the network or SillyTavern directly — they only get what their <em>rights</em> allow, through gates. That is why a misbehaving module cannot break your chats.</p>
 <h2 id="2-cores-the-engine-s-own-parts">2. Cores — the engine's own parts</h2>
-<p><strong>Cores</strong> are what modules stand on: model connections, chat memory, summaries, the lorebook, sync, the prompt pipeline, the interface. You rarely touch them directly — they appear as <strong>cards</strong> in the engine panel (Model connections, Chat Summary, Lorebook, Sync, Updates…).</p>
+<p><strong>Cores</strong> are what modules stand on: model connections, chat memory, summaries, the lorebook, sync, the prompt pipeline, the interface. You rarely touch them directly — they appear as <strong>tiles</strong> in the engine panel (Models, Classifiers, Macros, Lorebook, Chat Summary) and on the settings screen (Preset, Sync, Updates…).</p>
+<figure class="shot "><img src="../assets/shots/hub.webp" alt="The engine panel." loading="lazy"><figcaption>The engine panel.</figcaption></figure>
+
 <div class="layers-mini">
 <p><strong>Runner</strong> starts everything → <strong>Services</strong> touch SillyTavern, the page and the network → <strong>Libraries</strong> share building blocks → <strong>Cores</strong> do the engine's work → <strong>Modules</strong> are the features you see.</p>
 </div>
@@ -51,7 +53,7 @@
 <p><strong>Rule of thumb.</strong> Let your best model write the story in SillyTavern. Give the side jobs (trackers, summaries, clean-up passes) to a cheap, fast one.</p>
 </div>
 <h2 id="4-macros-values-you-can-use-anywhere">4. Macros — values you can use anywhere</h2>
-<p>When a tracker or RP Time knows something, it publishes it as a <strong>macro</strong> — a placeholder such as <code>{{tracker_health}}</code> that you can write into any SillyTavern prompt, character card or lorebook entry. The text is replaced with the current value when the prompt is built. The <strong>Macros</strong> card lists every macro that exists right now. <a href="lorebook-macros.html">More →</a></p>
+<p>When a tracker or RP Time knows something, it publishes it as a <strong>macro</strong> — a placeholder such as <code>{{tracker_health}}</code> that you can write into any SillyTavern prompt, character card or lorebook entry. The text is replaced with the current value when the prompt is built. Tracker and RP Time publish their values this way; the <strong>Macros</strong> tile lets you define your own too. <a href="lorebook-macros.html">More →</a></p>
 <h2 id="5-nothing-is-deleted">5. Nothing is deleted</h2>
 <p>The engine is careful with your story:</p>
 <ul>
@@ -71,15 +73,15 @@
 <tbody>
 <tr>
 <td><strong>Dock</strong> (right edge, hover)</td>
-<td>Opens the engine panel, the music player, the map and other windows</td>
+<td>Engine panel, Memory graph, Music player, Picture window, engine settings</td>
 </tr>
 <tr>
 <td><strong>Engine panel</strong></td>
-<td>Cards: Modules, Model connections, Chat Summary, Memory graph, Lorebook, Macros, Chat Viewport…</td>
+<td>Tiles: Models, Classifiers, Modules, Macros, Lorebook, Chat Summary</td>
 </tr>
 <tr>
-<td><strong>Settings screen</strong></td>
-<td>Preset (export/import), Sync, Updates, Backgrounds</td>
+<td><strong>Settings screen</strong> (gear on the dock)</td>
+<td>Engine, Chat Viewport, Preset, Updates, Sync, Backgrounds</td>
 </tr>
 <tr>
 <td><strong>Under replies</strong></td>

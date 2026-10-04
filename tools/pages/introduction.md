@@ -48,12 +48,14 @@ Back up and sync your settings and chats between devices.
 
 You keep using SillyTavern the way you always did. Module Engine adds:
 
-- a **dock** on the right edge of the screen — hover it to open the engine's panel;
+- a **dock** on the right edge of the screen — hover it to slide it out and open the engine's panel;
 - **floating windows** (tracker values, the in-world clock, the music player, pictures, the map) that you can drag around;
 - small **badges and buttons under replies** (time, 🎨 Paint);
 - a built-in guide, **Mea**, who knows every setting and can walk you through the first start.
 
 Nothing is forced on you: every feature is a **module** that is off until you switch it on, and the engine never deletes your messages.
+
+<figure class="shot "><img src="../assets/shots/hub.webp" alt="The engine panel: one tile per area — Models, Classifiers, Modules, Macros, Lorebook, Chat Summary." loading="lazy"><figcaption>The engine panel: one tile per area — Models, Classifiers, Modules, Macros, Lorebook, Chat Summary.</figcaption></figure>
 
 ## Good to know before you start
 

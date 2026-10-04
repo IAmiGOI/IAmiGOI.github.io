@@ -6,11 +6,13 @@ order: 5
 needs: Most modules need a model connection
 where: Engine panel → Modules
 ---
-Switch modules on and off in the **Modules** card. Each module's own settings appear there once it is on. Most modules need a working [model connection](models.html).
+Switch modules on and off on the **Modules** screen (the **Modules** tile of the engine panel). Each module has a switch, and a ⌄ that opens its own settings once it is on. Most modules need a working [model connection](models.html).
 
 <div class="note tip" markdown="1">
 **Good first modules:** [Tracker](tracker.html) — watch values like health or mood update by themselves — and [RP Time](rp-time.html) — an in-world clock.
 </div>
+
+<figure class="shot "><img src="../assets/shots/modules.webp" alt="The Modules screen." loading="lazy"><figcaption>The Modules screen.</figcaption></figure>
 
 ## Story awareness
 
@@ -76,5 +78,7 @@ A floating world map with distances and travel time.
 </div>
 
 <div class="note" markdown="1">
+**Notebook** and **Secrets** live under **Tools** ("tools the AI operates itself — each one enabled separately"). **Install a module** adds verified modules from a catalog, or from any GitHub link; nothing runs until you install it and switch it on.
+
 The `module.*` ids are the names the engine uses internally (for example in the guide's actions). You never need to type them.
 </div>

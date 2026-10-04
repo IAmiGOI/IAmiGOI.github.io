@@ -26,7 +26,7 @@ With **NanoGPT**, character avatars are sent as **reference photos** so the pict
 <ol class="steps">
 <li markdown="1">
 ### Turn on Scene Painter
-Modules card → **Scene Painter**.
+Engine panel → **Modules** → **Scene Painter**.
 </li>
 <li markdown="1">
 ### Add an image backend
@@ -42,6 +42,10 @@ Press **🎨 Paint** under any reply — or switch on *Paint automatically after
 </li>
 </ol>
 
+The settings screen, with its defaults:
+
+<figure class="shot "><img src="../assets/shots/painter-form.webp" alt="Scene Painter settings: prompt writer, image backend, size, style and negative prompt." loading="lazy"><figcaption>Scene Painter settings: prompt writer, image backend, size, style and negative prompt.</figcaption></figure>
+
 ## Settings
 
 | Setting | What it does |
@@ -49,10 +53,10 @@ Press **🎨 Paint** under any reply — or switch on *Paint automatically after
 | **Image backend** | Which service draws |
 | **Prompt writer** / **Backup prompt writer** | The text model that turns messages into an image prompt; the backup is asked if the first refuses |
 | **Instruction for the prompt writer** | How the prompt should be written. The default is fine to start with |
-| **Style** | A fixed tail added to every prompt, e.g. *watercolor, soft light* |
+| **Style** | A fixed tail added to every prompt. Starts as *detailed digital painting, cinematic lighting*; try *watercolor, soft light* |
 | **Negative prompt** | What to avoid. Used by Stable Diffusion and Pollinations; OpenAI ignores it |
 | **Scene depth** | How many recent messages the prompt writer reads |
-| **Width / Height** | Picture size in pixels. Bigger is slower and costs more |
+| **Width / Height** | Picture size in pixels (1024 × 768 by default). Bigger is slower and costs more |
 | **Paint automatically after every reply** | Otherwise use the 🎨 button |
 | **Open the Picture window when ready** | Off: the picture waits under its reply; 🖼 shows it |
 | **Use character avatars as reference photos** | Keeps the characters' looks. Needs a backend that accepts image input. **Also send the persona avatar** adds yours |

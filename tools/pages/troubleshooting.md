@@ -4,7 +4,7 @@ group: Help
 desc: Find your symptom, get the fix.
 order: 20
 ---
-**Always start here:** open **Model connections**. Most problems are a connection that is **down** or **rejected** — its last error is shown right under it.
+**Always start here:** open **Models** → **Model connections**. Most problems are a connection that is **down** or **rejected** — its last error is shown right under it.
 
 ## By symptom
 
@@ -14,7 +14,7 @@ order: 20
 | **HTTP 404** | Wrong endpoint or model name | Check the endpoint (OpenAI-compatible usually ends with `/v1`) and the exact model name |
 | **HTTP 429** | Rate limit | Add another connection; it recovers on its own |
 | **"Failed to fetch"** | Endpoint unreachable, or it blocks the browser (CORS) | Check the address; try another provider or a proxy |
-| A feature does nothing | Module is off, or has no connection | Modules card: switch it on and select a connection |
+| A feature does nothing | Module is off, or has no connection | Modules screen: switch it on and select a connection |
 | Replies wait before generating | A tracker set to *before the reply* is polling, or a connection is slow | Change *Poll when* to *after every reply*; check connection latency |
 | A tracker never updates | Not saved, not enabled, or vague field prompts | Press **Save**, check **Enabled**, rewrite field prompts, try **Poll now** |
 | Post-Turn pass never runs | Auto-run is off, or the pass is empty | Enable **Auto-run after each reply** and write an instruction |
