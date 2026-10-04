@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Music — ST Module Engine docs</title>
-<meta name="description" content="Background music chosen by the meaning of the scene — locally, with your own tracks.">
+<meta name="description" content="Ready-made background music from the Module Engine music library, chosen by the meaning of the scene.">
 <meta name="theme-color" content="#0d0e12">
 <meta property="og:title" content="Music — ST Module Engine docs">
-<meta property="og:description" content="Background music chosen by the meaning of the scene — locally, with your own tracks.">
+<meta property="og:description" content="Ready-made background music from the Module Engine music library, chosen by the meaning of the scene.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../assets/me-logo.webp" type="image/webp">
@@ -37,10 +37,17 @@
     <div class="results"></div>
     <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="on" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
   </aside>
-  <article class="article"><div class="eyebrow">Modules</div><h1>Music</h1><div class="glance"><div><small>Needs</small><span>Optional — only for describing tracks</span></div><div><small>Find it</small><span>Modules → Music</span></div><div><small>Module id</small><span><code>module.music</code></span></div></div><p class="lead">Music plays background tracks that <strong>match the scene</strong>. Tracks are chosen <strong>locally by meaning</strong> (embeddings) — picking a track makes no model calls. A model is only used, once, to <em>describe</em> tracks so that matching works even when file names say nothing.</p>
-<p>The player is a floating window you toggle from the dock.</p>
+  <article class="article"><div class="eyebrow">Modules</div><h1>Music</h1><div class="glance"><div><small>Needs</small><span>Nothing for the library · a model only to describe your own tracks</span></div><div><small>Find it</small><span>Modules → Music</span></div><div><small>Module id</small><span><code>module.music</code></span></div></div><p class="lead">Music plays background tracks that <strong>match the scene</strong> — and you do not have to bring any. Pick a section of the <strong>Music library</strong>, the ready-made collection on the Module Engine music server, and tracks start on their own as the story changes.</p>
 <figure class="shot player"><img src="../assets/shots/music-player.webp" alt="The Music player window" loading="lazy"><figcaption>The player: the track that matches the scene, with how well it matches.</figcaption></figure>
 
+<p>The player is a floating window you toggle from the dock.</p>
+<h2 id="how-it-works">How it works</h2>
+<ol>
+<li>After each reply the engine turns the recent scene into a numeric <strong>vector</strong> — a fingerprint of its meaning.</li>
+<li>The music server receives that vector (not your chat text) together with what is playing now, and answers with one track, or "keep the current one".</li>
+<li>If the server cannot be reached, nothing breaks: the current track simply keeps playing.</li>
+</ol>
+<p>You never see or manage individual server tracks — you only choose the <strong>section</strong>.</p>
 <h2 id="set-it-up">Set it up</h2>
 <div class="steps">
 <div class="step">
@@ -48,16 +55,16 @@
 <p>Engine panel → <strong>Modules</strong> → <strong>Music</strong>.</p>
 </div>
 <div class="step">
-<h3>Add tracks</h3>
-<p><strong>Import audio files</strong> from your computer, or <strong>Add a direct audio link</strong> to a file or stream (.mp3, .ogg, .m4a, .flac…). For links, only the <em>address</em> is stored — never the audio.</p>
+<h3>Pick a section of the Music library</h3>
+<p>In the Music settings choose a section in <strong>Music library</strong>. <em>Off — only my own tracks</em> turns the server library off. Tracks start on their own to match the scene.</p>
 </div>
 <div class="step">
-<h3>Describe them</h3>
-<p>Turn on <strong>Describe new tracks with the model</strong> (or press <strong>Describe with the model</strong>). A model writes a one-line mood description per track, in batches of 10. Edit any description yourself — hand-edited ones are never overwritten.</p>
+<h3>(Optional) Smart scene detection</h3>
+<p>Switch on <strong>Smart scene detection (Jev)</strong>. When the music is about to change, your Jev connection (<strong>Models → Classifiers</strong>) rates the scene so the track fits it better. Without a Jev connection it is simply skipped.</p>
 </div>
 <div class="step">
 <h3>Let it follow the story</h3>
-<p>Switch on <strong>Auto-switch with the scene</strong> and open the player from the dock.</p>
+<p>Keep <strong>Auto-switch with the scene</strong> on and open the player from the dock.</p>
 </div>
 </div>
 <h2 id="settings">Settings</h2>
@@ -69,6 +76,14 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><strong>Music library</strong></td>
+<td>The section of ready-made music to play from. <em>Off — only my own tracks</em> disables the server library</td>
+</tr>
+<tr>
+<td><strong>Smart scene detection (Jev)</strong></td>
+<td>Lets your Jev classifier rate the scene when the music is about to change. Skipped without a Jev connection</td>
+</tr>
 <tr>
 <td><strong>Auto-switch with the scene</strong></td>
 <td>After each reply the module compares the scene with the tracks and may change the music. Off = only by hand</td>
@@ -85,20 +100,19 @@
 <td><strong>Switch margin</strong></td>
 <td>How much better a new track must fit than the current one before the music changes. Higher = fewer switches</td>
 </tr>
-<tr>
-<td><strong>Describe new tracks with the model</strong></td>
-<td>After import, a model writes a mood description for each track</td>
-</tr>
-<tr>
-<td><strong>Mood description</strong> <em>(per track)</em></td>
-<td>The text a track is matched by. Editing marks it as yours; a badge shows its source: <em>AI</em>, <em>Edited</em> or <em>Title only</em></td>
-</tr>
 </tbody>
 </table>
+<h2 id="your-own-music-optional">Your own music (optional)</h2>
+<p>The library is the main way to use Music. If you also want your own tracks, they play <strong>side by side</strong> with the library and are chosen by the same scene matching.</p>
+<ul>
+<li><strong>Import audio files</strong>, or <strong>Add a direct audio link</strong> to a file or stream (.mp3, .ogg, .m4a, .flac…). For links only the <em>address</em> is stored, never the audio.</li>
+<li><strong>Describe new tracks with the model</strong> — after importing, a text model writes a one-line mood description for each track (in batches of 10), so matching works even when file names say nothing. <strong>Describe with the model</strong> does it for tracks already added; descriptions you edited by hand are never overwritten.</li>
+<li><strong>Mood description</strong> <em>(per track)</em> — the text a track is matched by. A badge shows where it came from: <em>AI</em>, <em>Edited</em> or <em>Title only</em>.</li>
+</ul>
 <div class="note tip">
 <p><strong>Music keeps changing too much?</strong> Raise <strong>Switch margin</strong> and <strong>Scene depth</strong>. <strong>Silence?</strong> Lower <strong>Min similarity</strong>.</p>
 </div><div class="pager"><a href="scene-painter.html"><small>← Previous</small>Scene Painter</a><a class="nx" href="speaker-colors.html"><small>Next →</small>Speaker Colors</a></div></article>
-  <aside class="toc"><b>On this page</b><a href="#set-it-up">Set it up</a><a href="#settings">Settings</a></aside>
+  <aside class="toc"><b>On this page</b><a href="#how-it-works">How it works</a><a href="#set-it-up">Set it up</a><a href="#settings">Settings</a><a href="#your-own-music-optional">Your own music (optional)</a></aside>
 </main>
 <footer>
   <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
