@@ -323,3 +323,47 @@ section.show, section#more, section#safe, section#sync, section#how { padding-to
 .vis.center { align-items: center; } .vis.center .playershot { width: min(380px, 100%); align-self: center; }
 
 .show.stack { grid-template-columns: 1fr; gap: 26px; } .show.stack .txt { max-width: 70ch; }
+
+/* Mea — the guide chat */
+.mea-launcher { position: fixed; right: 18px; bottom: 18px; z-index: 80; width: 64px; height: 64px; padding: 0; cursor: pointer; border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--accent) 60%, transparent); background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 12px 30px rgba(0,0,0,.5), 0 0 26px rgba(91,140,255,.28); transition: transform .18s ease, border-color .18s ease; }
+.mea-launcher:hover { transform: translateY(-2px); border-color: var(--accent); animation: pulse 1.5s ease-out infinite; }
+.mea-launcher img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 14%; border-radius: 50%; pointer-events: none; }
+.mea-launcher.open { display: none; }
+.mea-tip { position: absolute; right: 76px; top: 50%; transform: translateY(-50%); white-space: nowrap; font: 500 13px var(--font); color: var(--text); padding: 7px 13px; border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); box-shadow: 0 8px 22px rgba(0,0,0,.4); animation: rise .35s ease-out both; }
+.mea-tip[hidden] { display: none; }
+.mea-panel { position: fixed; right: 18px; bottom: 18px; z-index: 90; width: min(390px, calc(100vw - 24px)); height: min(590px, calc(100vh - 36px)); display: flex; flex-direction: column; overflow: hidden;
+  border: 2px solid color-mix(in srgb, var(--accent) 50%, transparent); border-radius: 18px; background: color-mix(in srgb, var(--surface) 95%, transparent);
+  backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); box-shadow: 0 24px 70px rgba(0,0,0,.6); animation: rise .25s ease-out both; }
+.mea-panel[hidden] { display: none; }
+.mea-head { display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 10px; background: linear-gradient(105deg, var(--surface), var(--panel-tint)); border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, var(--accent)); }
+.mea-avatar { width: 44px; height: 44px; object-fit: cover; object-position: 50% 12%; border-radius: 50%; background: var(--level-2); border: 2px solid color-mix(in srgb, var(--accent) 55%, transparent); }
+.mea-who { flex: 1; line-height: 1.25; } .mea-who strong { display: block; color: var(--accent); font-size: 15px; } .mea-who small { color: var(--muted); font-size: 12px; }
+.mea-icon { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 1px solid var(--line); background: transparent; color: var(--text); font-size: 14px; }
+.mea-icon:hover { border-color: var(--accent); color: var(--accent); }
+.mea-log { flex: 1; min-height: 0; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; overscroll-behavior: contain; }
+.mea-msg { display: flex; flex-direction: column; max-width: 92%; } .mea-msg.user { align-self: flex-end; align-items: flex-end; } .mea-msg.assistant { align-self: flex-start; }
+.mea-bubble { padding: 9px 13px; border-radius: 14px; font-size: 14px; line-height: 1.55; background: var(--level-1); word-wrap: break-word; overflow-wrap: anywhere; }
+.mea-msg.user .mea-bubble { background: color-mix(in srgb, var(--accent) 16%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); white-space: pre-wrap; }
+.mea-bubble p { margin: 0 0 6px; } .mea-bubble p:last-child { margin: 0; } .mea-bubble ul { margin: 4px 0; padding-left: 18px; } .mea-bubble li { margin: 2px 0; }
+.mea-bubble pre { margin: 6px 0; padding: 9px 11px; font-size: 12px; max-height: 220px; overflow: auto; } .mea-bubble code { font-size: 12.5px; }
+.mea-bubble strong { color: #fff; }
+.mea-sources { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 6px; } .mea-sources small { color: var(--muted); font-size: 12px; }
+.mea-sources a { font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+.mea-sources a:hover { text-decoration: none; border-color: var(--accent); }
+.mea-typing { display: flex; gap: 5px; padding: 12px 14px; } .mea-typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); opacity: .5; animation: meadot 1.1s infinite ease-in-out; }
+.mea-typing i:nth-child(2) { animation-delay: .15s; } .mea-typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes meadot { 0%, 80%, 100% { transform: translateY(0); opacity: .35; } 40% { transform: translateY(-5px); opacity: 1; } }
+.mea-chips { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 14px 10px; } .mea-chips[hidden] { display: none; }
+.mea-chip { cursor: pointer; padding: 6px 12px; border-radius: 999px; font: 13px var(--font); color: var(--text); background: transparent; border: 2px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+.mea-chip:hover { border-color: var(--accent); color: var(--accent); }
+.mea-form { display: flex; gap: 8px; align-items: flex-end; padding: 10px 12px; border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent); background: var(--level-1); }
+.mea-input { flex: 1; resize: none; max-height: 110px; padding: 9px 13px; border-radius: 16px; border: 1px solid var(--line); background: var(--level-2); color: var(--text); font: 14px/1.4 var(--font); outline: none; }
+.mea-input:focus { border-color: var(--accent); } .mea-input:disabled { opacity: .6; }
+.mea-send { width: 38px; height: 38px; flex: none; border-radius: 50%; cursor: pointer; border: 2px solid var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--text); font-size: 15px; }
+.mea-send:disabled { opacity: .45; cursor: default; }
+.mea-note { padding: 0 14px 10px; background: var(--level-1); font-size: 11px; line-height: 1.4; color: var(--muted); }
+@media (max-width: 560px) { .mea-panel { right: 0; bottom: 0; width: 100vw; height: 100vh; height: 100dvh; border-radius: 0; border-width: 0; } .mea-launcher { right: 12px; bottom: 12px; } }
+@media (prefers-reduced-motion: reduce) { .mea-panel, .mea-tip, .mea-typing i, .mea-launcher:hover { animation: none; } }

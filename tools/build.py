@@ -76,6 +76,8 @@ def foot(base):
   <nav><a href="{base}docs/index.html">Docs</a><a href="{base}install.html">Install</a><a href="{base}privacy.html">Privacy policy</a><a href="{base}terms.html">Terms</a><a href="{REPO}/issues">Issues</a><a href="{REPO}">GitHub</a></nav>
 </footer>
 <script src="{base}assets/site.js"></script>
+<script src="{base}assets/mea-config.js"></script>
+<script src="{base}assets/mea.js" defer></script>
 </body>
 </html>
 """
