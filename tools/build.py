@@ -229,7 +229,7 @@ def landing():
     </div>
     <div class="vis">
       <div class="frame"><div class="art"></div><small>Harbour alley, rain</small></div>
-      <div class="player"><b>♪</b><div><span>Rain on the Docks</span><div class="bar"><i style="width:38%"></i></div></div></div>
+      <img class="playershot" src="assets/shots/music-player.webp" alt="The Music player"></div>
     </div>
   </section>
 

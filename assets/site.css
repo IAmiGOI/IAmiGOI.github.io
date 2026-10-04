@@ -316,3 +316,6 @@ section.show, section#more, section#safe, section#sync, section#how { padding-to
 @media (max-width: 520px) { .callouts { grid-template-columns: 1fr; } }
 
 .graphshot { margin: 0; }
+
+.shot.player { max-width: 420px; background: transparent; border: 0; box-shadow: none; } .shot.player img { border-radius: 22px; box-shadow: 0 14px 36px rgba(0,0,0,.45); } .shot.player figcaption { background: transparent; border: 0; padding-left: 4px; }
+.playershot { width: min(330px, 100%); height: auto; align-self: flex-start; border-radius: 22px; box-shadow: 0 14px 36px rgba(0,0,0,.45); }

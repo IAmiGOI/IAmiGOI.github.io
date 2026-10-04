@@ -11,6 +11,9 @@ Music plays background tracks that **match the scene**. Tracks are chosen **loca
 
 The player is a floating window you toggle from the dock.
 
+<figure class="shot player"><img src="../assets/shots/music-player.webp" alt="The Music player window" loading="lazy"><figcaption>The player: the track that matches the scene, with how well it matches.</figcaption></figure>
+
+
 ## Set it up
 
 <ol class="steps">
