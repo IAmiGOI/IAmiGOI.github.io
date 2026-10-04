@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Typing — ST Module Engine docs</title>
+<meta name="description" content="Type checking without TypeScript — JSDoc comments inside plain .js files, checked on demand.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Typing — ST Module Engine docs">
+<meta property="og:description" content="Type checking without TypeScript — JSDoc comments inside plain .js files, checked on demand.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="" href="dev-overview.html">Development overview</a><a class="" href="dev-first-module.html">Writing a module</a><a class="" href="dev-runtime.html">Runtime (the Runner)</a><a class="" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="" href="dev-ui.html">UI primitives</a><a class="" href="dev-widgets.html">Widget reference</a><a class="on" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>Typing</h1><p class="lead">Types live in <strong>JSDoc comments inside the existing <code>.js</code> files</strong>. There are no <code>.ts</code> files, no build step and no new runtime dependency: the code that ships is exactly the code that is written. The TypeScript compiler is used only as a <strong>checker</strong> — a linter that understands JSDoc — run on demand and never imported by the engine.</p>
+<h2 id="why">Why</h2>
+<p>The engine is made of buses, contracts and many small modules that talk through plain objects. The bugs that cost the most time were <strong>shape mismatches that tests did not exercise</strong>: a wrong field on an envelope, a value that can be <code>null</code> on one path, an inherited property treated as a lookup key. A checker finds that class of bug at the keyboard instead of in the browser.</p>
+<p>It paid off on the first pass:</p>
+<ul>
+<li><code>stme:constructor</code> resolved through <code>Object.prototype</code> and turned into a bogus module URL — fixed, with a regression test.</li>
+<li>A "home domain" type that was too narrow was rejected by existing tests, which showed services can register callers too.</li>
+<li>Places where a value could be <code>null</code> but was dereferenced (<code>meta</code>, <code>pending</code>, <code>hudUi</code>) were made explicit.</li>
+</ul>
+<h2 id="how-it-works">How it works</h2>
+<ol>
+<li><strong>Opt in per file</strong> with <code>// @ts-check</code> as the very first line. A file without it is not checked.</li>
+<li><strong>Strict mode, no exceptions.</strong> <code>jsconfig.json</code> sets <code>strict: true</code>. A file that opts in must pass with zero errors: no "allow implicit any" escape hatch and no <code>// @ts-ignore</code>. If a type is hard to express, fix the design or use a narrow, commented cast.</li>
+<li><strong>Gradual.</strong> <code>checkJs</code> is <code>false</code> globally, so unchecked files cannot break the check. The ratchet only goes one way: once a file is opted in it stays at zero errors.</li>
+</ol>
+<pre><code class="language-bash">npm run typecheck            # checks every opted-in file; non-zero exit on any error
+npm run typecheck:progress   # how many files opted in, where the remaining errors are
+</code></pre>
+<p>Both fetch the compiler with <code>npx</code> the first time (network needed once); nothing is added to the dependencies. Editors that understand JSDoc (VS Code, WebStorm) read <code>jsconfig.json</code> and show the same errors and hover types as you type.</p>
+<h2 id="where-the-types-are">Where the types are</h2>
+<p>Types are <code>@typedef</code>s in <strong>code-free <code>.js</code> files</strong> next to the code that owns them, imported with <code>import()</code> types:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Defines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>libraries/shared/bus-types.js</code></td>
+<td><code>Envelope</code>, <code>Host</code>, <code>Engine</code>, buses, gates, <code>RightsConfig</code>, <code>RightsCore</code>, <code>Domain</code></td>
+</tr>
+<tr>
+<td><code>cores/ui/ui-types.js</code></td>
+<td><code>Signal</code>, <code>UiNode</code>, <code>UiProps</code> (typed <code>on:*</code> handlers), <code>UiChild</code></td>
+</tr>
+<tr>
+<td><code>libraries/core/module-types.js</code></td>
+<td>Module header/meta, <code>Analysis</code>, runner/installer/registry shapes</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-js">// @ts-check
+/** @typedef {import('../shared/bus-types.js').Host} Host */
+/** @template [T=any] @typedef {import('../../cores/ui/ui-types.js').Signal&lt;T&gt;} Signal */
+</code></pre>
+<p>A types file ends with <code>export {};</code> so it is a module, holds no logic, and is never run for its own sake.</p>
+<h2 id="writing-annotations">Writing annotations</h2>
+<ul>
+<li><strong>One block per function.</strong> The description and the <code>@param</code>/<code>@returns</code> tags must be a single <code>/** … */</code> directly above the function, or editors show only the nearest block. Put <code>@typedef</code>s at the top of the file.</li>
+<li><strong>Prefer precise unions over <code>any</code>.</strong> <code>Envelope&lt;T&gt;</code> is <code>{ ok: true, value: T } | { ok: false, error }</code>; narrow with <code>if (!result.ok) return …</code> instead of casting.</li>
+<li><strong><code>any</code> is deliberate and rare.</strong> Today it appears only for contract <code>params</code> and envelope values, because there is no per-contract type map yet — a documented gap, not a style.</li>
+<li><strong>Data from outside is <code>unknown</code>.</strong> Parsed JSON, storage values and GitHub responses are checked, never assumed.</li>
+<li><strong>A cast is a last resort and must say why:</strong> <code>/** @type {X} */ (value)</code> with a short comment. Prefer a type guard or restructuring.</li>
+<li><strong>Do not widen a type to silence an error.</strong> Ask first whether the error is a real bug — it often is.</li>
+<li><strong>If an options object has required fields, do not give the parameter a <code>= {}</code> default.</strong></li>
+</ul>
+<pre><code class="language-js">/** @type {Map&lt;string, Entry&gt;} */                 // empty collections need an explicit type
+const byId = new Map();
+
+/**
+ * @template T
+ * @param {() =&gt; T[]} items
+ * @param {(item: T) =&gt; UiNode} renderItem
+ * @returns {Signal&lt;UiNode[]&gt;}
+ */
+
+/** @type {GateAccessor['subscribe']} */          // reuse a member type instead of repeating it
+function subscribe(contract, options, callback) { /* … */ }
+</code></pre>
+<h2 id="adding-a-file-to-the-checked-set">Adding a file to the checked set</h2>
+<ol>
+<li>Run <code>npm run typecheck:progress</code>, pick a file with few errors — ideally one the typed code already imports.</li>
+<li>Put <code>// @ts-check</code> on the first line and run <code>npm run typecheck</code>.</li>
+<li>Fix from the inside out: shared typedefs, then function signatures, then locals the checker cannot infer (empty arrays/maps, <code>let x = null</code>).</li>
+<li>Run that area's tests, and check UI or engine changes in the test SillyTavern.</li>
+<li>If the checker found a real bug, fix it <strong>and add a regression test</strong> — and confirm the test fails on the old code.</li>
+</ol>
+<h2 id="status-and-known-gaps">Status and known gaps</h2>
+<p>Checked today under <code>strict</code> with zero errors: the module runtime, the connectivity layer (event bus, contract bus, <code>request</code>, gate, network gate, engine, rights core), the module kit, the UI primitives, all widgets and the Modules card and installer panel.</p>
+<ul>
+<li><strong>Contracts are untyped.</strong> The bus does not know the shape of each contract. A contract map (name → params/result) would give typed <code>request()</code> calls; it is the most valuable next step, introduced contract by contract rather than all ~280 at once.</li>
+<li><strong>Tests are not type-checked</strong> — they intentionally pass partial stubs.</li>
+<li><strong>Catalog modules</strong> are plain JavaScript the engine cannot check; an author can opt in with <code>// @ts-check</code> and the typedefs above.</li>
+</ul><div class="pager"><a href="dev-widgets.html"><small>← Previous</small>Widget reference</a><a class="nx" href="dev-testing.html"><small>Next →</small>Testing</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#why">Why</a><a href="#how-it-works">How it works</a><a href="#where-the-types-are">Where the types are</a><a href="#writing-annotations">Writing annotations</a><a href="#adding-a-file-to-the-checked-set">Adding a file to the checked set</a><a href="#status-and-known-gaps">Status and known gaps</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Runtime (the Runner) — ST Module Engine docs</title>
+<meta name="description" content="How the Runner discovers, checks, orders, loads and isolates modules — trust levels, scanning, quarantine, the catalog.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Runtime (the Runner) — ST Module Engine docs">
+<meta property="og:description" content="How the Runner discovers, checks, orders, loads and isolates modules — trust levels, scanning, quarantine, the catalog.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="" href="dev-overview.html">Development overview</a><a class="" href="dev-first-module.html">Writing a module</a><a class="on" href="dev-runtime.html">Runtime (the Runner)</a><a class="" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="" href="dev-ui.html">UI primitives</a><a class="" href="dev-widgets.html">Widget reference</a><a class="" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>Runtime (the Runner)</h1><p class="lead">The <strong>Runner</strong> is the engine's entry point. It starts everything in a fixed order — <strong>Services → Libraries → Cores → Modules</strong> — and it owns the answers to "which modules exist", "in what order do they load", "with what rights" and "why did one not load".</p>
+<p>The Runner does not switch modules on by itself: that is the user's choice, saved by the registry and restored at the next start. An unknown id in the saved list is skipped silently — the build may have changed between launches, and failing at start because a module is gone would be the worst possible behaviour.</p>
+<h2 id="where-modules-come-from">Where modules come from</h2>
+<table>
+<thead>
+<tr>
+<th>Origin</th>
+<th>How it is read</th>
+<th>Rights</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Built-in</strong> (<code>modules/*</code>)</td>
+<td>Source read as text only for the header; code is imported normally</td>
+<td>The header's <code>rights</code> list, as a <em>community</em>-level caller — a built-in module takes the same path as a third-party one</td>
+</tr>
+<tr>
+<td><strong>Installed</strong> (from a repository)</td>
+<td>Source text stored with the module, so launching needs no network</td>
+<td>By trust level, from the scan result</td>
+</tr>
+</tbody>
+</table>
+<p>A failure in one module — a bad header, a failed scan, a missing dependency — never stops the others. It lands in the <strong>Could not load</strong> list with a reason.</p>
+<h2 id="the-header-in-detail">The header, in detail</h2>
+<pre><code>/*@module
+id: community.dice
+title: Dice
+description: Rolls dice on request.
+version: 1.2.0
+engine: ^0.2
+requires: module.tracker@^1.0, core.map@&gt;=0.3
+rights: tracking.poll, ui.notify
+network: false
+*/
+</code></pre>
+<ul>
+<li><code>id</code> and <code>version</code> are required; <code>engine</code>, <code>requires</code>, <code>rights</code> and <code>network</code> default to empty / <code>false</code>.</li>
+<li>For built-in modules <code>rights</code> is the requested set. For external ones it is only a <strong>request</strong> — the final rights depend on the trust level.</li>
+<li>The hash and the scan are computed over the same text that is later executed.</li>
+</ul>
+<h2 id="loading-order-and-dependencies">Loading order and dependencies</h2>
+<p><code>requires</code> lists modules and cores with semver ranges (<code>module.tracker@^1.0</code>; without <code>@</code> any version). The Runner sorts modules so that dependencies load first, checks the ranges, and refuses a module whose dependency is missing or too old. Version ranges follow semver, and a module's <code>engine</code> field is checked against the engine's own version.</p>
+<h2 id="trust-levels">Trust levels</h2>
+<p>Every caller — module or core — is registered with a <strong>trust tier</strong>. The same mechanism serves both layers; first-party cores rarely need anything but the top tier.</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Meaning</th>
+<th>Rights</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>official</code></td>
+<td>Shipped by the engine</td>
+<td>Effectively unrestricted</td>
+</tr>
+<tr>
+<td><code>community</code></td>
+<td>Reviewed and approved</td>
+<td>An explicit allowed list</td>
+</tr>
+<tr>
+<td><code>scanned-safe</code></td>
+<td>Unreviewed; the scan found nothing dangerous</td>
+<td>Everything not explicitly denied</td>
+</tr>
+<tr>
+<td><code>scanned-unsafe</code></td>
+<td>Unreviewed; the scan found risky patterns</td>
+<td>Same, but more restricted</td>
+</tr>
+</tbody>
+</table>
+<p>Signed keys for the reviewed tier are deferred: for now external modules receive only the two scanned tiers.</p>
+<p>For the scanned tiers the policy is <strong>default-allow</strong>: whatever the scan does not forbid is permitted. The scan decides the <em>tier</em>; the real boundary is the rights check at the gate.</p>
+<h2 id="the-scan">The scan</h2>
+<p>A static scan over the module's text — the code is never run. It is "the best possible", not a sandbox: it catches the obvious, and a determined author could evade it, which is why it only decides the trust level while the <strong>gate</strong> enforces rights.</p>
+<table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Severity</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eval</code>, <code>new Function</code>, <code>import()</code>, <code>importScripts</code></td>
+<td>block</td>
+<td>The module does not load</td>
+</tr>
+<tr>
+<td>Computed access to the global object, <code>constructor.constructor</code></td>
+<td>block</td>
+<td>The module does not load</td>
+</tr>
+<tr>
+<td>Any import other than <code>stme:&lt;path&gt;</code></td>
+<td>block</td>
+<td>The module does not load</td>
+</tr>
+<tr>
+<td><code>fetch</code>, <code>XMLHttpRequest</code>, <code>WebSocket</code>, <code>EventSource</code>, <code>sendBeacon</code>, <code>RTCPeerConnection</code></td>
+<td>unsafe</td>
+<td>Loads as <em>scanned-unsafe</em></td>
+</tr>
+<tr>
+<td><code>localStorage</code>, <code>sessionStorage</code>, <code>indexedDB</code>, <code>document.cookie</code></td>
+<td>unsafe</td>
+<td>Loads as <em>scanned-unsafe</em></td>
+</tr>
+<tr>
+<td><code>window.parent</code>/<code>top</code>/<code>opener</code>, <code>document.write</code></td>
+<td>unsafe</td>
+<td>Loads as <em>scanned-unsafe</em></td>
+</tr>
+<tr>
+<td>Direct SillyTavern access (<code>getContext(</code>, the word <em>SillyTavern</em>)</td>
+<td>unsafe</td>
+<td>Loads as <em>scanned-unsafe</em></td>
+</tr>
+</tbody>
+</table>
+<p>False positives are acceptable (a worse tier, not a refusal). A miss is not, so the rules are deliberately coarse and run over the raw text.</p>
+<h2 id="network-access">Network access</h2>
+<p>Network access is a <strong>separate binary right</strong>, not part of the trust level. It is physically a separate bus (<code>host.network</code>), not another gate on the services bus, so the check cannot be bypassed. A header's <code>network: true</code> is only a request; the user interface does not yet grant it to external modules.</p>
+<h2 id="quarantine">Quarantine</h2>
+<p>An external module is registered with <em>quarantine on violation</em>: any refusal by the gate — a contract outside its rights, an <code>http.request</code> without the network right — puts it in quarantine.</p>
+<ul>
+<li>It is recorded as <code>{ id, hash, contract, at }</code> and survives restarts.</li>
+<li>Quarantine is tied to the <strong>id</strong>, not the hash: a fixed version under the same name does not lift it, otherwise an author could change one byte to escape. Only the user can lift it — <strong>Allow again</strong> on the module's card.</li>
+<li>While quarantined a module is not loaded at start, is refused in the preview, and appears under <strong>Could not load</strong>.</li>
+<li>Built-in modules are never quarantined: they sometimes probe contracts they do not hold, and a silent refusal is the old behaviour.</li>
+<li>The user is not notified proactively. The violation shows on that module's card only.</li>
+</ul>
+<p>The current response is not interrupted: the engine carries on, and generation is never aborted by a module's mistake.</p>
+<h2 id="installing-from-a-repository">Installing from a repository</h2>
+<ul>
+<li><strong>Preview installs nothing.</strong> It downloads the text, parses the header, scans, computes SHA-256, and shows the trust level, requested rights, requested network, findings, and "replaces version X".</li>
+<li>The module is stored <strong>with its source</strong>, and re-parsed and re-scanned with the same analysis <strong>on every start</strong>.</li>
+<li>The user switches it on separately.</li>
+<li><strong>Limits:</strong> source up to 512 KB; the id must start with <code>community.</code>.</li>
+</ul>
+<p>The catalog repository holds confirmed modules (<code>modules/&lt;name&gt;/index.js</code>, one file each) and a <code>third-party.txt</code> with one link per line (<code>#</code> for comments). A link can be <code>owner/repo</code>, a repository URL, <code>…/tree/&lt;ref&gt;/&lt;dir&gt;</code> (takes <code>&lt;dir&gt;/index.js</code>) or <code>…/blob/&lt;ref&gt;/&lt;file&gt;.js</code>.</p>
+<h2 id="an-honest-limit">An honest limit</h2>
+<p>There is <strong>no sandbox</strong>: an external module's JavaScript lives in the same page as SillyTavern. Protection is rights through the gate, the hash, the scan and quarantine — not isolation. Review what you install.</p><div class="pager"><a href="dev-first-module.html"><small>← Previous</small>Writing a module</a><a class="nx" href="dev-contracts.html"><small>Next →</small>Contracts, buses &amp; events</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#where-modules-come-from">Where modules come from</a><a href="#the-header-in-detail">The header, in detail</a><a href="#loading-order-and-dependencies">Loading order and dependencies</a><a href="#trust-levels">Trust levels</a><a href="#the-scan">The scan</a><a href="#network-access">Network access</a><a href="#quarantine">Quarantine</a><a href="#installing-from-a-repository">Installing from a repository</a><a href="#an-honest-limit">An honest limit</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

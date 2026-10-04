@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI primitives — ST Module Engine docs</title>
+<meta name="description" content="Signals, the abstract tree, and how a module&#x27;s interface is rendered without touching the DOM.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="UI primitives — ST Module Engine docs">
+<meta property="og:description" content="Signals, the abstract tree, and how a module&#x27;s interface is rendered without touching the DOM.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="" href="dev-overview.html">Development overview</a><a class="" href="dev-first-module.html">Writing a module</a><a class="" href="dev-runtime.html">Runtime (the Runner)</a><a class="" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="on" href="dev-ui.html">UI primitives</a><a class="" href="dev-widgets.html">Widget reference</a><a class="" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>UI primitives</h1><p class="lead">A module never touches the DOM. It returns a <strong>tree</strong> — plain data describing the interface — and the engine's final-UI core applies it to the real page, with every DOM call passing through the same rights check as any other request. The result: widgets and whole modules can be tested without a browser, as data.</p>
+<pre><code>UI core (primitives)       reactive.js · tree.js · diff.js — signals, h(), diffing
+        ↓
+Widget library             libraries/shared/widgets.js — pure functions: data → tree
+        ↓
+Consumers                  the engine panel, your module
+        ↓
+Final UI core              the only thing that touches the DOM — and only through a gate
+</code></pre>
+<h2 id="signals">Signals</h2>
+<p>A <strong>signal</strong> is a reactive value. Reads are tracked; writes re-run every dependent, <strong>synchronously</strong> — there is no batching or scheduler.</p>
+<pre><code class="language-js">import { signal, computed, effect } from 'stme:ui/reactive';
+
+const count = signal(0);
+count();                 // read (tracked if called inside computed/effect)
+count.peek();            // read without tracking
+count.set(5);            // write
+count.update(n =&gt; n + 1) // write from the previous value
+
+const doubled = computed(() =&gt; count() * 2);   // re-evaluates only when count changes
+
+const dispose = effect(() =&gt; console.log(count()));  // runs now and on every change
+dispose();                                            // after this it never runs again
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>signal(initial)</code></td>
+<td>A reactive value. <code>set</code> with an identical value (<code>Object.is</code>) does nothing</td>
+</tr>
+<tr>
+<td><code>computed(fn)</code></td>
+<td>A signal derived from the signals <code>fn</code> read last time</td>
+</tr>
+<tr>
+<td><code>effect(fn)</code></td>
+<td>Runs <code>fn</code> now and again when anything it read changes; returns a dispose function</td>
+</tr>
+</tbody>
+</table>
+<div class="note warn">
+<p><strong>Never create a signal inside a render function.</strong> A signal made inside <code>renderItem</code> lives shorter than the node that reads it; on the next render the node stays subscribed to the old one. Keep a map <code>id → signal</code> with a <strong>stable key</strong> and create each signal once. This bit the engine twice.</p>
+</div>
+<h2 id="h-the-tree"><code>h()</code> — the tree</h2>
+<pre><code class="language-js">import { h } from 'stme:ui/tree';
+
+h('div', { class: 'row', key: item.id },
+    h('span', {}, item.name),
+    h('button', { 'on:click': () =&gt; remove(item.id) }, 'Remove'),
+);
+</code></pre>
+<p><code>h(tag, props, ...children)</code> returns <code>{ tag, props, children }</code>. Children are flattened; <code>null</code>, <code>undefined</code> and <code>false</code> are dropped.</p>
+<table>
+<thead>
+<tr>
+<th>Props</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>class</code>, <code>style</code>, attributes</td>
+<td>Plain properties</td>
+</tr>
+<tr>
+<td><code>key</code></td>
+<td>A <strong>stable</strong> identity for list items — an id, not an array position</td>
+</tr>
+<tr>
+<td><code>on:&lt;event&gt;</code></td>
+<td>A DOM handler — <code>'on:click'</code>, <code>'on:input'</code>, <code>'on:pointerdown'</code> …; the event type is inferred from the name</td>
+</tr>
+</tbody>
+</table>
+<p>A <strong>prop value or a child may itself be a signal</strong>. The renderer resolves it and updates only that spot when it changes:</p>
+<pre><code class="language-js">h('p', {}, computed(() =&gt; `Clicked ${count()} times`))
+h('ul', {}, computed(() =&gt; items().map(item =&gt; h('li', { key: item.id }, item.name))))
+</code></pre>
+<h2 id="rendering">Rendering</h2>
+<p><code>render(node, onPatch)</code> (in <code>diff.js</code>) turns a tree into a stream of patches that the final UI core applies, diffing against the previous tree so only what changed is touched. You do not call it in a module: you return a tree from <code>tree()</code> and the engine mounts it.</p>
+<h2 id="the-rules-behind-the-interface">The rules behind the interface</h2>
+<p>Almost every rule here is a conclusion from a concrete mistake that was already made.</p>
+<p><strong>Layers.</strong> No core and no module touches the DOM. A widget is a pure function: no state, no bus access, no right to save anything. If a widget needs memory (is it collapsed?) it is <em>given</em> a signal and a callback.</p>
+<p><strong>Hierarchy by fill, not borders.</strong> Only the top level — a <code>Card</code> — draws a border. Everything inside is a flat <code>Section</code>. Nesting is shown by <strong>depth of fill</strong> (<code>--stme-level-1..3</code>, deeper = darker), taken from real DOM nesting, never set by hand. Inputs are lighter than their surface, otherwise a dark field on a dark background stops reading as a field.</p>
+<p><strong>Colour.</strong> One accent, <code>--stme-accent</code>, taken from the SillyTavern theme (<code>--SmartThemeQuoteColor</code>). Accent only on section titles; titles inside are plain and bright, because two blues on one screen compete.</p>
+<p><strong>Buttons.</strong> Meaning is carried by the <strong>outline</strong>, with live white or accent text. Danger is a red frame with white text. No fill on hover — the outline brightens and softly pulses (the pulse is removed for <code>prefers-reduced-motion</code>).</p>
+<p><strong>State vs action.</strong> State is a <code>Toggle</code>; an action is a <code>Button</code>. A button "Enable" makes you guess whether the label is the current state or the effect of a click. A number with clear limits is a <code>Slider</code> with the live value next to its label.</p>
+<p><strong>Collapsing.</strong> Everything collapses — section → module → its records — using native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>, <strong>collapsed by default</strong>, with the state remembered per consumer. Each collapsible has a <strong>stable key</strong> (the record id), or the state moves to a neighbour when you add an item. Buttons inside a <code>&lt;summary&gt;</code> must stop click propagation, or "Remove" also collapses the card.</p>
+<p><strong>Style tokens.</strong> Styles live in <code>styles/</code> as tokens on <code>:root</code> (accent, radii <code>14 / 9 / 7</code>, danger <code>#f5232f</code>, ok <code>#3f9e72</code>), not as scattered rules. Override SillyTavern by <strong>specificity</strong>, repeating the shape of its selector, never with <code>!important</code>.</p><div class="pager"><a href="dev-contracts.html"><small>← Previous</small>Contracts, buses &amp; events</a><a class="nx" href="dev-widgets.html"><small>Next →</small>Widget reference</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#signals">Signals</a><a href="#h-the-tree">h() — the tree</a><a href="#rendering">Rendering</a><a href="#the-rules-behind-the-interface">The rules behind the interface</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

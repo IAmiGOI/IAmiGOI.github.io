@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Widget reference — ST Module Engine docs</title>
+<meta name="description" content="The widget library — every ready-made building block available to module interfaces.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Widget reference — ST Module Engine docs">
+<meta property="og:description" content="The widget library — every ready-made building block available to module interfaces.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="" href="dev-overview.html">Development overview</a><a class="" href="dev-first-module.html">Writing a module</a><a class="" href="dev-runtime.html">Runtime (the Runner)</a><a class="" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="" href="dev-ui.html">UI primitives</a><a class="on" href="dev-widgets.html">Widget reference</a><a class="" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>Widget reference</h1><p class="lead">Widgets are <strong>pure functions</strong>: data in, tree out. They live in <code>libraries/shared/widgets.js</code> and an external module imports them from <code>stme:widgets</code>. Controls take <strong>signals</strong> and write back into them.</p>
+<pre><code class="language-js">import { Section, Field, Row, TextInput, Select, Toggle, Slider, Button } from 'stme:widgets';
+</code></pre>
+<h2 id="layout">Layout</h2>
+<table>
+<thead>
+<tr>
+<th>Widget</th>
+<th>Signature</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Section</code></td>
+<td><code>Section(title, options, ...children)</code></td>
+<td>A flat collapsible section — the standard container</td>
+</tr>
+<tr>
+<td><code>Card</code></td>
+<td><code>Card(title, options, ...children)</code></td>
+<td>A top-level framed card (accent title, gradient header)</td>
+</tr>
+<tr>
+<td><code>Row</code></td>
+<td><code>Row(...children)</code></td>
+<td>Children side by side</td>
+</tr>
+<tr>
+<td><code>Field</code></td>
+<td><code>Field(label, control, { hint })</code></td>
+<td>A label, a control and optional hint text</td>
+</tr>
+<tr>
+<td><code>TwoColumn</code></td>
+<td><code>TwoColumn({ left, right })</code></td>
+<td>A two-column layout</td>
+</tr>
+<tr>
+<td><code>Details</code></td>
+<td><code>Details(summary, ...children)</code></td>
+<td>A native collapsible block</td>
+</tr>
+<tr>
+<td><code>EdgeDrawer</code></td>
+<td><code>EdgeDrawer(open, { onToggle, title, side }, ...children)</code></td>
+<td>A drawer attached to a screen edge</td>
+</tr>
+<tr>
+<td><code>Overlay</code></td>
+<td><code>Overlay(visibleSignal, { title, description, children })</code></td>
+<td>A modal overlay</td>
+</tr>
+</tbody>
+</table>
+<h2 id="inputs">Inputs</h2>
+<table>
+<thead>
+<tr>
+<th>Widget</th>
+<th>Signature</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Button</code></td>
+<td><code>Button(label, onClick, { variant, disabled })</code></td>
+<td><code>variant</code>: <code>'default'</code> or <code>'danger'</code> (a red frame)</td>
+</tr>
+<tr>
+<td><code>IconButton</code></td>
+<td><code>IconButton(icon, onClick, { active, title, disabled })</code></td>
+<td>An icon-only button</td>
+</tr>
+<tr>
+<td><code>HoldButton</code></td>
+<td><code>HoldButton(label, onConfirm, { holdMs, variant, disabled })</code></td>
+<td>Must be held to confirm — for destructive actions</td>
+</tr>
+<tr>
+<td><code>TextInput</code></td>
+<td><code>TextInput(signal, { placeholder, type, onInput })</code></td>
+<td>A one-line field</td>
+</tr>
+<tr>
+<td><code>TextArea</code></td>
+<td><code>TextArea(signal, { placeholder, rows })</code></td>
+<td>A multi-line field</td>
+</tr>
+<tr>
+<td><code>NumberInput</code></td>
+<td><code>NumberInput(signal, { min, max, step })</code></td>
+<td>A number field</td>
+</tr>
+<tr>
+<td><code>Slider</code></td>
+<td><code>Slider(label, signal, { min, max, step })</code></td>
+<td>A slider with the live value beside its label</td>
+</tr>
+<tr>
+<td><code>Toggle</code></td>
+<td><code>Toggle(label, checkedSignal, { hint, onChange })</code></td>
+<td>A switch for <strong>state</strong></td>
+</tr>
+<tr>
+<td><code>Select</code></td>
+<td><code>Select(signal, options, { onChange })</code></td>
+<td><code>options</code> is <code>[{ value, label }]</code> (can be a signal)</td>
+</tr>
+<tr>
+<td><code>ColorPicker</code></td>
+<td><code>ColorPicker(signal, { onChange })</code></td>
+<td>A colour field</td>
+</tr>
+</tbody>
+</table>
+<h2 id="display">Display</h2>
+<table>
+<thead>
+<tr>
+<th>Widget</th>
+<th>Signature</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Badge</code></td>
+<td><code>Badge(text, { tone })</code></td>
+<td>A small status label</td>
+</tr>
+<tr>
+<td><code>Chip</code></td>
+<td><code>Chip(label, { title, onClick })</code></td>
+<td>A small clickable tag</td>
+</tr>
+<tr>
+<td><code>StatBlock</code></td>
+<td><code>StatBlock(label, valueSignal, { icon, onClick, title, showLabel, showValue })</code></td>
+<td>A labelled live value</td>
+</tr>
+<tr>
+<td><code>ProgressBar</code></td>
+<td><code>ProgressBar(percent, label)</code></td>
+<td>A progress bar</td>
+</tr>
+<tr>
+<td><code>Spinner</code></td>
+<td><code>Spinner({ size })</code></td>
+<td>A loading indicator</td>
+</tr>
+<tr>
+<td><code>EmptyState</code></td>
+<td><code>EmptyState(text)</code></td>
+<td>A friendly "nothing here" line</td>
+</tr>
+<tr>
+<td><code>Banner</code></td>
+<td><code>Banner(textSignal, { tone, icon, action, actionLabel, busy, detail, onDismiss })</code></td>
+<td>A notice with an optional action</td>
+</tr>
+<tr>
+<td><code>Toast</code></td>
+<td><code>Toast(text, { tone, onDismiss, key })</code></td>
+<td>One toast; <code>tone</code>: <code>ok</code>, <code>error</code>, <code>muted</code>…</td>
+</tr>
+<tr>
+<td><code>Avatar</code></td>
+<td><code>Avatar(url, { width, height, name, onError })</code></td>
+<td>A picture with a fallback</td>
+</tr>
+<tr>
+<td><code>Timestamp</code></td>
+<td><code>Timestamp(text, { title })</code></td>
+<td>A formatted time</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lists">Lists</h2>
+<table>
+<thead>
+<tr>
+<th>Widget</th>
+<th>Signature</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>List</code></td>
+<td><code>List(itemsSignal, renderItem)</code></td>
+<td>Renders a signal of items; give each item a stable <code>key</code></td>
+</tr>
+<tr>
+<td><code>EditableList</code></td>
+<td><code>EditableList({ items, renderItem, onAdd, addLabel, empty, actions })</code></td>
+<td>A list with an add button and an empty state</td>
+</tr>
+</tbody>
+</table>
+<h2 id="floating-ui">Floating UI</h2>
+<table>
+<thead>
+<tr>
+<th>Widget</th>
+<th>Signature</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FloatingPanel</code></td>
+<td><code>FloatingPanel(title, { … })</code></td>
+<td>A draggable always-on-screen window (the tracker's state window is one)</td>
+</tr>
+<tr>
+<td><code>FloatingStack</code></td>
+<td><code>FloatingStack(itemsSignal, { corner, renderItem })</code></td>
+<td>A stack of floating items in a screen corner</td>
+</tr>
+<tr>
+<td><code>DockButton</code></td>
+<td><code>DockButton(icon, { position, drag, title })</code></td>
+<td>A draggable round button</td>
+</tr>
+</tbody>
+</table>
+<h2 id="chat-specific">Chat-specific</h2>
+<p><code>MessageHeader</code>, <code>MessageActionsRow</code>, <code>ReasoningBlock</code>, <code>GenStripe</code> and <code>StatBlock</code> build the pieces of the engine's own chat view. They are meant for cores and the Chat Viewport rather than ordinary modules.</p>
+<h2 id="a-form-in-one-screen">A form in one screen</h2>
+<pre><code class="language-js">tree: () =&gt; Section('My module', {},
+    Field('Name', TextInput(name, { placeholder: 'Who?' })),
+    Field('Mode', Select(mode, [{ value: 'fast', label: 'Fast' }, { value: 'deep', label: 'Deep' }])),
+    Toggle('Enabled', enabled, { hint: 'Turn the whole module on or off.' }),
+    Slider('Strength', strength, { min: 0, max: 1, step: 0.05 }),
+    Row(Button('Save', save), Button('Reset', reset, { variant: 'danger' })),
+)
+</code></pre>
+<div class="note tip">
+<p>Need something new? A reusable element is written into the widget library at once, not "for now" in a module — a consumer holds only the wiring, never its own markup.</p>
+</div><div class="pager"><a href="dev-ui.html"><small>← Previous</small>UI primitives</a><a class="nx" href="dev-typing.html"><small>Next →</small>Typing</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#layout">Layout</a><a href="#inputs">Inputs</a><a href="#display">Display</a><a href="#lists">Lists</a><a href="#floating-ui">Floating UI</a><a href="#chat-specific">Chat-specific</a><a href="#a-form-in-one-screen">A form in one screen</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

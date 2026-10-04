@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing a module — ST Module Engine docs</title>
+<meta name="description" content="The anatomy of a module — header, factory, lifecycle, imports, rights and how it is installed.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Writing a module — ST Module Engine docs">
+<meta property="og:description" content="The anatomy of a module — header, factory, lifecycle, imports, rights and how it is installed.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="" href="dev-overview.html">Development overview</a><a class="on" href="dev-first-module.html">Writing a module</a><a class="" href="dev-runtime.html">Runtime (the Runner)</a><a class="" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="" href="dev-ui.html">UI primitives</a><a class="" href="dev-widgets.html">Widget reference</a><a class="" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>Writing a module</h1><p class="lead">A module is <strong>one JavaScript file</strong>, <code>index.js</code>. It has a header comment that describes it, and a default-exported factory that gives the engine the module's behaviour.</p>
+<h2 id="the-smallest-module">The smallest module</h2>
+<pre><code class="language-js">/*@module
+id: community.hello
+title: Hello (example)
+description: A tiny example module. Safe to remove.
+version: 1.0.0
+engine: ^0.2
+rights: ui.notify
+*/
+import { h } from 'stme:ui/tree';
+import { signal } from 'stme:ui/reactive';
+import { Button } from 'stme:widgets';
+import { request } from 'stme:request';
+
+export default function create(host) {
+    const clicks = signal(0);
+
+    async function sayHello() {
+        clicks.set(clicks.peek() + 1);
+        await request(host.cores, 'ui.notify', { params: { tone: 'ok', text: `Hello! (${clicks.peek()})` } });
+    }
+
+    return {
+        async load() {},
+        tree: () =&gt; h('div', {}, Button('Say hello', sayHello)),
+        stop() {},
+    };
+}
+</code></pre>
+<p>This is the real example module in the catalog repository. Everything a module is made of is in it.</p>
+<h2 id="1-the-header">1. The header</h2>
+<p>The very first thing in the file is a <code>/*@module … */</code> block of <code>key: value</code> lines. It is read <strong>as text, without running anything</strong>, so a stranger's module can be inspected safely.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Meaning</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Unique id. External modules <strong>must</strong> start with <code>community.</code>; <code>module.*</code> belongs to built-ins</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>Semver, e.g. <code>1.2.0</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>title</code>, <code>description</code></td>
+<td>Shown on the module's card</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>engine</code></td>
+<td>Range of engine versions it works with, e.g. <code>^0.2</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>requires</code></td>
+<td>Other modules or cores it needs, e.g. <code>module.tracker@^1.0, core.map@&gt;=0.3</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rights</code></td>
+<td>Contracts it asks permission to use — a comma-separated list</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td><code>true</code> if it needs the network (only <em>requested</em>, never granted automatically)</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>A line may end in a comma to continue on the next one, and lines starting with <code>#</code> are comments — useful to explain why each right is needed.</p>
+<h2 id="2-the-factory">2. The factory</h2>
+<p><code>export default function create(host)</code> is called once. It receives the <strong>host</strong> — everything the module may use to reach the rest of the engine — and returns an object:</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>When it runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>load()</code></td>
+<td>When the user switches the module on. Restore saved state, subscribe, do first work</td>
+</tr>
+<tr>
+<td><code>tree()</code></td>
+<td>Returns the module's settings UI, shown on its card (see <a href="dev-ui.html">UI primitives</a>)</td>
+</tr>
+<tr>
+<td><code>stop()</code></td>
+<td>When it is switched off. <strong>Unsubscribe from everything you subscribed to</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Whatever else you return (<code>id</code>, <code>title</code>, …) is optional for external modules; the header already says it.</p>
+<h2 id="3-the-host">3. The host</h2>
+<p><code>host</code> is how a module reaches the world:</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>host.cores</code></td>
+<td>Ask a core for something — <code>request(host.cores, 'model.generate', { params })</code></td>
+</tr>
+<tr>
+<td><code>host.services</code></td>
+<td>Ask a service — DOM, chat, SillyTavern events (needs matching rights)</td>
+</tr>
+<tr>
+<td><code>host.network</code></td>
+<td>The only path to the internet (needs the network right)</td>
+</tr>
+<tr>
+<td><code>host.events</code></td>
+<td>The event bus: <code>subscribe(name, callback)</code> returns an unsubscribe function, <code>emit(name, payload)</code></td>
+</tr>
+<tr>
+<td><code>host.own</code></td>
+<td>The module's home bus</td>
+</tr>
+</tbody>
+</table>
+<p>A module <strong>never</strong> touches SillyTavern, the DOM or the network directly. Every request goes through a bus and is checked against the module's rights. See <a href="dev-contracts.html">Contracts &amp; buses</a>.</p>
+<h2 id="4-imports">4. Imports</h2>
+<p>An external module may import only these four paths, written as <code>stme:&lt;path&gt;</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Import</th>
+<th>Gives you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stme:ui/tree</code></td>
+<td><code>h()</code> — builds UI nodes</td>
+</tr>
+<tr>
+<td><code>stme:ui/reactive</code></td>
+<td><code>signal</code>, <code>computed</code>, <code>effect</code></td>
+</tr>
+<tr>
+<td><code>stme:widgets</code></td>
+<td>The widget library — Button, Toggle, Select, Section…</td>
+</tr>
+<tr>
+<td><code>stme:request</code></td>
+<td><code>request(bus, contract, options)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Any other import — a URL, <code>data:</code>, a relative path — is a violation and the module does not load. The engine replaces <code>stme:</code> paths with real addresses when it prepares the source, and runs exactly the text that was hashed and scanned.</p>
+<h2 id="5-rights">5. Rights</h2>
+<p><code>rights:</code> lists every contract the module will call. Check the list against your code: a call outside it is refused, and for an external module it <strong>quarantines</strong> the module (see <a href="dev-runtime.html">Runtime</a>).</p>
+<div class="note warn">
+<p><strong>What the scanner rejects.</strong> The text is scanned before it runs. <code>eval</code>, <code>new Function</code>, <code>import()</code>, computed global access like <code>window["x"]</code>, and <code>constructor.constructor</code> stop the module from loading. <code>fetch</code>, <code>XMLHttpRequest</code>, <code>WebSocket</code>, <code>localStorage</code>/<code>indexedDB</code>, <code>getContext()</code> and even the word <em>SillyTavern</em> in your source make it <em>scanned-unsafe</em>. Keep those words out of comments and strings too.</p>
+</div>
+<h2 id="6-conventions">6. Conventions</h2>
+<ul>
+<li><strong>Reactive state in signals, created once.</strong> Never create a signal inside a render function: the next render subscribes to a stale one.</li>
+<li><strong>Persist through the storage contracts</strong>, with a namespace equal to your module id.</li>
+<li><strong>Return failures, do not throw them across the bus.</strong> Every <code>request()</code> resolves to an envelope <code>{ ok, value }</code> or <code>{ ok: false, error }</code> — check <code>ok</code>.</li>
+<li><strong>Clean up in <code>stop()</code>.</strong></li>
+</ul>
+<h2 id="install-and-run">Install and run</h2>
+<ol>
+<li>Put the module file in a repository folder, for example <code>modules/dice/index.js</code>.</li>
+<li>In the engine open <strong>Modules → Install a module</strong>, paste the repository link (or <code>owner/repo</code>, or a <code>…/tree/&lt;ref&gt;/&lt;dir&gt;</code> link).</li>
+<li><strong>Preview</strong> shows the header, requested rights, scan findings, the file's SHA-256 and the trust level — nothing is installed yet.</li>
+<li><strong>Install</strong>, then switch the module on. It is switched on separately.</li>
+</ol>
+<p>The catalog repository is <code>IAmiGOI/Module-Engine-Modules</code>: confirmed modules live in <code>modules/&lt;name&gt;/index.js</code>, and a <code>third-party.txt</code> lists links to other people's modules.</p>
+<p><strong>Next:</strong> build the <a href="dev-example-dice.html">Dice</a> module step by step.</p><div class="pager"><a href="dev-overview.html"><small>← Previous</small>Development overview</a><a class="nx" href="dev-runtime.html"><small>Next →</small>Runtime (the Runner)</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#the-smallest-module">The smallest module</a><a href="#1-the-header">1. The header</a><a href="#2-the-factory">2. The factory</a><a href="#3-the-host">3. The host</a><a href="#4-imports">4. Imports</a><a href="#5-rights">5. Rights</a><a href="#6-conventions">6. Conventions</a><a href="#install-and-run">Install and run</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

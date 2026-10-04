@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contracts, buses &amp; events — ST Module Engine docs</title>
+<meta name="description" content="How modules and cores talk — contracts, the four buses, the envelope, request(), events, blocks and errors.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Contracts, buses &amp; events — ST Module Engine docs">
+<meta property="og:description" content="How modules and cores talk — contracts, the four buses, the envelope, request(), events, blocks and errors.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="" href="dev-overview.html">Development overview</a><a class="" href="dev-first-module.html">Writing a module</a><a class="" href="dev-runtime.html">Runtime (the Runner)</a><a class="on" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="" href="dev-ui.html">UI primitives</a><a class="" href="dev-widgets.html">Widget reference</a><a class="" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>Contracts, buses &amp; events</h1><p class="lead">Nothing in the engine calls anything else directly. A caller asks for a <strong>capability</strong> by name over a <strong>bus</strong>; a provider registers to answer it. The bus finds the provider, applies the rights check, and delivers the answer — and the caller never needs to know who answered.</p>
+<h2 id="contracts">Contracts</h2>
+<p>A <strong>contract</strong> is a pre-declared request/response shape, addressed by name.</p>
+<ul>
+<li><strong>Name:</strong> <code>&lt;domain&gt;.&lt;capability&gt;[.&lt;detail&gt;]</code>, lowercase, camelCase inside a segment — <code>model.generate</code>, <code>storage.settings.get</code>, <code>worldInfo.entries</code>, <code>tracking.value</code>, <code>pipeline.run</code>.</li>
+<li><strong>The domain is the capability, not a provider.</strong> <code>model.generate</code> can be served by the internal-models core, a local-host core or SillyTavern's own connection; the caller asks for the capability and never a particular core.</li>
+<li><strong>A contract name is finite and never changes at runtime.</strong> Do not bake a dynamic id into a name (<code>tracker:field:&lt;id&gt;:&lt;name&gt;</code>). Use a fixed name — <code>tracking.value</code> — and pass the dynamic part as a parameter: <code>{ blockId, fieldName }</code>.</li>
+</ul>
+<h2 id="the-buses">The buses</h2>
+<table>
+<thead>
+<tr>
+<th>Bus</th>
+<th>Carries</th>
+<th>Reached through</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Events</strong></td>
+<td>Broadcast pub/sub — a "dumb transport"</td>
+<td><code>host.events</code></td>
+</tr>
+<tr>
+<td><strong>Modules</strong></td>
+<td>Module ↔ module</td>
+<td><code>host.modules</code> (cores)</td>
+</tr>
+<tr>
+<td><strong>Cores</strong></td>
+<td>Core ↔ core, and modules asking cores</td>
+<td><code>host.cores</code></td>
+</tr>
+<tr>
+<td><strong>Services</strong></td>
+<td>The only path to SillyTavern, the DOM, timers</td>
+<td><code>host.services</code></td>
+</tr>
+<tr>
+<td><strong>Network</strong></td>
+<td>The only path to the internet (<code>http.*</code> contracts)</td>
+<td><code>host.network</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each bus plays <strong>director</strong> for its own domain: it decides <strong>who</strong> answers (by the provider's declared load), <strong>when</strong> the answer is delivered (waiting on a condition or event), and <strong>in what format</strong> if a contract can be implemented in several ways.</p>
+<p>A <strong>gate</strong> sits at each crossing between domains. The gate is where rights are really checked.</p>
+<h2 id="the-envelope">The envelope</h2>
+<p>Every delivery has exactly one shape:</p>
+<pre><code>{ ok: true,  value: &lt;result&gt; }
+{ ok: false, error: { message, code? } }
+</code></pre>
+<p>The bus never throws across its boundary: any exception inside a provider is caught and converted. One failing subscriber never disturbs the others. Always check <code>ok</code>:</p>
+<pre><code class="language-js">const result = await request(host.cores, 'chatHistory.messages', { params: { limit: 4 } });
+if (!result.ok) return;          // result.error.message says why
+const messages = result.value;
+</code></pre>
+<h2 id="request"><code>request()</code></h2>
+<p><code>request(bus, contract, options)</code> is sugar over <code>subscribe()</code>: subscribe once, resolve on the first delivery, unsubscribe automatically. It <strong>never rejects</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>params</code></td>
+<td>The contract's input</td>
+</tr>
+<tr>
+<td><code>when</code></td>
+<td>A condition for delivery (below)</td>
+</tr>
+<tr>
+<td><code>timeoutMs</code></td>
+<td>For "completion"-type conditions only; on timeout resolves with an error envelope</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>Handed to the provider next to the caller's identity (<code>'pipeline'</code> marks a call on the generation's critical path)</td>
+</tr>
+</tbody>
+</table>
+<h3><code>when</code> conditions</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>event</code></td>
+<td>Deliver when this event happens</td>
+</tr>
+<tr>
+<td><code>every</code></td>
+<td>Every N-th event, or <code>{ event, count, ms }</code> — or on a timer</td>
+</tr>
+<tr>
+<td><code>debounceMs</code>, <code>throttleMs</code></td>
+<td>Rate-shape the delivery</td>
+</tr>
+<tr>
+<td><code>dedupe</code></td>
+<td>Skip repeats of the same value</td>
+</tr>
+<tr>
+<td><code>once</code></td>
+<td>Deliver once, then stop</td>
+</tr>
+</tbody>
+</table>
+<h2 id="events">Events</h2>
+<p>Events travel on the event bus. Native SillyTavern events are brought in by a thin service and arrive as <code>st.*</code>; the engine and modules add their own.</p>
+<pre><code class="language-js">const off = host.events.subscribe('generation.completed', payload =&gt; { /* … */ });
+// later, in stop():
+off();
+</code></pre>
+<p>Events you can rely on include: <code>st.chatChanged</code>, <code>st.messageSwiped</code>, <code>st.messageDeleted</code>, <code>generation.beforeSend</code>, <code>generation.completed</code>, <code>model.workers.changed</code>, <code>tracking.poll.completed</code>, <code>settings.changed</code>, <code>summary.folded</code>.</p>
+<p><strong>Names</strong> follow the thing they describe: a block <code>tracking.blocks</code> announces changes as <code>tracking.blocks.changed</code>. For operations that are slow, fallible or touch SillyTavern, a triple is used — <code>&lt;contract&gt;.started</code>, <code>.completed</code>, <code>.failed</code> — so an observer never has to guess a DOM timing.</p>
+<h2 id="blocks">Blocks</h2>
+<p>A <strong>block</strong> is a category of entries inside a bus — "the tracker fields that can be inserted", "the published lorebook entries". When a block's content changes, its owner emits one <code>&lt;block&gt;.changed</code> event for the whole block; a consumer re-requests the content with an ordinary <code>request()</code>. The <strong>taxonomy of block categories</strong> belongs to the engine: a module registers its block under an official category name and any consumer of that category picks it up, with no change to anyone else's code. The pipeline's stage registry is a block: <code>pipeline.stages.add</code> writes to it, <code>pipeline.stagesChanged</code> announces it.</p>
+<h2 id="identity-and-rights">Identity and rights</h2>
+<p>A caller <strong>cannot know or forge its own rights</strong>. Its own bus knows them from the moment it registered, and the gate checks them. Rights are <em>flat</em> — one set per module, not per contract.</p>
+<h2 id="contracts-a-module-commonly-uses">Contracts a module commonly uses</h2>
+<p>These are real contracts; each needs its name in the header's <code>rights:</code> list.</p>
+<table>
+<thead>
+<tr>
+<th>Contract</th>
+<th>Input → output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ui.notify</code></td>
+<td><code>{ tone, text, … }</code> → shows a toast (<code>tone</code>: <code>ok</code>, <code>error</code>, <code>muted</code>…)</td>
+</tr>
+<tr>
+<td><code>storage.settings.get</code></td>
+<td><code>{ namespace, key, fallback }</code> → the stored value</td>
+</tr>
+<tr>
+<td><code>storage.settings.set</code></td>
+<td><code>{ namespace, key, value }</code> → <code>true</code>. Publishes <code>settings.changed</code></td>
+</tr>
+<tr>
+<td><code>chatHistory.messages</code></td>
+<td><code>{ limit }</code> → messages <code>{ mesid, isUser, name, text, … }</code></td>
+</tr>
+<tr>
+<td><code>chatHistory.replaceText</code>, <code>.annotate</code>, <code>.annotations</code></td>
+<td>Edit a message's text, attach and read per-message notes</td>
+</tr>
+<tr>
+<td><code>model.generate</code></td>
+<td><code>{ prompt, systemPrompt, workerId, temperature, maxTokens, stream, … }</code> → the model's text. <code>model.generate.cancel</code> aborts by <code>requestId</code></td>
+</tr>
+<tr>
+<td><code>macros.setValue</code>, <code>macros.clearValue</code></td>
+<td><code>{ name, value }</code> / <code>{ name }</code> → publish or remove a <code>{{macro}}</code></td>
+</tr>
+<tr>
+<td><code>tracking.poll</code>, <code>tracking.reset</code>, <code>tracking.trackers</code></td>
+<td>Drive the Tracker core</td>
+</tr>
+<tr>
+<td><code>pipeline.stages.add</code>, <code>pipeline.stages.remove</code></td>
+<td>Add or remove a stage in a generation pipeline</td>
+</tr>
+<tr>
+<td><code>promptManager.contribute</code></td>
+<td>Give the Prompt Manager a block</td>
+</tr>
+<tr>
+<td><code>ui.messageFooter.claim</code>, <code>.release</code></td>
+<td>Own a strip under a message</td>
+</tr>
+</tbody>
+</table>
+<div class="note">
+<p>Contracts are <strong>untyped</strong> for now: the bus does not know that <code>storage.settings.get</code> takes <code>{ namespace, key, fallback }</code>. A contract map is the most valuable next step and will be introduced contract by contract. See <a href="dev-typing.html">Typing</a>.</p>
+</div>
+<h2 id="errors">Errors</h2>
+<ul>
+<li>A provider's exception becomes <code>{ ok: false, error }</code> — never a thrown error for the caller.</li>
+<li>A <strong>rights violation</strong> is quiet: the module is quarantined and the user sees a mark on its card only.</li>
+<li>An ordinary runtime error (a bug) is visible <strong>locally on the module's card</strong> as its last error — not as a global toast.</li>
+<li>Logging an error uses the same point as the audit log; it is not a separate system.</li>
+</ul>
+<h2 id="persistence">Persistence</h2>
+<p>Settings and per-chat data go through the storage contracts, namespaced (<code>&lt;module id&gt;</code> is the convention). Do not use browser storage: the scanner flags it as <em>unsafe</em>, and the engine's storage cores also keep your data syncable between devices.</p><div class="pager"><a href="dev-runtime.html"><small>← Previous</small>Runtime (the Runner)</a><a class="nx" href="dev-ui.html"><small>Next →</small>UI primitives</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#contracts">Contracts</a><a href="#the-buses">The buses</a><a href="#the-envelope">The envelope</a><a href="#request">request()</a><a href="#events">Events</a><a href="#blocks">Blocks</a><a href="#identity-and-rights">Identity and rights</a><a href="#contracts-a-module-commonly-uses">Contracts a module commonly uses</a><a href="#errors">Errors</a><a href="#persistence">Persistence</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

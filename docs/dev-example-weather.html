@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Example 3 · Scene Weather (advanced) — ST Module Engine docs</title>
+<meta name="description" content="Ask a model after every reply, publish the answer as a {{macro}}, cancel stale work and surface errors.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Example 3 · Scene Weather (advanced) — ST Module Engine docs">
+<meta property="og:description" content="Ask a model after every reply, publish the answer as a {{macro}}, cancel stale work and surface errors.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="" href="dev-overview.html">Development overview</a><a class="" href="dev-first-module.html">Writing a module</a><a class="" href="dev-runtime.html">Runtime (the Runner)</a><a class="" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="" href="dev-ui.html">UI primitives</a><a class="" href="dev-widgets.html">Widget reference</a><a class="" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="on" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>Example 3 · Scene Weather (advanced)</h1><div class="glance"><div><small>Needs</small><span>A model connection</span></div><div><small>Module id</small><span><code>community.sceneWeather</code></span></div></div><p class="lead"><strong>Level: advanced.</strong> After each reply it asks a model for <strong>one line about the weather and mood of the scene</strong> and publishes it as the macro <code>{{scene_weather}}</code>, so any prompt, lorebook entry or character card can use it. It brings together everything from the other two examples and adds <strong>calling a model</strong>, <strong>publishing a macro</strong>, <strong>cancelling stale work</strong>, a <strong>busy guard</strong> and <strong>error handling you can see</strong>.</p>
+<h2 id="what-you-will-learn">What you will learn</h2>
+<ul>
+<li><code>model.generate</code> — prompts, system prompt, limits, <code>requestId</code></li>
+<li>Publishing and clearing a macro with <code>macros.setValue</code> / <code>macros.clearValue</code></li>
+<li><strong>Cancelling</strong> an in-flight request when the chat changes</li>
+<li>Guarding against <strong>overlapping</strong> work</li>
+<li>Keeping pure helpers separate and testable</li>
+<li>Showing the last error instead of swallowing it</li>
+</ul>
+<h2 id="the-whole-module">The whole module</h2>
+<pre><code class="language-js">/*@module
+id: community.sceneWeather
+title: Scene Weather
+description: After each reply asks a model for one line of weather and mood, and publishes it as a macro.
+version: 1.0.0
+engine: ^0.2
+rights: chatHistory.messages, model.generate, model.generate.cancel,
+macros.setValue, macros.clearValue, storage.settings.get, storage.settings.set
+*/
+import { h } from 'stme:ui/tree';
+import { signal, computed } from 'stme:ui/reactive';
+import { Button, Field, Row, Section, Slider, TextArea, Toggle } from 'stme:widgets';
+import { request } from 'stme:request';
+
+const NAMESPACE = 'community.sceneWeather';
+const MACRO = 'scene_weather';
+const DEFAULT_INSTRUCTION = 'Read the roleplay excerpt and describe the weather and the mood of the scene '
+    + 'in ONE short line, at most 15 words. Answer with that line only.';
+
+/** Pure: whatever the model returned, as a clean single line. */
+export function cleanLine(value) {
+    const text = typeof value === 'string' ? value : value?.text ?? '';
+    return text.replace(/\s+/g, ' ').replace(/^[&quot;'\s]+|[&quot;'\s]+$/g, '').slice(0, 160);
+}
+
+/** Pure: the user prompt, built from the last few messages. */
+export function buildPrompt(messages) {
+    return messages.map(message =&gt; `${message.name || (message.isUser ? 'User' : 'Character')}: ${message.text}`).join('\n\n');
+}
+
+export default function create(host) {
+    const ask = (contract, params) =&gt; request(host.cores, contract, { params });
+
+    const enabled = signal(true);
+    const instruction = signal(DEFAULT_INSTRUCTION);
+    const depth = signal(4);
+    const current = signal('');       // the line published right now
+    const lastError = signal('');
+    const busy = signal(false);
+    let activeRequestId = null;       // the in-flight model request, if any
+
+    async function loadSettings() {
+        const saved = await ask('storage.settings.get', { namespace: NAMESPACE, key: 'settings', fallback: null });
+        if (!saved.ok || !saved.value) return;
+        enabled.set(saved.value.enabled !== false);
+        instruction.set(String(saved.value.instruction || DEFAULT_INSTRUCTION));
+        depth.set(Number(saved.value.depth) || 4);
+    }
+
+    async function saveSettings() {
+        await ask('storage.settings.set', {
+            namespace: NAMESPACE, key: 'settings',
+            value: { enabled: enabled.peek(), instruction: instruction.peek(), depth: depth.peek() },
+        });
+    }
+
+    async function publish(line) {
+        current.set(line);
+        if (line) await ask('macros.setValue', { name: MACRO, value: line });
+        else await ask('macros.clearValue', { name: MACRO });
+    }
+
+    async function refresh() {
+        if (busy.peek()) return;                          // one request at a time
+        busy.set(true);
+        lastError.set('');
+        const requestId = `scene-weather-${Date.now()}`;
+        activeRequestId = requestId;
+        try {
+            const chat = await ask('chatHistory.messages', { limit: depth.peek() });
+            if (!chat.ok || !chat.value?.length) return;
+            const reply = await ask('model.generate', {
+                requestId,
+                systemPrompt: instruction.peek(),
+                prompt: buildPrompt(chat.value),
+                maxTokens: 60, temperature: 0.7, stream: false, reasoningMode: 'disabled',
+            });
+            if (activeRequestId !== requestId) return;    // cancelled or superseded: drop the answer
+            if (!reply.ok) { lastError.set(reply.error.message); return; }
+            await publish(cleanLine(reply.value));
+        } finally {
+            if (activeRequestId === requestId) activeRequestId = null;
+            busy.set(false);
+        }
+    }
+
+    async function onChatChanged() {
+        if (activeRequestId) {
+            const stale = activeRequestId;
+            activeRequestId = null;                       // mark first, so the late answer is ignored
+            await ask('model.generate.cancel', { requestId: stale });
+        }
+        await publish('');                                // the old chat's weather must not leak into the new one
+    }
+
+    const unsubscribers = [
+        host.events.subscribe('generation.completed', () =&gt; { if (enabled.peek()) void refresh(); }),
+        host.events.subscribe('st.chatChanged', () =&gt; { void onChatChanged(); }),
+    ];
+
+    return {
+        async load() { await loadSettings(); },
+        tree: () =&gt; Section('Scene Weather', {},
+            Toggle('Update after every reply', enabled, { hint: 'Publishes the macro {{scene_weather}}.' }),
+            Slider('Messages to read', depth, { min: 1, max: 12, step: 1 }),
+            Field('Instruction', TextArea(instruction, { rows: 4 })),
+            Row(Button('Refresh now', () =&gt; { void refresh(); }), Button('Save', () =&gt; { void saveSettings(); })),
+            h('div', {}, computed(() =&gt; (busy() ? 'Asking the model…' : current() ? `Now: ${current()}` : 'No line yet.'))),
+            computed(() =&gt; (lastError() ? h('small', { class: 'stme-module-hint' }, `Last error: ${lastError()}`) : null)),
+        ),
+        stop() {
+            for (const off of unsubscribers) off();
+            void ask('macros.clearValue', { name: MACRO });
+        },
+    };
+}
+</code></pre>
+<h2 id="what-is-new">What is new</h2>
+<div class="steps">
+<div class="step">
+<h3>Calling a model</h3>
+<p><code>model.generate</code> takes a <code>systemPrompt</code> (your standing instruction) and a <code>prompt</code> (the data). <code>maxTokens</code>, <code>temperature</code>, <code>stream</code>, <code>reasoningMode</code> shape the answer; leave <code>workerId</code> out and the engine picks any working connection, or pin one. The envelope's <code>value</code> is the text. <code>cleanLine</code> is defensive about its shape and trims quotes and whitespace — and, being pure, can be unit tested without any engine.</p>
+</div>
+<div class="step">
+<h3>Publishing a macro</h3>
+<p><code>macros.setValue({ name, value })</code> makes <code>{{scene_weather}}</code> resolve to the line anywhere SillyTavern parses macros. <code>macros.clearValue({ name })</code> removes it. The engine caches the value, because SillyTavern resolves macros <strong>synchronously</strong> and cannot wait for a round trip.</p>
+</div>
+<div class="step">
+<h3>Stale work</h3>
+<p>Every request gets a <code>requestId</code>. When the chat changes, the module marks the request as dead (<code>activeRequestId = null</code>) <strong>before</strong> cancelling, so a late answer is dropped by the <code>!== requestId</code> check instead of publishing the previous chat's weather. <code>model.generate.cancel</code> aborts the call itself.</p>
+</div>
+<div class="step">
+<h3>The busy guard</h3>
+<p><code>if (busy.peek()) return;</code> — a model call takes seconds and replies can arrive faster. The <code>finally</code> block always clears <code>busy</code>, even on the early returns.</p>
+</div>
+<div class="step">
+<h3>Errors you can see</h3>
+<p>A failed envelope goes into a <code>lastError</code> signal and is shown on the card. A module's bug or a model failure should be <strong>visible locally</strong>, not a global toast and not silence.</p>
+</div>
+<div class="step">
+<h3>Clean exit</h3>
+<p><code>stop()</code> unsubscribes <strong>both</strong> handlers and clears the macro, so switching the module off leaves nothing behind.</p>
+</div>
+</div>
+<h2 id="using-the-macro">Using the macro</h2>
+<p>Anywhere a prompt is parsed — a character card, a lorebook entry, a <a href="prompt-manager.html">Prompt Manager</a> block:</p>
+<blockquote>
+<p>The scene right now: {{scene_weather}}. Let it colour your description.</p>
+</blockquote>
+<div class="note warn">
+<p><strong>Mind the cache.</strong> A value that changes every message breaks the provider's prompt cache from the place it appears. Put the macro near the <strong>end</strong> of the request.</p>
+</div>
+<h2 id="try-it">Try it</h2>
+<p>Install and switch on (you need a <a href="models.html">model connection</a>). Chat; after each reply the card shows the new line. Switch chats — the line clears.</p>
+<h2 id="where-to-go-next">Where to go next</h2>
+<ul>
+<li>Hold the generation until the line is ready by adding a <strong>pipeline stage</strong> (<code>pipeline.stages.add</code>) instead of reacting after the reply.</li>
+<li>Feed the line to the Prompt Manager with <code>promptManager.contribute</code>, so it is placed where the user chose.</li>
+<li>Keep one line <strong>per chat</strong> with <code>storage.settings</code> and a chat id as the key.</li>
+<li>Add a <code>// @ts-check</code> and the <a href="dev-typing.html">typedefs</a> to catch shape mismatches early.</li>
+<li>Write a <a href="dev-testing.html">scenario test</a> with a fake model that answers with a canned line.</li>
+</ul><div class="pager"><a href="dev-example-meter.html"><small>← Previous</small>Example 2 · Reply Meter (medium)</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#what-you-will-learn">What you will learn</a><a href="#the-whole-module">The whole module</a><a href="#what-is-new">What is new</a><a href="#using-the-macro">Using the macro</a><a href="#try-it">Try it</a><a href="#where-to-go-next">Where to go next</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

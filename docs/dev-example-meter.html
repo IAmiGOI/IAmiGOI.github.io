@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Example 2 · Reply Meter (medium) — ST Module Engine docs</title>
+<meta name="description" content="Listen to engine events, read the chat, keep derived state and persist settings.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Example 2 · Reply Meter (medium) — ST Module Engine docs">
+<meta property="og:description" content="Listen to engine events, read the chat, keep derived state and persist settings.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="" href="dev-overview.html">Development overview</a><a class="" href="dev-first-module.html">Writing a module</a><a class="" href="dev-runtime.html">Runtime (the Runner)</a><a class="" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="" href="dev-ui.html">UI primitives</a><a class="" href="dev-widgets.html">Widget reference</a><a class="" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="on" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>Example 2 · Reply Meter (medium)</h1><div class="glance"><div><small>Needs</small><span>Nothing</span></div><div><small>Module id</small><span><code>community.replyMeter</code></span></div></div><p class="lead"><strong>Level: medium.</strong> After every reply it counts the words, keeps a running average and, if you ask it to, nudges you when a reply comes out much shorter than your target. It adds <strong>events</strong>, <strong>reading the chat</strong>, <strong>derived state</strong>, <strong>saved settings</strong> and <strong>cleanup</strong>.</p>
+<h2 id="what-you-will-learn">What you will learn</h2>
+<ul>
+<li>Subscribing to an <strong>event</strong> and unsubscribing in <code>stop()</code></li>
+<li>Reading messages with <code>chatHistory.messages</code></li>
+<li><strong>Checking <code>ok</code></strong> on every envelope</li>
+<li>Persisting settings with <code>storage.settings.get/set</code></li>
+<li><code>computed</code> for derived values</li>
+</ul>
+<h2 id="the-whole-module">The whole module</h2>
+<pre><code class="language-js">/*@module
+id: community.replyMeter
+title: Reply Meter
+description: Counts the words in each reply and nudges you when replies run short.
+version: 1.0.0
+engine: ^0.2
+rights: chatHistory.messages, storage.settings.get, storage.settings.set, ui.notify
+*/
+import { h } from 'stme:ui/tree';
+import { signal, computed } from 'stme:ui/reactive';
+import { Button, Field, Row, Section, Slider, Toggle } from 'stme:widgets';
+import { request } from 'stme:request';
+
+const NAMESPACE = 'community.replyMeter';
+
+/** Pure: words are runs of non-space characters. */
+export const countWords = text =&gt; (String(text ?? '').match(/\S+/g) ?? []).length;
+
+export default function create(host) {
+    const ask = (contract, params) =&gt; request(host.cores, contract, { params });
+
+    const target = signal(250);     // words
+    const nudge = signal(true);
+    const replies = signal(0);
+    const totalWords = signal(0);
+    const lastWords = signal(0);
+    const average = computed(() =&gt; (replies() ? Math.round(totalWords() / replies()) : 0));
+
+    async function loadSettings() {
+        const saved = await ask('storage.settings.get', { namespace: NAMESPACE, key: 'settings', fallback: null });
+        if (!saved.ok || !saved.value) return;                 // first run, or the store failed: keep defaults
+        target.set(Number(saved.value.target) || 250);
+        nudge.set(saved.value.nudge !== false);
+    }
+
+    async function saveSettings() {
+        const saved = await ask('storage.settings.set', {
+            namespace: NAMESPACE, key: 'settings', value: { target: target.peek(), nudge: nudge.peek() },
+        });
+        await ask('ui.notify', { tone: saved.ok ? 'ok' : 'error', text: saved.ok ? 'Reply Meter saved.' : saved.error.message });
+    }
+
+    async function onReplyCompleted() {
+        const result = await ask('chatHistory.messages', { limit: 1 });
+        const last = result.ok ? result.value?.[0] : null;
+        if (!last || last.isUser) return;                      // count only the AI's replies
+        const words = countWords(last.text);
+        lastWords.set(words);
+        replies.update(n =&gt; n + 1);
+        totalWords.update(n =&gt; n + words);
+        if (nudge.peek() &amp;&amp; words &lt; target.peek() / 2) {
+            await ask('ui.notify', { tone: 'muted', text: `Short reply: ${words} words (target ${target.peek()}).` });
+        }
+    }
+
+    const stopListening = host.events.subscribe('generation.completed', () =&gt; { void onReplyCompleted(); });
+    const resetSession = () =&gt; { replies.set(0); totalWords.set(0); lastWords.set(0); };
+
+    return {
+        async load() { await loadSettings(); },
+        tree: () =&gt; Section('Reply Meter', {},
+            Slider('Target length (words)', target, { min: 50, max: 1000, step: 10 }),
+            Toggle('Nudge me when a reply is much shorter', nudge, { hint: 'Below half of the target.' }),
+            Field('This session', h('div', {}, computed(() =&gt; `Last reply ${lastWords()} words · average ${average()} over ${replies()} replies`))),
+            Row(Button('Save', () =&gt; { void saveSettings(); }), Button('Reset session', resetSession)),
+        ),
+        stop() { stopListening(); },
+    };
+}
+</code></pre>
+<h2 id="what-is-new">What is new</h2>
+<div class="steps">
+<div class="step">
+<h3>Events</h3>
+<p><code>host.events.subscribe('generation.completed', cb)</code> returns an <strong>unsubscribe function</strong>. Keep it, and call it in <code>stop()</code> — a module that forgets leaves a live handler behind after the user switches it off.</p>
+</div>
+<div class="step">
+<h3>A small <code>ask</code> helper</h3>
+<p>All calls go to <code>host.cores</code> with the same shape, so one line wraps them. The contract and its params are the only things that change.</p>
+</div>
+<div class="step">
+<h3>Always check <code>ok</code></h3>
+<p><code>const last = result.ok ? result.value?.[0] : null;</code> — if the chat could not be read, there is simply nothing to count. Settings loading does the same: a failed read leaves the defaults. Never assume <code>value</code> exists.</p>
+</div>
+<div class="step">
+<h3>Persisting</h3>
+<p><code>storage.settings.set</code> takes <code>{ namespace, key, value }</code>. The namespace is the module id, so two modules never collide. Reading back uses <code>fallback: null</code> to tell "never saved" from "saved".</p>
+</div>
+<div class="step">
+<h3>Derived state</h3>
+<p><code>average</code> is a <code>computed</code> of two signals; the status line is a computed string. Nothing recomputes by hand — change a signal and the screen follows.</p>
+</div>
+</div>
+<div class="note tip">
+<p><strong>Your messages are filtered out.</strong> <code>chatHistory.messages</code> returns messages with <code>isUser</code>, so the meter counts only the AI's side. If the last message were yours, there would be nothing to measure yet.</p>
+</div>
+<h2 id="try-it">Try it</h2>
+<p>Install, switch on, set a high target, and chat. A toast appears when a reply is under half the target. Switch the module off — the handler is removed.</p>
+<h2 id="make-it-yours">Make it yours</h2>
+<ul>
+<li>Keep the numbers <strong>per chat</strong>: listen to <code>st.chatChanged</code> and reset the session there.</li>
+<li>Show the <strong>longest</strong> reply as well as the average.</li>
+<li>Turn the nudge into a <em>prompt contribution</em> so the model itself is reminded about length (see the pipeline stage contracts in <a href="dev-contracts.html">Contracts</a>).</li>
+</ul>
+<p><strong>Next:</strong> <a href="dev-example-weather.html">Scene Weather</a> — calling a model, publishing a macro and cancelling work.</p><div class="pager"><a href="dev-example-dice.html"><small>← Previous</small>Example 1 · Dice (easy)</a><a class="nx" href="dev-example-weather.html"><small>Next →</small>Example 3 · Scene Weather (advanced)</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#what-you-will-learn">What you will learn</a><a href="#the-whole-module">The whole module</a><a href="#what-is-new">What is new</a><a href="#try-it">Try it</a><a href="#make-it-yours">Make it yours</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

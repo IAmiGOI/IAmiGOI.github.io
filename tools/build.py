@@ -9,13 +9,14 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 KB = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/home/amigo/Module Engine/Client/Release/guide/knowledge")
 REPO = "https://github.com/IAmiGOI/Module-Engine"
 
-GROUPS = ["Start here", "Setup", "Modules", "Memory & prompts", "Interface & data", "Help"]
+GROUPS = ["Start here", "Setup", "Modules", "Memory & prompts", "Interface & data", "Development", "Help"]
 GROUP_BLURB = {
     "Start here": "New to Module Engine? Begin here.",
     "Setup": "Connect the models the engine works with.",
     "Modules": "Every feature, step by step.",
     "Memory & prompts": "Long-term memory and full control of the request.",
     "Interface & data": "The look of the engine, and keeping your data safe.",
+    "Development": "Write your own modules, and see how the engine works inside.",
     "Help": "When something is unclear or broken.",
 }
 
@@ -62,6 +63,7 @@ def nav(base, cur):
     {a("index.html#features", "Features", "home")}
     {a("install.html", "Install", "install")}
     {a("docs/index.html", "Docs", "docs")}
+    {a("docs/dev-overview.html", "Develop", "dev")}
     <a class="l" href="{REPO}">GitHub</a>
   </nav>
   {cpbtn("primary sm dl", "Copy install link")}
@@ -373,7 +375,7 @@ def docs():
         return h
 
     def shell(title, desc, cur, inner, toc=""):
-        return head(f"{title} — ST Module Engine docs", desc, "../") + nav("../", "docs") + f"""
+        return head(f"{title} — ST Module Engine docs", desc, "../") + nav("../", "dev" if cur.startswith("dev-") else "docs") + f"""
 <main class="docs">
   <aside class="side">
     <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
@@ -407,7 +409,7 @@ def docs():
     start = [q for q in pages if q["slug"] in ("quick-start", "concepts", "models")]
     big = "".join(f'<a class="mini big" href="{q["slug"]}.html"><b>{html.escape(q["title"])}</b><p>{html.escape(q["desc"])}</p></a>' for q in start)
     tasks = [("Track health, mood and location", "tracker"), ("Make a long chat fit the context", "summary"), ("Clean up the writing of replies", "postprocess"),
-             ("Illustrate a scene", "scene-painter"), ("Control the prompt precisely", "prompt-manager"), ("Fix an error", "troubleshooting")]
+             ("Illustrate a scene", "scene-painter"), ("Control the prompt precisely", "prompt-manager"), ("Write my own module", "dev-first-module"), ("Fix an error", "troubleshooting")]
     tk = "".join(f'<a class="task" href="{u}.html">{html.escape(t)} <span>→</span></a>' for t, u in tasks)
     topics = ""
     for g in GROUPS:

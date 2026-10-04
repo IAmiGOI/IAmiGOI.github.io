@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Development overview — ST Module Engine docs</title>
+<meta name="description" content="How Module Engine is built, where the code lives and what you can build on top of it.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Development overview — ST Module Engine docs">
+<meta property="og:description" content="How Module Engine is built, where the code lives and what you can build on top of it.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="on" href="dev-overview.html">Development overview</a><a class="" href="dev-first-module.html">Writing a module</a><a class="" href="dev-runtime.html">Runtime (the Runner)</a><a class="" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="" href="dev-ui.html">UI primitives</a><a class="" href="dev-widgets.html">Widget reference</a><a class="" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>Development overview</h1><p class="lead">Module Engine is built like a small operating system, and you can extend it: <strong>modules</strong> are small plugins that add features, and they run on the same engine as the built-in ones — Tracker, RP Time, Music and the rest are all modules.</p>
+<p>This section is for people who want to write a module, or understand how the engine works inside. It is written from the engine's own design documents and its source.</p>
+<div class="cards">
+<a class="mini" href="dev-first-module.html">
+<p><strong>Write a module</strong>
+The anatomy of a module: header, factory, lifecycle, rights.</p>
+</a>
+<a class="mini" href="dev-runtime.html">
+<p><strong>Runtime</strong>
+How the Runner finds, checks, loads and isolates modules.</p>
+</a>
+<a class="mini" href="dev-contracts.html">
+<p><strong>Contracts &amp; buses</strong>
+How a module asks the engine for things, safely.</p>
+</a>
+<a class="mini" href="dev-ui.html">
+<p><strong>UI primitives</strong>
+Signals, the tree, and how rendering works.</p>
+</a>
+<a class="mini" href="dev-widgets.html">
+<p><strong>Widgets</strong>
+Ready-made building blocks for module interfaces.</p>
+</a>
+<a class="mini" href="dev-typing.html">
+<p><strong>Typing</strong>
+Type checking with JSDoc — no TypeScript, no build step.</p>
+</a>
+<a class="mini" href="dev-testing.html">
+<p><strong>Testing</strong>
+Unit tests and whole-engine scenario tests.</p>
+</a>
+<a class="mini" href="dev-example-dice.html">
+<p><strong>Three example modules</strong>
+Dice, Reply Meter and Scene Weather — from easy to advanced.</p>
+</a>
+</div>
+<h2 id="the-five-layers">The five layers</h2>
+<div class="layers" markdown="0">
+<div class="layer"><div class="n">1</div><div><strong>Runner</strong><p>The entry point. Starts everything in order — Services, Libraries, Cores, Modules — and remembers which modules you switched on.</p></div></div>
+<div class="layer"><div class="n">2</div><div><strong>Services</strong><p>The only layer that touches SillyTavern, the DOM, the network and timers. Each service is a separate file with its own version.</p></div></div>
+<div class="layer"><div class="n">3</div><div><strong>Libraries</strong><p>Pure helpers with no state and no outside world: parsing, queues, widgets.</p></div></div>
+<div class="layer"><div class="n">4</div><div><strong>Cores</strong><p>The engine's real logic: models, memory, summaries, lorebook, tracking, sync, UI. They never touch SillyTavern directly, and never each other directly — only through a bus.</p></div></div>
+<div class="layer"><div class="n">5</div><div><strong>Modules</strong><p>The features a user switches on. Almost all infrastructure — waiting for conditions, picking a provider, reconciling — lives below and is invisible to a module.</p></div></div>
+</div>
+
+<p><strong>Core or module?</strong> One test: <em>a user installs a module; the engine does not work without a core.</em> The engine's own interface is a core; Notebook, Music and your Dice are modules — the engine runs fine if nobody installed them.</p>
+<h2 id="design-priorities">Design priorities</h2>
+<p>When two decisions conflict, these win, in this order:</p>
+<ol>
+<li><strong>Simple to write a module</strong> — an author writes the minimum of infrastructure code.</li>
+<li><strong>Full customisation</strong> — any layer can be replaced or extended without touching the rest.</li>
+<li><strong>Simple, dynamic connections with hot-swap</strong>, handled by the core — a module never writes its own subscription or reconciliation code.</li>
+<li><strong>Almost any modules can connect</strong> to each other, with no artificial walls.</li>
+<li><strong>Safe against SillyTavern changes</strong> — everything SillyTavern-specific is isolated in one layer (Services).</li>
+<li><strong>Plug and play</strong> — the top priority.</li>
+</ol>
+<h2 id="where-things-live">Where things live</h2>
+<pre><code>modules/&lt;name&gt;/index.js     modules (one folder each)
+cores/&lt;domain&gt;/index.js     cores
+services/&lt;name&gt;.js          services
+libraries/{core,module,shared}/&lt;name&gt;.js
+styles/                     CSS, split by area
+tests/                      unit and scenario tests
+</code></pre>
+<p>The documents behind this section ship with the engine: <code>ARCHITECTURE.md</code>, <code>RUNTIME.md</code>, <code>CONVENTIONS.md</code>, <code>UI.md</code>, <code>TYPING.md</code>, <code>TESTING.md</code>, <code>LIBRARIES.md</code>, <code>CORES.md</code>.</p>
+<p>The three example modules in this section are real code: each was run against the engine's own widget library and request helper with a fake host, and passes the same header parser and scanner that the Runner uses (all three come out as <em>scanned-safe</em>).</p>
+<h2 id="set-up-a-place-to-experiment">Set up a place to experiment</h2>
+<p>Run a separate test SillyTavern on its own port, install the engine there, and keep your personal instance untouched. Modules you write can be dropped in as a single <code>index.js</code> and installed from a repository link, so the loop is: edit, install, enable, look at the Modules card.</p>
+<div class="note tip">
+<p><strong>Naming.</strong> Contract names are <code>&lt;domain&gt;.&lt;capability&gt;</code> in camelCase — <code>model.generate</code>, <code>storage.settings.get</code>. A domain is the <em>capability</em>, never the name of a particular provider, so any core can serve a contract. See <a href="dev-contracts.html">Contracts &amp; buses</a>.</p>
+</div><div class="pager"><a href="glossary.html"><small>← Previous</small>Glossary</a><a class="nx" href="dev-first-module.html"><small>Next →</small>Writing a module</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#the-five-layers">The five layers</a><a href="#design-priorities">Design priorities</a><a href="#where-things-live">Where things live</a><a href="#set-up-a-place-to-experiment">Set up a place to experiment</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

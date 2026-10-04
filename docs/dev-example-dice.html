@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Example 1 · Dice (easy) — ST Module Engine docs</title>
+<meta name="description" content="A first module in 40 lines — signals, widgets, one contract call. Build it step by step.">
+<meta name="theme-color" content="#0d0e12">
+<meta property="og:title" content="Example 1 · Dice (easy) — ST Module Engine docs">
+<meta property="og:description" content="A first module in 40 lines — signals, widgets, one contract call. Build it step by step.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/me-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../assets/site.css">
+
+</head>
+<body>
+<div class="glows"></div>
+<header class="nav">
+  <a class="brand" href="../index.html"><img src="../assets/me-logo.webp" alt="" width="30" height="27">Module Engine <small>for SillyTavern</small></a>
+  <button class="burger" aria-label="Menu">☰</button>
+  <nav class="links" style="display:contents">
+    <a class="l" href="../index.html#features">Features</a>
+    <a class="l" href="../install.html">Install</a>
+    <a class="l" href="../docs/index.html">Docs</a>
+    <a class="l on" href="../docs/dev-overview.html">Develop</a>
+    <a class="l" href="https://github.com/IAmiGOI/Module-Engine">GitHub</a>
+  </nav>
+  <button type="button" class="btn primary sm dl copy-repo" data-copy="https://github.com/IAmiGOI/Module-Engine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg> <span>Copy install link</span></button>
+</header>
+
+<main class="docs">
+  <aside class="side">
+    <input class="search" data-base="" type="search" placeholder="Search docs  ( / )" aria-label="Search docs">
+    <div class="results"></div>
+    <div class="side-nav"><a class="" href="index.html">Documentation home</a><h4>Start here</h4><a class="" href="introduction.html">Introduction</a><a class="" href="quick-start.html">Quick start</a><a class="" href="concepts.html">Core concepts</a><h4>Setup</h4><a class="" href="models.html">Model connections</a><h4>Modules</h4><a class="" href="modules.html">Modules at a glance</a><a class="" href="tracker.html">Tracker</a><a class="" href="rp-time.html">RP Time</a><a class="" href="postprocess.html">Post-Turn Processor</a><a class="" href="scene-painter.html">Scene Painter</a><a class="" href="music.html">Music</a><a class="" href="speaker-colors.html">Speaker Colors</a><a class="" href="map.html">Map</a><a class="" href="notebook-secrets.html">Notebook &amp; Secrets</a><h4>Memory & prompts</h4><a class="" href="summary.html">Chat Summary</a><a class="" href="memory-graph.html">Memory graph</a><a class="" href="lorebook-macros.html">Lorebook &amp; Macros</a><a class="" href="prompt-manager.html">Prompt Manager</a><h4>Interface & data</h4><a class="" href="chat-viewport.html">Chat Viewport &amp; desktop</a><a class="" href="sync-backup-updates.html">Sync, backup &amp; updates</a><h4>Development</h4><a class="" href="dev-overview.html">Development overview</a><a class="" href="dev-first-module.html">Writing a module</a><a class="" href="dev-runtime.html">Runtime (the Runner)</a><a class="" href="dev-contracts.html">Contracts, buses &amp; events</a><a class="" href="dev-ui.html">UI primitives</a><a class="" href="dev-widgets.html">Widget reference</a><a class="" href="dev-typing.html">Typing</a><a class="" href="dev-testing.html">Testing</a><a class="on" href="dev-example-dice.html">Example 1 · Dice (easy)</a><a class="" href="dev-example-meter.html">Example 2 · Reply Meter (medium)</a><a class="" href="dev-example-weather.html">Example 3 · Scene Weather (advanced)</a><h4>Help</h4><a class="" href="troubleshooting.html">Troubleshooting</a><a class="" href="faq.html">FAQ</a><a class="" href="glossary.html">Glossary</a></div>
+  </aside>
+  <article class="article"><div class="eyebrow">Development</div><h1>Example 1 · Dice (easy)</h1><div class="glance"><div><small>Needs</small><span>Nothing</span></div><div><small>Module id</small><span><code>community.dice</code></span></div></div><p class="lead"><strong>Level: easy.</strong> A die with a configurable number of sides, a <strong>Roll</strong> button, a short history and a toast with the result. It teaches the four things every module is made of: the header, a signal, a few widgets, and one call to the engine.</p>
+<h2 id="what-you-will-learn">What you will learn</h2>
+<ul>
+<li>Writing the <strong>header</strong> and choosing <strong>rights</strong></li>
+<li>Holding state in <strong>signals</strong></li>
+<li>Building an interface with <strong>widgets</strong></li>
+<li>Calling a <strong>contract</strong> and reading its envelope</li>
+</ul>
+<h2 id="the-whole-module">The whole module</h2>
+<pre><code class="language-js">/*@module
+id: community.dice
+title: Dice
+description: Rolls a die and keeps the last few results.
+version: 1.0.0
+engine: ^0.2
+rights: ui.notify
+*/
+import { h } from 'stme:ui/tree';
+import { signal, computed } from 'stme:ui/reactive';
+import { Button, EmptyState, Field, NumberInput, Row, Section } from 'stme:widgets';
+import { request } from 'stme:request';
+
+/** Pure: a roll of an n-sided die. Kept outside the factory so it can be tested alone. */
+export const rollDie = (sides, random = Math.random) =&gt; 1 + Math.floor(random() * sides);
+
+export default function create(host) {
+    const sides = signal(20);
+    const history = signal([]);   // newest first: { id, sides, value }
+
+    async function roll() {
+        const n = Math.max(2, Math.floor(sides.peek()) || 20);
+        const value = rollDie(n);
+        history.update(list =&gt; [{ id: Date.now(), sides: n, value }, ...list].slice(0, 8));
+        await request(host.cores, 'ui.notify', { params: { tone: 'ok', text: `d${n} → ${value}` } });
+    }
+
+    return {
+        async load() {},
+        tree: () =&gt; Section('Dice', {},
+            Field('Sides', NumberInput(sides, { min: 2, max: 1000 })),
+            Row(Button('Roll', () =&gt; { void roll(); })),
+            computed(() =&gt; (history().length
+                ? history().map(item =&gt; h('div', { key: item.id }, `d${item.sides} → ${item.value}`))
+                : [EmptyState('No rolls yet.')])),
+        ),
+        stop() {},
+    };
+}
+</code></pre>
+<h2 id="step-by-step">Step by step</h2>
+<div class="steps">
+<div class="step">
+<h3>The header</h3>
+<p><code>id: community.dice</code> — external modules must start with <code>community.</code>. <code>rights: ui.notify</code> — the only contract this module calls. If you call something that is not in this list, the module is quarantined.</p>
+</div>
+<div class="step">
+<h3>Pure logic first</h3>
+<p><code>rollDie</code> takes the random source as a parameter, so a test can pass a fixed one. Keep logic like this <strong>outside</strong> the factory, in plain functions.</p>
+</div>
+<div class="step">
+<h3>State in signals</h3>
+<p><code>sides</code> and <code>history</code> are created <strong>once</strong>, in the factory — never inside <code>tree()</code>. <code>history.update(fn)</code> writes from the previous value. <code>sides.peek()</code> reads without subscribing, which is what you want inside an event handler.</p>
+</div>
+<div class="step">
+<h3>The tree</h3>
+<p><code>tree()</code> returns widgets: <code>Section</code> is the container, <code>Field</code> pairs a label with a control, <code>NumberInput</code> is bound to the <code>sides</code> signal (typing updates it), <code>Button</code> runs <code>roll</code>. The list is a <code>computed</code> — it re-renders when <code>history</code> changes, and each item has a stable <code>key</code>.</p>
+</div>
+<div class="step">
+<h3>One contract call</h3>
+<p><code>request(host.cores, 'ui.notify', { params: { tone: 'ok', text } })</code> shows a toast. It resolves to an envelope and never throws; here we ignore the result because a missed toast is harmless. The next examples check <code>ok</code>.</p>
+</div>
+</div>
+<h2 id="try-it">Try it</h2>
+<ol>
+<li>Put the file at <code>modules/dice/index.js</code> in a repository.</li>
+<li><strong>Modules → Install a module</strong>, paste the link, check the preview (it should say <em>scanned-safe</em> and show the one right), <strong>Install</strong>, switch it on.</li>
+<li>Open its card, press <strong>Roll</strong>.</li>
+</ol>
+<h2 id="make-it-yours">Make it yours</h2>
+<ul>
+<li>Replace <code>NumberInput</code> with a <code>Select</code> of common dice (<code>d4</code>, <code>d6</code>, <code>d20</code>, <code>d100</code>).</li>
+<li>Roll several dice at once and show the sum.</li>
+<li>Add a <code>Toggle('Announce rolls', announce)</code> and only call <code>ui.notify</code> when it is on.</li>
+</ul>
+<p><strong>Next:</strong> <a href="dev-example-meter.html">Reply Meter</a> — events, saved settings and reading the chat.</p><div class="pager"><a href="dev-testing.html"><small>← Previous</small>Testing</a><a class="nx" href="dev-example-meter.html"><small>Next →</small>Example 2 · Reply Meter (medium)</a></div></article>
+  <aside class="toc"><b>On this page</b><a href="#what-you-will-learn">What you will learn</a><a href="#the-whole-module">The whole module</a><a href="#step-by-step">Step by step</a><a href="#try-it">Try it</a><a href="#make-it-yours">Make it yours</a></aside>
+</main>
+<footer>
+  <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
+  <nav><a href="../docs/index.html">Docs</a><a href="../install.html">Install</a><a href="../privacy.html">Privacy policy</a><a href="../terms.html">Terms</a><a href="https://github.com/IAmiGOI/Module-Engine/issues">Issues</a><a href="https://github.com/IAmiGOI/Module-Engine">GitHub</a></nav>
+</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>
