@@ -10,6 +10,8 @@ The **Memory graph** builds a **mind-map** from your chat: *nodes* with text (pe
 
 It opens from the **dock** in its own window with two tabs, **Graph** and **Library**, where you can look at the graph, edit nodes and see which memories were pulled into the last prompt (the *pathway* overlay).
 
+<!--graph-regions-->
+
 ## Why a graph
 
 A summary is a flat story. A graph keeps **who is connected to what**: that the innkeeper owes the hero a favour, that the key is in the harbour warehouse. The right memories are pulled in by meaning, not by position in the chat.
@@ -21,6 +23,12 @@ A summary is a flat story. A graph keeps **who is connected to what**: that the 
 - **Reconsolidation** — if a region still overflows, a cluster of weak nodes is rewritten into a compact one (preferred).
 - **Decay** — as a last resort the weakest node is removed. **Protected** nodes (such as a region's centre) are never evicted.
 - Matching by meaning uses a **local embedding model** in your browser — picking memories does not call a remote model.
+
+## Pathway — see what the model remembered
+
+Switch on **Pathway** in the graph window and the graph shows the **last retrieval**: the *beacon* nodes the engine found by meaning, the **route** along the links between them, and everything else dimmed. It is the quickest way to understand why a particular memory did — or did not — make it into the prompt.
+
+<!--graph-pathway-->
 
 ## Start it from your lorebook
 

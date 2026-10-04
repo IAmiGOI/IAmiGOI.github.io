@@ -89,6 +89,11 @@ GRAPH_SVG = """<svg viewBox="0 0 320 210" class="graph" aria-hidden="true">
 <g fill="#dfe3ea" font-size="10" font-family="Noto Sans, sans-serif" text-anchor="middle">
 <text x="160" y="109">Mira</text><text x="70" y="54">Tavern</text><text x="250" y="49">Harbour</text><text x="60" y="154">Key</text><text x="255" y="164">Guild</text></g></svg>"""
 
+def graph_fig(file, caption, base, cls="shot"):
+    """A memory-graph screenshot, rendered only if the file is present in assets/shots/."""
+    if not (ROOT / "assets" / "shots" / file).exists(): return ""
+    return f'<figure class="{cls}"><img src="{base}assets/shots/{file}" alt="{html.escape(caption)}"><figcaption>{html.escape(caption)}</figcaption></figure>'
+
 def landing():
     return head("ST Module Engine — modules, pipeline and memory for SillyTavern",
                 "ST Module Engine is a SillyTavern extension: trackers, long-term memory, a prompt manager, scene pictures, music and more — as modules you switch on.", "") + nav("", "") + f"""
@@ -162,8 +167,7 @@ def landing():
     </div>
     <div class="vis">
       <div class="levels sm"><div class="lv"><b>Newest messages</b><span>as they are</span></div><div class="lv l1"><b>Level 1</b><span>summary</span></div><div class="lv l2"><b>Level 2</b><span>summary of summaries</span></div></div>
-      {GRAPH_SVG}
-      <img class="crop" src="assets/shots/summary-crop.webp" alt="Chat Summary settings">
+      {graph_fig("graph-main.webp", "The memory graph. Green nodes are strong and well connected, red ones are fading.", "", "shot graphshot") or GRAPH_SVG}
     </div>
   </section>
 
@@ -324,7 +328,7 @@ def docs():
     pages = []
     for f in sorted((ROOT / "tools" / "pages").glob("*.md")):
         meta, text = read_page(f)
-        body = render_md(md, text)
+        body = render_md(md, text).replace("<!--graph-regions-->", graph_fig("graph-main.webp", "The memory graph. Each cluster is a region labelled with its centre and its node count against capacity (for example 22/23); green nodes are strong and well connected, red ones are fading.", "../")).replace("<!--graph-pathway-->", graph_fig("graph-pathway.webp", "Pathway: the last retrieval — the memories the engine reached for, and the route between them.", "../"))
         heads = []
         def addid(m):
             t = re.sub(r"<[^>]+>", "", m.group(1)); i = slug(t)

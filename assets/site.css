@@ -314,3 +314,5 @@ section.show, section#more, section#safe, section#sync, section#how { padding-to
 #modules .shot { margin-top: 18px; }
 @media (max-width: 860px) { .callouts { grid-template-columns: 1fr 1fr; gap: 18px; } }
 @media (max-width: 520px) { .callouts { grid-template-columns: 1fr; } }
+
+.graphshot { margin: 0; }

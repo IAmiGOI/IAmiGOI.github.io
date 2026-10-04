@@ -39,6 +39,8 @@
   </aside>
   <article class="article"><div class="eyebrow">Memory & prompts</div><h1>Memory graph</h1><div class="glance"><div><small>Needs</small><span>A model connection</span></div><div><small>Find it</small><span>Dock → Memory graph button</span></div></div><p class="lead">The <strong>Memory graph</strong> builds a <strong>mind-map</strong> from your chat: <em>nodes</em> with text (people, places, facts, events) connected by typed links, with one central node and a network around it. It runs alongside the Chat Summary and the Notebook — it complements them, it does not replace them.</p>
 <p>It opens from the <strong>dock</strong> in its own window with two tabs, <strong>Graph</strong> and <strong>Library</strong>, where you can look at the graph, edit nodes and see which memories were pulled into the last prompt (the <em>pathway</em> overlay).</p>
+<figure class="shot"><img src="../assets/shots/graph-main.webp" alt="The memory graph. Each cluster is a region labelled with its centre and its node count against capacity (for example 22/23); green nodes are strong and well connected, red ones are fading."><figcaption>The memory graph. Each cluster is a region labelled with its centre and its node count against capacity (for example 22/23); green nodes are strong and well connected, red ones are fading.</figcaption></figure>
+
 <h2 id="why-a-graph">Why a graph</h2>
 <p>A summary is a flat story. A graph keeps <strong>who is connected to what</strong>: that the innkeeper owes the hero a favour, that the key is in the harbour warehouse. The right memories are pulled in by meaning, not by position in the chat.</p>
 <h2 id="how-it-keeps-itself-tidy">How it keeps itself tidy</h2>
@@ -49,12 +51,16 @@
 <li><strong>Decay</strong> — as a last resort the weakest node is removed. <strong>Protected</strong> nodes (such as a region's centre) are never evicted.</li>
 <li>Matching by meaning uses a <strong>local embedding model</strong> in your browser — picking memories does not call a remote model.</li>
 </ul>
+<h2 id="pathway-see-what-the-model-remembered">Pathway — see what the model remembered</h2>
+<p>Switch on <strong>Pathway</strong> in the graph window and the graph shows the <strong>last retrieval</strong>: the <em>beacon</em> nodes the engine found by meaning, the <strong>route</strong> along the links between them, and everything else dimmed. It is the quickest way to understand why a particular memory did — or did not — make it into the prompt.</p>
+<figure class="shot"><img src="../assets/shots/graph-pathway.webp" alt="Pathway: the last retrieval — the memories the engine reached for, and the route between them."><figcaption>Pathway: the last retrieval — the memories the engine reached for, and the route between them.</figcaption></figure>
+
 <h2 id="start-it-from-your-lorebook">Start it from your lorebook</h2>
 <p>The graph can <strong>bootstrap from your Lorebook</strong>: existing entries become the first nodes, so it starts with your world instead of empty. Use the <strong>Bootstrap &amp; graph</strong> panel in the memory graph window.</p>
 <div class="note">
 <p>The graph window has side panels: <strong>Bootstrap &amp; graph</strong>, <strong>Map visuals</strong> and <strong>Edit node</strong>. Node count is shown on the card subtitle in the engine panel.</p>
 </div><div class="pager"><a href="summary.html"><small>← Previous</small>Chat Summary</a><a class="nx" href="lorebook-macros.html"><small>Next →</small>Lorebook &amp; Macros</a></div></article>
-  <aside class="toc"><b>On this page</b><a href="#why-a-graph">Why a graph</a><a href="#how-it-keeps-itself-tidy">How it keeps itself tidy</a><a href="#start-it-from-your-lorebook">Start it from your lorebook</a></aside>
+  <aside class="toc"><b>On this page</b><a href="#why-a-graph">Why a graph</a><a href="#how-it-keeps-itself-tidy">How it keeps itself tidy</a><a href="#pathway-see-what-the-model-remembered">Pathway — see what the model remembered</a><a href="#start-it-from-your-lorebook">Start it from your lorebook</a></aside>
 </main>
 <footer>
   <div>© 2026 IAmiGOI · All rights reserved. Source is viewable on GitHub (<a href="https://github.com/IAmiGOI/Module-Engine/blob/main/LICENSE">license</a>). Not affiliated with SillyTavern.</div>
