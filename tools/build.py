@@ -157,16 +157,28 @@ def landing():
     </div>
   </section>
 
-  <section class="show rev rv" id="memory">
+  <section class="show rev rv" id="summary">
     <div class="txt">
-      <div class="eyebrow">Chat Summary · Memory graph</div>
+      <div class="eyebrow">Chat Summary</div>
       <h2 class="sec">Long chats that still fit the context</h2>
-      <p>Old messages fold into summaries, level by level — originals are hidden from the prompt, never deleted. A memory graph keeps who is connected to what, and pulls the right memories in by meaning.</p>
-      <ul class="ticks"><li>Three levels of summaries, with a protected recent window</li><li>A mind-map of people, places and facts</li><li>Can start from your lorebook</li></ul>
-      <a class="more" href="docs/summary.html">Memory guide →</a>
+      <p>Old messages fold into summaries, level by level. The originals are hidden from the prompt, never deleted, and the newest messages are always sent as they are.</p>
+      <ul class="ticks"><li>Three levels, each folding the one below</li><li>A protected window of recent messages</li><li>An optional check of every higher-level summary</li></ul>
+      <a class="more" href="docs/summary.html">Chat Summary guide →</a>
     </div>
     <div class="vis">
-      <div class="levels sm"><div class="lv"><b>Newest messages</b><span>as they are</span></div><div class="lv l1"><b>Level 1</b><span>summary</span></div><div class="lv l2"><b>Level 2</b><span>summary of summaries</span></div></div>
+      <div class="levels sm"><div class="lv"><b>Newest messages</b><span>sent as they are · protected window</span></div><div class="lv l1"><b>Level 1</b><span>oldest messages folded into one summary</span></div><div class="lv l2"><b>Level 2</b><span>level-1 summaries folded into one</span></div><div class="lv l3"><b>Level 3</b><span>level-2 summaries folded into one</span></div></div>
+    </div>
+  </section>
+
+  <section class="show rv" id="memory">
+    <div class="txt">
+      <div class="eyebrow">Memory graph</div>
+      <h2 class="sec">A map of who and what matters</h2>
+      <p>A mind-map built from your chat: people, places, facts and events as nodes, connected by links and grouped into regions. The right memories are recalled by meaning.</p>
+      <ul class="ticks"><li>Regions that tidy themselves: duplicates merge, weak nodes fade</li><li>Pathway view: see exactly what was recalled for the last reply</li><li>Can start from your lorebook</li></ul>
+      <a class="more" href="docs/memory-graph.html">Memory graph guide →</a>
+    </div>
+    <div class="vis">
       {graph_fig("graph-main.webp", "The memory graph. Green nodes are strong and well connected, red ones are fading.", "", "shot graphshot") or GRAPH_SVG}
     </div>
   </section>

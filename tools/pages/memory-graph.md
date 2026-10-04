@@ -6,7 +6,7 @@ order: 15
 needs: A model connection
 where: Dock → Memory graph button
 ---
-The **Memory graph** builds a **mind-map** from your chat: *nodes* with text (people, places, facts, events) connected by typed links, with one central node and a network around it. It runs alongside the Chat Summary and the Notebook — it complements them, it does not replace them.
+The **Memory graph** builds a **mind-map** from your chat: *nodes* with text (people, places, facts, events) connected by typed links, with one central node and a network around it.
 
 It opens from the **dock** in its own window with two tabs, **Graph** and **Library**, where you can look at the graph, edit nodes and see which memories were pulled into the last prompt (the *pathway* overlay).
 
@@ -14,7 +14,7 @@ It opens from the **dock** in its own window with two tabs, **Graph** and **Libr
 
 ## Why a graph
 
-A summary is a flat story. A graph keeps **who is connected to what**: that the innkeeper owes the hero a favour, that the key is in the harbour warehouse. The right memories are pulled in by meaning, not by position in the chat.
+A graph keeps **who is connected to what**: that the innkeeper owes the hero a favour, that the key is in the harbour warehouse. The right memories are pulled in by meaning, not by position in the chat.
 
 ## How it keeps itself tidy
 

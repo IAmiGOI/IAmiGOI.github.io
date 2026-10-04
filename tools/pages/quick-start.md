@@ -48,7 +48,8 @@ Open Tracker's settings and press **+ Add tracker**. Rename it `status`, pick yo
 
 | I want to… | Read |
 |---|---|
-| Make the AI remember a long story | [Chat Summary](summary.html) and [Memory graph](memory-graph.html) |
+| Fit a very long chat into the context | [Chat Summary](summary.html) |
+| Keep track of who is connected to what | [Memory graph](memory-graph.html) |
 | Clean up the writing of every reply | [Post-Turn Processor](postprocess.html) |
 | Illustrate scenes | [Scene Painter](scene-painter.html) |
 | Take control of what is sent to the model | [Prompt Manager](prompt-manager.html) |

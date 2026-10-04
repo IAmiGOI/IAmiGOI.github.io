@@ -39,5 +39,5 @@ The **Chat Summary** screen, with its defaults:
 | **Fold now** | Folds eligible messages immediately instead of waiting |
 
 <div class="note tip" markdown="1">
-**Starting point:** keep the protected window large enough that the current scene is never folded, and use a cheap, reliable model as the worker. Summaries work best alongside the [Memory graph](memory-graph.html), which keeps people, places and facts.
+**Starting point:** keep the protected window large enough that the current scene is never folded, and use a cheap, reliable model as the worker.
 </div>

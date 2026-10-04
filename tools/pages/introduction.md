@@ -18,8 +18,13 @@ Health, mood, location, relationships — values that update themselves after ev
 </a>
 
 <a class="mini" href="summary.html" markdown="1">
-**Remember everything**
-Leveled summaries and a memory graph so long chats still fit the context.
+**Fit long chats**
+Leveled summaries keep a long history inside the context.
+</a>
+
+<a class="mini" href="memory-graph.html" markdown="1">
+**Map the world**
+A mind-map of people, places and facts, with a Pathway view of what was recalled.
 </a>
 
 <a class="mini" href="postprocess.html" markdown="1">
