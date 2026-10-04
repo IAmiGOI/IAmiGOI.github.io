@@ -17,6 +17,8 @@ where: Settings screen → Chat Viewport
 
 ## The desktop
 
+<figure class="shot"><img src="../assets/shots/desktop.webp" alt="The Module Engine desktop" loading="lazy"><figcaption>The desktop: recent chats, quick actions, the guide Mea — and the dock on the right edge.</figcaption></figure>
+
 With Chat Viewport on, the home screen — the one shown when no chat is open — becomes a **desktop of blocks**:
 
 - recent chats

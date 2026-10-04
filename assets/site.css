@@ -302,3 +302,15 @@ section.show, section#more, section#safe, section#sync, section#how { padding-to
 .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 22px; align-items: start; }
 .gallery .shot { margin: 0; } .gallery .shot.wide { grid-column: 1 / -1; }
 @media (max-width: 860px) { .gallery { grid-template-columns: 1fr; }  }
+
+/* desktop hero + real crops */
+.desk { margin: 52px auto 0; max-width: 1120px; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: var(--surface-2); box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 90px rgba(91,140,255,.18); }
+.desk img { display: block; width: 100%; height: auto; }
+.desk figcaption { padding: 11px 18px; font-size: 13px; color: var(--muted); border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent); background: var(--level-1); text-align: left; }
+.callouts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; max-width: 1120px; margin: 30px auto 0; text-align: left; }
+.callouts b { display: block; font-size: 15px; color: var(--accent); margin-bottom: 4px; padding-top: 10px; border-top: 2px solid color-mix(in srgb, var(--accent) 55%, transparent); }
+.callouts span { font-size: 13.5px; color: var(--muted); }
+.vis img.crop { width: 100%; height: auto; border-radius: var(--r); border: 1px solid var(--line); }
+#modules .shot { margin-top: 18px; }
+@media (max-width: 860px) { .callouts { grid-template-columns: 1fr 1fr; gap: 18px; } }
+@media (max-width: 520px) { .callouts { grid-template-columns: 1fr; } }

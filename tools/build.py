@@ -104,29 +104,17 @@ def landing():
     <div class="meta">Paste it in SillyTavern → Extensions → Install extension</div>
     <div class="loadbar"></div>
 
-    <div class="preview rv">
-      <div class="chat">
-        <div class="bubble u">I push the tavern door open and step out into the rain.</div>
-        <div class="bubble"><b>Mira</b> pulls her hood up and follows you into the alley. "You really mean to go to the harbour tonight?"<br><span class="badge">🕒 Day 3 · 21:40</span></div>
-        <div class="bubble u">We don't have a choice.</div>
-      </div>
-      <div class="float"><div class="h"><span>Tracker</span><span>✕</span></div><div class="b"><span>❤ <i>health</i> 82</span><span>📍 <i>location</i> Harbour alley</span><span>🎭 <i>mood</i> Tense</span></div></div>
-      <div class="float two"><div class="h"><span>RP Time</span><span>✕</span></div><div class="b"><span>Day 3 · 21:40</span><span><i>raining</i></span></div></div>
-      <div class="dock"><i>▦</i><i>♪</i><i>🎨</i><i>🗺</i></div>
+    <figure class="desk rv">
+      <img src="assets/shots/desktop.webp" alt="The Module Engine desktop inside SillyTavern" width="1235" height="714">
+      <figcaption>The engine's desktop: recent chats, quick actions, your guide Mea — and the dock peeking from the right edge.</figcaption>
+    </figure>
+    <div class="callouts rv">
+      <div><b>Recent chats</b><span>Pick up exactly where you left off.</span></div>
+      <div><b>Quick actions &amp; widgets</b><span>Drag blocks anywhere; add a clock, characters, your own shortcuts.</span></div>
+      <div><b>Mea, the guide</b><span>Knows every setting and walks you through the first start.</span></div>
+      <div><b>The dock</b><span>Slides out from the right edge: engine, memory graph, music, pictures.</span></div>
     </div>
   </div>
-
-  <section id="see">
-    <div class="eyebrow">The real thing</div>
-    <h2 class="sec">This is what it looks like</h2>
-    <p class="lead">Screenshots from the engine itself, running inside SillyTavern.</p>
-    <div class="gallery rv">
-      <figure class="shot wide"><img src="assets/shots/modules.webp" alt="The Modules screen" loading="lazy"><figcaption>Modules — every feature has its own switch and its own settings.</figcaption></figure>
-      <figure class="shot"><img src="assets/shots/tracker-form.webp" alt="Tracker settings" loading="lazy"><figcaption>Tracker — name the values you care about.</figcaption></figure>
-      <figure class="shot"><img src="assets/shots/pass-form.webp" alt="Post-Turn pass" loading="lazy"><figcaption>Post-Turn Processor — a pass is just an instruction and a model.</figcaption></figure>
-      <figure class="shot wide"><img src="assets/shots/summary.webp" alt="Chat Summary settings" loading="lazy"><figcaption>Chat Summary — a pyramid of summaries with a protected window.</figcaption></figure>
-    </div>
-  </section>
 
   <section id="how">
     <div class="eyebrow">How it works</div>
@@ -141,6 +129,13 @@ def landing():
     </div>
   </section>
 
+  <section id="modules">
+    <div class="eyebrow">Modular by design</div>
+    <h2 class="sec">Everything is a module. Switch on what you need.</h2>
+    <p class="lead">Each feature has its own switch and its own settings. Nothing runs until you turn it on.</p>
+    <figure class="shot rv"><img src="assets/shots/modules.webp" alt="The Modules screen"></figure>
+  </section>
+
   <section class="show rv" id="tracker">
     <div class="txt">
       <div class="eyebrow">Tracker · RP Time</div>
@@ -153,6 +148,7 @@ def landing():
       <div class="float st"><div class="h"><span>Tracker · status</span><span>✕</span></div><div class="b"><span>❤ <i>health</i> 82</span><span>💰 <i>gold</i> 140</span><span>📍 <i>location</i> Harbour alley</span><span>🎭 <i>mood</i> Tense</span></div></div>
       <div class="float st t2"><div class="h"><span>RP Time</span><span>✕</span></div><div class="b"><span>Day 3 · 21:40</span><span><i>night · raining</i></span></div></div>
       <div class="macro"><code>{{{{tracker_health}}}}</code> → <b>82</b></div>
+      <img class="crop" src="assets/shots/tracker-crop.webp" alt="Tracker settings">
     </div>
   </section>
 
@@ -167,6 +163,7 @@ def landing():
     <div class="vis">
       <div class="levels sm"><div class="lv"><b>Newest messages</b><span>as they are</span></div><div class="lv l1"><b>Level 1</b><span>summary</span></div><div class="lv l2"><b>Level 2</b><span>summary of summaries</span></div></div>
       {GRAPH_SVG}
+      <img class="crop" src="assets/shots/summary-crop.webp" alt="Chat Summary settings">
     </div>
   </section>
 
@@ -182,6 +179,7 @@ def landing():
       <div class="diff"><small>Before</small><p>Her eyes <s>sparkled like stars</s> as <s>a shiver ran down her spine</s>. She <s>let out a breath she didn't know she was holding</s>.</p></div>
       <div class="diff after"><small>After</small><p>Mira's hand found the doorframe. Rain hissed on the slates; she counted three breaths before she spoke.</p></div>
       <span class="eg">Illustrative example</span>
+      <img class="crop" src="assets/shots/pass-crop.webp" alt="A Post-Turn pass">
     </div>
   </section>
 

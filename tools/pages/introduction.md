@@ -46,6 +46,8 @@ Back up and sync your settings and chats between devices.
 
 ## How it feels to use
 
+<figure class="shot"><img src="../assets/shots/desktop.webp" alt="The Module Engine desktop" loading="lazy"><figcaption>The desktop: recent chats, quick actions, the guide Mea — and the dock on the right edge.</figcaption></figure>
+
 You keep using SillyTavern the way you always did. Module Engine adds:
 
 - a **dock** on the right edge of the screen — hover it to slide it out and open the engine's panel;
