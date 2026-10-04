@@ -313,13 +313,14 @@ def docs():
 
 # ---------------------------------------------------------------- legal pages (text untouched, restyled)
 def restyle_legal(name, cur_title):
+    """Text of the legal pages is never touched: only the shell (head/nav/footer) is regenerated around it."""
     src = ROOT / name
     raw = src.read_text(encoding="utf-8")
-    if "assets/site.css" in raw:  # already restyled — extract original body
-        return
-    m = re.search(r"<body>(.*?)</body>", raw, re.S)
     t = re.search(r"<title>(.*?)</title>", raw, re.S).group(1)
-    inner = m.group(1).replace("<h1>", '<div class="eyebrow">Legal</div><h1>', 1)
+    if 'class="legal"' in raw:  # already wrapped: take the inner text back out
+        inner = re.search(r'<div class="legal">(.*?)</div></main>', raw, re.S).group(1)
+    else:
+        inner = re.search(r"<body>(.*?)</body>", raw, re.S).group(1).replace("<h1>", '<div class="eyebrow">Legal</div><h1>', 1)
     page = head(t, f"{cur_title} for the ST Module Engine extension.", "") + nav("", "") + f'<main><div class="legal">{inner}</div></main>' + foot("")
     src.write_text(page, encoding="utf-8")
 
